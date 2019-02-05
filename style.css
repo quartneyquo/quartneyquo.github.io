@@ -1,6 +1,10 @@
 * {
   font-family: arial, sans-serif;
 }
+
+h1 {
+  font-family: arial;
+}
 .section-content{
   padding-top: 350px;
   padding-bottom: 350px;
