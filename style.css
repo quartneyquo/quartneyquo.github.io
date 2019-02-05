@@ -1,6 +1,37 @@
-h1 {
-  color: blue;
-  text-align: center;
-  font-size: 120px;
-  font-family: fantasy;
+.section-content{
+  padding-top: 350px;
+  padding-bottom: 350px;
+}
+.navbar{
+  background-color: #B0E0E6;
+}
+.carousel-item{
+  height:800px;
+}
+.my-img{
+  height: 800px;
+  width:1200px;
+}
+.profile{
+  height:250px;
+  width:250px;
+  opacity: 1;
+}
+#home{
+  background: url(IMG_3597.JPG);
+  background-size: cover;
+  opacity: 0.7;
+}
+#about{
+  background: url(about.jpg);
+  background-size: cover;
+}
+#resume{
+  background: url(orang.jpg);
+  background-size: cover;
+}
+#Contact{
+  background: url(IMG_1563.JPG);
+  background-size: cover;
+  opacity: 0.5;
 }
