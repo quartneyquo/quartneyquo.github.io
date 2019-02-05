@@ -33,6 +33,10 @@ h1 {
   background: url(about.jpg);
   background-size: cover;
 }
+#projects{
+  background: #add8e6;
+  background-size: cover;
+}
 #resume{
   background: url(orang.jpg);
   background-size: cover;
