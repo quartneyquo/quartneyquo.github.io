@@ -41,6 +41,9 @@ h1 {
   background: url(orang.jpg);
   background-size: cover;
 }
+#embedresume{
+  height: 300px; 
+}
 #Contact{
   background: url(IMG_1563.JPG);
   background-size: cover;
