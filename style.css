@@ -3,9 +3,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: url('quartneyquo.github.io/cursor.cur'), auto;
 }
 
-cursor: url('quartneyquo.github.io/cursor.cur'), auto;
 
 html{
   height: 100%;
