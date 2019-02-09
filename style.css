@@ -114,22 +114,27 @@ div.lefthalf1{
   float: left;
   height: 25vw;
   margin-right: 0 auto;
+  height: 100%;
 }
 
-.centered {
+div.centered {
   position: relative;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }
 
-embed{
+iframe{
   overflow:visible;
-  height: 30em;
   width: 80%;
   position: relative;
   margin: 10px;
+  margin-top: -300px;
   top: 5;
+}
+
+embed#plugin{
+  margin-top: -125px;
 }
 section#resume.text-center.section-content{
   height: 25%;
@@ -149,10 +154,7 @@ section#resume.text-center.section-content{
   background: #add8e6;
   background-size: cover;
 }
-#embedresume{
-  height: 100%;
-  width: 100%;
-}
+
 #Contact{
   background: #E6E6FA;
   background-size: cover;
@@ -233,7 +235,7 @@ section#resume.text-center.section-content{
     float: left;
     background: #add8e6;
   }
-  embed{
+  iframe{
     display: none;
   }
   div.col-md-4.col-sm-4{
