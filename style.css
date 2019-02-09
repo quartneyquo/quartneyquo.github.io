@@ -1,17 +1,24 @@
 * {
-  font-family: 'Questrial', sans-serif;
+  font-family: 'Fredoka One', cursive;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html{
   height: 100%;
   width: 100%;
   margin: 0px;
+  overflow-x: hidden;
+}
+
+section{
+  height: 25%;
+  width: 100%;
 }
 
 h1 {
-  font-family: 'Questrial', sans-serif;
+  font-family: 'Fredoka One', cursive;
 }
 .section-content{
   padding-top: 350px;
@@ -21,7 +28,7 @@ h1 {
   background-color: #DCDCDC;
 }
 .carousel-item{
-  height:800px;
+  height:40%;
 }
 .my-img{
   height: 800px;
@@ -33,17 +40,17 @@ h1 {
   opacity: 1;
 }
 
-section{
-  width: 100%;
-}
+
 /* Style the image inside the centered container, if needed */
 .centered img {
   width: 150px;
   border-radius: 50%;
 }
 
+/*Home section */
+
 section#home.text-center.section-content{
-  height: 100%;
+  height: 25%;
   width:100%;
   background: linear-gradient(90deg, white 50%, #add8e6 50%);
 }
@@ -51,8 +58,11 @@ section#home.text-center.section-content{
 div.righthalf {
   width: 50%;
   float: right;
-  height: 100%;
   background-color: #add8e6;
+  margin-bottom: 150px;
+  position: relative;
+  top: 10px;
+  margin-top: -125px;
 }
 
 div.lefthalf {
@@ -66,17 +76,21 @@ img.profile{
   width: 40%;
 }
 
+/*Projects section */
 section#projects.text-center.section-content > img{
-  width: 30%;
+  width: 25%;
+}
+
+.row{
+  margin: 15px;
 }
 
 /* Three image containers (use 25% for four, and 50% for two, etc) */
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 5px;
-}
 
+
+img{
+  width: 100%;
+}
 /* Clear floats after image containers */
 .row::after {
   content: "";
@@ -84,16 +98,13 @@ section#projects.text-center.section-content > img{
   display: table;
 }
 
-section#home.text-center.section-content{
-  height: 100%;
-  width: 100%;
-}
+
+/* resume */
 
 div.righthalf1{
   width: 35%;
   float: right;
   height: 25vw;
-  background-color: #ffffff;
   text-align: right;
   margin: auto;
 }
@@ -113,6 +124,7 @@ div.lefthalf1{
 }
 
 embed{
+  overflow:visible;
   height: 48vw;
   width: 48vw;
   position: relative;
@@ -120,7 +132,7 @@ embed{
   top: 5;
 }
 section#resume.text-center.section-content{
-  height: 100%;
+  height: 25%;
   width:100%;
   background: linear-gradient(90deg, #add8e6 65%, white 35%);
 }
@@ -146,6 +158,8 @@ section#resume.text-center.section-content{
   background-size: cover;
 }
 
+/* contact */
+
 .fa {
   padding: 20px;
   font-size: 30px;
@@ -168,4 +182,43 @@ section#resume.text-center.section-content{
 .fa-facebook {
   background: #3B5998;
   color: white;
+}
+
+@media(max-width: 768px){
+  html{
+    overflow-x: hidden;
+  }
+  section#resume.text-center.section-content{
+    background: #add8e6
+  }
+  #resume{
+    overflow-x: visible;
+  }
+  div.lefthalf1{
+    width: 0;
+  }
+  div.righthalf1{
+    text-align: center;
+    margin:auto;
+    width: 100%;
+  }
+  h1{
+    text-align: center;
+    display: visible;
+    overflow-x: visible;
+  }
+
+  .div#righthalf1{
+    float: left;
+    background: #add8e6;
+  }
+  embed{
+    display: none;
+  }
+  div.col-md-4.col-sm-4{
+    padding-bottom: 15px;
+  }
+  img{
+    padding-bottom: 30px;
+  }
 }
