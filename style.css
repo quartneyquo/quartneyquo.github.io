@@ -1,16 +1,16 @@
 * {
-  font-family: arial, sans-serif;
+  font-family: 'Questrial', sans-serif;
 }
 
 h1 {
-  font-family: arial;
+  font-family: 'Questrial', sans-serif;
 }
 .section-content{
   padding-top: 350px;
   padding-bottom: 350px;
 }
 .navbar{
-  background-color: #B0E0E6;
+  background-color: #DCDCDC;
 }
 .carousel-item{
   height:800px;
@@ -24,21 +24,86 @@ h1 {
   width:250px;
   opacity: 1;
 }
-#home{
-  background: url(IMG_3597.JPG);
-  background-size: cover;
-  opacity: 0.7;
+
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  width: 150px;
+  border-radius: 50%;
 }
-#about{
-  background: url(about.jpg);
+
+section#home.text-center.section-content{
+  height: 100%;
+  width:100%;
+  background: linear-gradient(90deg, white 50%, #add8e6 50%);
+}
+
+div.righthalf {
+  width: 50%;
+  float: right;
+  height: 100%;
+  background-color: #add8e6;
+}
+
+div.lefthalf {
+  width: 50%;
+  float: left;
+  height: 100%;
+  background-color: #ffffff;
+}
+img.profile{
+  height: 50%;
+  width: 40%;
+}
+
+div.righthalf1{
+  width: 50%;
+  float: right;
+  height: 100%;
+  background-color: #ffffff;
+  text-align: right;
+  margin: auto;
+}
+
+div.lefthalf1{
+  width: 50%;
+  float: left;
+  height: 100%;
+  background: #E6E6FA;
+  margin-right: 0 auto;
+  height: 100%;
+}
+
+.centered {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+iframe#embedresume{
+  height: 500px;
+  width: 50%;
+  position: relative;
+  margin-bottom: 75px;
+  margin-top: 50px;
+}
+section#resume.text-center.section-content{
+  height: 100%;
+  width:100%;
+  background: linear-gradient(90deg, #E6E6FA 50%, white 50%);
+}
+
+#home{
+  background: linear-gradient(90deg, #add8e6 50%, white 50%);
   background-size: cover;
 }
 #projects{
-  background: #add8e6;
+  background: #ffffe0;
   background-size: cover;
 }
 #resume{
-  background: url(orang.jpg);
+  background: #E6E6FA;
   background-size: cover;
 }
 #embedresume{
@@ -46,7 +111,6 @@ h1 {
   width: 100%;
 }
 #Contact{
-  background: url(IMG_1563.JPG);
+  background: #add8e6;
   background-size: cover;
-  opacity: 0.5;
 }
