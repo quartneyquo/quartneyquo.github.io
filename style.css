@@ -69,7 +69,7 @@ div.lefthalf {
   width: 50%;
   float: left;
   height: 100%;
-  background-color: #ffffff;
+  margin-top: -125px;
 }
 img.profile{
   height: 50%;
@@ -187,6 +187,27 @@ section#resume.text-center.section-content{
 @media(max-width: 768px){
   html{
     overflow-x: hidden;
+  }
+  section#home.text-center.section-content{
+    background: #add8e6;
+  }
+  div.righthalf {
+    width: 100%;
+    margin-top: -100px;
+    position: relative;
+    top: -200px;
+  }
+  div.lefthalf{
+    width:100%;
+    margin-top: -100px;
+    position: relative;
+    top: -200px;
+    background: #add8e6;
+  }
+  h1 h2 p{
+    font-size: 12px;
+    text-align: center;
+    background-color: #add8e6;
   }
   section#resume.text-center.section-content{
     background: #add8e6
