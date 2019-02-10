@@ -27,7 +27,7 @@ h1 {
   padding-bottom: 350px;
 }
 .navbar{
-  background-color: #DCDCDC;
+  background-color: #D9E2FF;
 }
 .carousel-item{
   height:40%;
@@ -54,19 +54,30 @@ h1 {
 section#home.text-center.section-content{
   height: 25%;
   width:100%;
-  background: linear-gradient(90deg, white 50%, #add8e6 50%);
+  background: url('quartneyquo.github.io/portfoliobackground.svg');
 }
 
 div.righthalf {
   width: 50%;
   float: right;
-  background-color: #add8e6;
+  background-color: #D9F6FF;
   margin-bottom: 150px;
   position: relative;
   top: 10px;
   margin-top: -125px;
 }
 
+p{
+  margin-left: 20px;
+  margin-right: 20px;
+  justify-content: center;
+}
+
+section#home.text-center.section-content > p{
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+}
 div.lefthalf {
   width: 50%;
   float: left;
@@ -119,6 +130,7 @@ div.lefthalf1{
   height: 100%;
 }
 
+
 div.centered {
   position: relative;
   left: 50%;
@@ -139,24 +151,24 @@ iframe{
 section#resume.text-center.section-content{
   height: 25%;
   width:100%;
-  background: linear-gradient(90deg, #add8e6 65%, white 35%);
+  background: linear-gradient(90deg, #D9F6FF 65%, white 35%);
 }
 
 #home{
-  background: linear-gradient(90deg, #add8e6 50%, white 50%);
+  background: url('quartneyquo.github.io/portfoliobackground.svg');
   background-size: cover;
 }
 #projects{
-  background: #E6E6FA;
+  background: #D9E2FF;
   background-size: cover;
 }
 #resume{
-  background: #add8e6;
+  background: #D9F6FF;
   background-size: cover;
 }
 
 #Contact{
-  background: #E6E6FA;
+  background: #D9E2FF;
   background-size: cover;
 }
 
@@ -191,7 +203,7 @@ section#resume.text-center.section-content{
     overflow-x: hidden;
   }
   section#home.text-center.section-content{
-    background: #add8e6;
+    background: #D9F6FF;
   }
   div.righthalf {
     width: 100%;
@@ -204,15 +216,15 @@ section#resume.text-center.section-content{
     margin-top: -100px;
     position: relative;
     top: -200px;
-    background: #add8e6;
+    background: #D9F6FF;
   }
   h1 h2 p{
     font-size: 12px;
     text-align: center;
-    background-color: #add8e6;
+    background-color: #D9F6FF;
   }
   section#resume.text-center.section-content{
-    background: #add8e6
+    background: #D9F6FF
   }
   #resume{
     overflow-x: visible;
@@ -233,7 +245,7 @@ section#resume.text-center.section-content{
 
   .div#righthalf1{
     float: left;
-    background: #add8e6;
+    background: #D9F6FF;
   }
   iframe{
     display: none;
