@@ -3,7 +3,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor: url('quartneyquo.github.io/cursor.cur'), pointer, zoom-in;
 }
 
 
@@ -54,7 +53,9 @@ h1 {
 section#home.text-center.section-content{
   height: 25%;
   width:100%;
-  background: url('quartneyquo.github.io/portfoliobackground.svg');
+  background: no-repeat, url('quartneyquo.github.io/portfoliobackground.svg');
+  background-size: 100% auto;
+
 }
 
 div.righthalf {
