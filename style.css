@@ -151,9 +151,8 @@ iframe{
   overflow:visible;
   width: 80%;
   position: relative;
-  margin: 10px;
   margin-top: -300px;
-  top: 5;
+  left: 10px;
 }
 
 
