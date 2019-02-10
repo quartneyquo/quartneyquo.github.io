@@ -151,7 +151,6 @@ iframe{
 section#resume.text-center.section-content{
   height: 25%;
   width:100%;
-  background: linear-gradient(90deg, #D9F6FF 65%, white 35%);
 }
 
 #home{
@@ -163,8 +162,8 @@ section#resume.text-center.section-content{
   background-size: cover;
 }
 #resume{
-  background: #D9F6FF;
-  background-size: cover;
+  background: no-repeat, url('quartneyquo.github.io/starresume.svg');
+  background-size: auto, 100%;
 }
 
 #Contact{
