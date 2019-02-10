@@ -98,6 +98,15 @@ section#projects.text-center.section-content > img{
   margin: 15px;
 }
 
+a.btn.btn-primary{
+  background-color: #D9E2FF;
+  font: #000000;
+  border: #D9E2FF;
+}
+
+.btn-primary{
+  color: black;
+}
 /* Three image containers (use 25% for four, and 50% for two, etc) */
 
 
