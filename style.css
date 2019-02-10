@@ -27,6 +27,7 @@ h1 {
 }
 .navbar{
   background-color: #D9E2FF;
+  text-align: center;
 }
 .carousel-item{
   height:40%;
