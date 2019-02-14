@@ -50,13 +50,11 @@ h1 {
 
 /*Home section */
 
-section#home.text-center.section-content{
-  height: 25%;
-  width:100%;
-  background: no-repeat, url('quartneyquo.github.io/portfoliobackground.svg');
-  background-size: 100% auto;
-
+#home{
+  background: url("portfoliobackground.svg");
+  background-size: cover;
 }
+
 
 div.righthalf {
   width: 50%;
@@ -73,11 +71,7 @@ p{
   justify-content: center;
 }
 
-section#home.text-center.section-content > p{
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 10px;
-}
+
 div.lefthalf {
   width: 50%;
   float: left;
@@ -90,12 +84,30 @@ img.profile{
 }
 
 /*Projects section */
+
+#projects{
+  background: #D9E2FF;
+  background-size: cover;
+  opacity: 50%;
+}
+
 section#projects.text-center.section-content > img{
   width: 25%;
 }
 
 .row{
   margin: 15px;
+  padding-left: 100px;
+}
+
+div.col-md-4.col-xs-12{
+  padding-left: 75px;
+}
+.card-img-top{
+  background: #D9E2FF;
+}
+.card-body{
+  background: #D9F6FF;
 }
 
 a.btn.btn-primary{
@@ -122,6 +134,12 @@ img{
 
 
 /* resume */
+
+#resume{
+  background: url(starresume.svg);
+  background-size: cover;
+  opacity: 50%;
+}
 
 div.righthalf1{
   width: 35%;
@@ -155,34 +173,17 @@ iframe{
   left: 10px;
 }
 
-
-section#resume.text-center.section-content{
-  height: 25%;
-  width:100%;
-  background: no-repeat, url('quartneyquo.github.io/starresume.svg');
-  background-size: auto, 100%;
-
-}
-
-#home{
-  background: url('quartneyquo.github.io/portfoliobackground.svg');
-  background-size: cover;
-}
-#projects{
-  background: #D9E2FF;
-  background-size: cover;
-}
-#resume{
-  background: no-repeat, url('quartneyquo.github.io/starresume.svg');
-  background-size: cover;
-}
+/* contact */
 
 #Contact{
   background: #D9E2FF;
   background-size: cover;
+  opacity: 50%;
 }
 
-/* contact */
+div.row{
+  padding-left: 0px;
+}
 
 .fa {
   padding: 20px;
