@@ -100,8 +100,14 @@ section#projects.text-center.section-content > img{
   padding-left: 100px;
 }
 
-div.col-md-4.col-xs-12{
-  padding-left: 75px;
+div.col-md-4.col-sm-6.col-xs-12{
+  text-align: center;
+  margin:auto;
+}
+
+.card{
+  float: center;
+  margin: auto;
 }
 .card-img-top{
   background: #D9E2FF;
@@ -208,6 +214,7 @@ div.row{
   background: #3B5998;
   color: white;
 }
+
 
 @media(max-width: 768px){
   html{
