@@ -11,6 +11,7 @@ export interface Track {
   type: string;
   year?: number;
   description: string;
+  coverImage?: string;
   contentSections: ContentSection[];
 }
 
@@ -19,5 +20,6 @@ export interface Playlist {
   title: string;
   description: string;
   coverGradient: [string, string];
+  coverImage?: string;
   tracks: Track[];
 }

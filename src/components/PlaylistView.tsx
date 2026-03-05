@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Play, Clock, Music2 } from 'lucide-react';
 import { Playlist, Track } from '@/types';
+import CoverImage from './CoverImage';
 
 interface PlaylistViewProps {
   playlist: Playlist;
@@ -48,27 +49,35 @@ export default function PlaylistView({
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6">
           {/* Cover art */}
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.2 }}
-            className="w-40 h-40 rounded-xl flex items-center justify-center flex-shrink-0 shadow-2xl relative overflow-hidden"
-            style={{
-              background: `linear-gradient(135deg, ${playlist.coverGradient[0]}, ${playlist.coverGradient[1]})`,
-            }}
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            >
-              <Music2 size={52} className="text-white/50" />
-            </motion.div>
-            {/* Vinyl rings */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-28 h-28 border-2 border-white/15 rounded-full" />
-              <div className="absolute w-16 h-16 border border-white/10 rounded-full" />
-              <div className="absolute w-5 h-5 bg-black/40 rounded-full" />
-            </div>
-          </motion.div>
+          <div className="w-40 h-40 rounded-xl flex-shrink-0 shadow-2xl overflow-hidden">
+            {playlist.coverImage ? (
+              <CoverImage
+                src={playlist.coverImage}
+                alt={playlist.title}
+                className="w-full h-full rounded-xl"
+                overlay
+              />
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center relative"
+                style={{
+                  background: `linear-gradient(135deg, ${playlist.coverGradient[0]}, ${playlist.coverGradient[1]})`,
+                }}
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                >
+                  <Music2 size={52} className="text-white/50" />
+                </motion.div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-28 h-28 border-2 border-white/15 rounded-full" />
+                  <div className="absolute w-16 h-16 border border-white/10 rounded-full" />
+                  <div className="absolute w-5 h-5 bg-black/40 rounded-full" />
+                </div>
+              </div>
+            )}
+          </div>
 
           <div>
             <div className="text-[10px] font-bold uppercase text-[#a3a3a3] tracking-widest mb-2">
@@ -147,14 +156,26 @@ export default function PlaylistView({
 
               {/* Title + description */}
               <div className="flex items-center gap-3 min-w-0">
-                <div
-                  className="w-10 h-10 rounded flex-shrink-0 flex items-center justify-center"
-                  style={{
-                    background: `linear-gradient(135deg, ${playlist.coverGradient[0]}99, ${playlist.coverGradient[1]}99)`,
-                  }}
-                >
-                  <Music2 size={12} className="text-white/70" />
+                {/* Track thumbnail */}
+                <div className="w-10 h-10 rounded flex-shrink-0 overflow-hidden">
+                  {track.coverImage ? (
+                    <CoverImage
+                      src={track.coverImage}
+                      alt={track.title}
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{
+                        background: `linear-gradient(135deg, ${playlist.coverGradient[0]}99, ${playlist.coverGradient[1]}99)`,
+                      }}
+                    >
+                      <Music2 size={12} className="text-white/70" />
+                    </div>
+                  )}
                 </div>
+
                 <div className="min-w-0">
                   <div
                     className={`text-sm font-semibold truncate ${

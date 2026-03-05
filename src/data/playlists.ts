@@ -6,6 +6,7 @@ export const playlists: Playlist[] = [
     title: 'Now Playing',
     description: "What Courtney is currently building, exploring, and working on.",
     coverGradient: ['#7c3aed', '#c084fc'],
+    coverImage: '/nowplaying.jpeg',
     tracks: [
       {
         id: 'ai-valley',
@@ -195,12 +196,106 @@ export const playlists: Playlist[] = [
     title: 'AI Valley Events',
     description: 'Building the future of AI through community and hackathons.',
     coverGradient: ['#0ea5e9', '#06b6d4'],
+    coverImage: '/witpic.jpeg',
     tracks: [
+      {
+        id: 'gtc-cofounder-mixer-2026',
+        title: 'AI Valley GTC Cofounder Mixer',
+        type: 'Founder Event',
+        year: 2026,
+        coverImage: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=75,width=500,height=500/event-covers/hv/fe000cd2-fdd2-48a5-a5cc-34d4cf78bb3e.png',
+        description:
+          'An intimate mixer during NVIDIA GTC bringing together AI cofounders, builders, and investors for real conversations. Free. SF.',
+        contentSections: [
+          {
+            title: 'Event Details',
+            stats: [
+              { label: 'Date', value: 'Mar 17' },
+              { label: 'Time', value: '6–9 PM' },
+              { label: 'Location', value: 'San Francisco' },
+              { label: 'Admission', value: 'Free' },
+            ],
+          },
+          {
+            title: 'Organizers',
+            items: ['Victor Su-Ortiz', 'Healthy Li', 'Courtney Ko'],
+          },
+          {
+            title: 'Purpose',
+            text: 'GTC is massive — this mixer carves out an intimate space for the builders and funders who matter to have real conversations away from the conference noise.',
+          },
+          {
+            title: 'RSVP',
+            text: 'luma.com/aivalley',
+          },
+        ],
+      },
+      {
+        id: 'minimax-gtc-minihack',
+        title: 'MiniMax GTC MiniHack',
+        type: 'Hackathon',
+        year: 2026,
+        coverImage: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=75,width=500,height=500/event-covers/yu/2fe6799d-0609-40f6-964a-8134071bf8a0.png',
+        description:
+          'A focused mini-hackathon during GTC week, powered by MiniMax. Builders ship fast experiments in 3 hours. Free. SF.',
+        contentSections: [
+          {
+            title: 'Event Details',
+            stats: [
+              { label: 'Date', value: 'Mar 19' },
+              { label: 'Time', value: '5:30–8:30 PM' },
+              { label: 'Location', value: 'San Francisco' },
+              { label: 'Admission', value: 'Free' },
+            ],
+          },
+          {
+            title: 'Organizers',
+            items: ['Victor Su-Ortiz', 'Leila Rishniw', 'Emily (Workato)'],
+          },
+          {
+            title: 'Format',
+            text: 'Show up, pick a goal, build for 2 hours, demo what you built. No pressure — maximum momentum.',
+          },
+          {
+            title: 'RSVP',
+            text: 'luma.com/aivalley',
+          },
+        ],
+      },
+      {
+        id: 'forks-and-frameworks',
+        title: 'Forks & Frameworks',
+        type: 'Community',
+        year: 2026,
+        coverImage: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=75,width=500,height=500/event-covers/mc/f4742ac6-deb6-4b8e-b79e-ac9d17a90fc8.png',
+        description:
+          'AI Valley Toronto — builders gathering for conversation, collaboration, and community. Free.',
+        contentSections: [
+          {
+            title: 'Event Details',
+            stats: [
+              { label: 'Date', value: 'Mar 8' },
+              { label: 'Time', value: '11 AM–2 PM' },
+              { label: 'Location', value: 'Toronto, ON' },
+              { label: 'Admission', value: 'Free' },
+            ],
+          },
+          {
+            title: 'Organizers',
+            items: ['Victor Su-Ortiz', 'Sineha Manivannan', 'Sahand Sojoodi'],
+          },
+          {
+            title: 'About',
+            text: 'AI Valley expanding to Toronto — bringing together first-gen builders and exceptional talent for a community lunch and knowledge share.',
+          },
+        ],
+      },
       {
         id: 'women-in-tech-hackathon',
         title: 'Women in Tech Hackathon',
         type: 'Hackathon',
         year: 2024,
+        coverImage: '/witpic.jpeg',
         description:
           'A dedicated hackathon celebrating and amplifying women builders in AI. Participants shipped real products in 48 hours, supported by mentors and sponsors.',
         contentSections: [
@@ -492,6 +587,7 @@ export const playlists: Playlist[] = [
     title: 'Hobbies',
     description: 'Things Courtney enjoys outside of work.',
     coverGradient: ['#ec4899', '#f43f5e'],
+    coverImage: '/hobby.jpeg',
     tracks: [
       {
         id: 'travel',
