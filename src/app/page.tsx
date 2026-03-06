@@ -94,7 +94,7 @@ export default function Home() {
           </h1>
 
           <p className="text-plum-400 text-lg max-w-xl mx-auto leading-relaxed mb-3">
-            COO of AI Valley · Product Manager · UX Designer
+            Building community, product, and tech at the intersection of people and AI
           </p>
           <div className="flex items-center justify-center gap-1.5 text-sm text-plum-500">
             <MapPin size={13} />
