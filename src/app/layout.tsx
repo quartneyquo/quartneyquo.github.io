@@ -4,7 +4,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Courtney Ko',
   description: 'COO of AI Valley · Builder · Community Architect',
-  icons: { icon: '/profile.jpeg' },
+  icons: { icon: '/favicon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
