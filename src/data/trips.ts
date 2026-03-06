@@ -677,6 +677,7 @@ export const trips: Trip[] = [
     subtitle: 'Products designed, built, and shipped — from 0 to 1',
     dateRange: '2019 – Present',
     coverImage: '/projects.png',
+    coverImagePosition: 'top',
     themeColor: '#B9A6FF',
     description: 'Case studies from Courtney\'s work designing and shipping real products across fintech, consumer, and AI.',
     stats: [
