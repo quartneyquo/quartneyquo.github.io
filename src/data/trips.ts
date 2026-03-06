@@ -938,6 +938,32 @@ export const trips: Trip[] = [
             blurb: 'Collecting experiences across time zones. Travel sharpens perspective more than almost anything.',
             content: [
               {
+                type: 'map',
+                title: 'Countries Visited',
+                countries: [
+                  '36',  // Australia
+                  '484', // Mexico
+                  '124', // Canada
+                  '380', // Italy
+                  '191', // Croatia
+                  '250', // France
+                  '276', // Germany
+                  '410', // South Korea
+                  '756', // Switzerland
+                  '196', // Cyprus
+                  '40',  // Austria
+                  '348', // Hungary
+                  '56',  // Belgium
+                  '344', // Hong Kong
+                  '392', // Japan
+                  '156', // China
+                  '158', // Taiwan
+                  '704', // Vietnam
+                  '336', // Vatican City
+                  '604', // Peru
+                ],
+              },
+              {
                 type: 'bullets',
                 title: 'Countries Lived In',
                 items: [
@@ -995,23 +1021,11 @@ export const trips: Trip[] = [
             content: [
               {
                 type: 'bullets',
-                title: 'Favorites to Bake',
+                title: 'Go-Tos',
                 items: [
-                  'Matcha mochi cake',
-                  'Brown butter chocolate chip cookies',
-                  'Homemade focaccia',
-                  'Japanese milk bread (shokupan)',
-                  'Seasonal fruit tarts',
-                ],
-              },
-              {
-                type: 'bullets',
-                title: 'Experiments',
-                items: [
-                  'Sourdough starter (currently alive)',
-                  'Croissants — attempted, journey ongoing',
-                  'Mochi donut variations',
-                  'Asian flavors + Western pastry techniques',
+                  'Chocolate chip cookies',
+                  'Banana bread',
+                  'Daan Taat (Hong Kong egg tarts)',
                 ],
               },
             ],

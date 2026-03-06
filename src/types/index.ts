@@ -22,7 +22,13 @@ export interface LinksBlock {
   items: { label: string; href: string }[];
 }
 
-export type ContentBlock = BulletsBlock | MetricsBlock | TextBlock | LinksBlock;
+export interface MapBlock {
+  type: 'map';
+  title?: string;
+  countries: string[]; // ISO numeric codes as strings
+}
+
+export type ContentBlock = BulletsBlock | MetricsBlock | TextBlock | LinksBlock | MapBlock;
 
 export interface Stop {
   id: string;

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Clock, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Stop, Trip, ContentBlock } from '@/types';
+import TravelMap from './TravelMap';
 
 interface StopDrawerProps {
   stop: Stop | null;
@@ -88,6 +89,19 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
             </a>
           ))}
         </div>
+      </div>
+    );
+  }
+
+  if (block.type === 'map') {
+    return (
+      <div className="mb-5">
+        {block.title && (
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-plum-300 mb-2">
+            {block.title}
+          </h4>
+        )}
+        <TravelMap countries={block.countries} />
       </div>
     );
   }
