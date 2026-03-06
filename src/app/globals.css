@@ -10,61 +10,30 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
   height: 100%;
 }
 
 body {
-  color: #ffffff;
-  background: #121212;
+  color: #2B1B2E;
+  background: #F9F6F7;
+  font-family: 'Avenir Next', 'Avenir', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', system-ui, sans-serif;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #F1E9EB;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #404040;
-  border-radius: 3px;
+  background: #C8AAAF;
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #606060;
-}
-
-/* Smooth progress bar range input */
-input[type='range'] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  background: white;
-  margin-top: -4px;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-input[type='range']:hover::-webkit-slider-thumb {
-  opacity: 1;
-}
-
-input[type='range']::-webkit-slider-runnable-track {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  background: #AD8690;
 }

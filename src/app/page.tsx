@@ -56,7 +56,7 @@ export default function Home() {
           <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-blush-200 shadow-soft">
             <img src="/profile.jpeg" alt="Courtney" className="w-full h-full object-cover" />
           </div>
-          <span className="font-bold text-plum-800 text-base">Courtney.ko</span>
+          <span className="font-bold text-plum-800 text-base">Courtney Ko</span>
         </div>
         <div className="flex items-center gap-2">
           {socials.map(({ href, label, Icon }) => (
@@ -94,9 +94,9 @@ export default function Home() {
           </h1>
 
           <p className="text-plum-400 text-lg max-w-xl mx-auto leading-relaxed mb-3">
-            COO of AI Valley · Builder · Community architect
+            COO of AI Valley · Product Manager · UX Designer
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-sm text-plum-300">
+          <div className="flex items-center justify-center gap-1.5 text-sm text-plum-500">
             <MapPin size={13} />
             San Francisco, CA
           </div>
@@ -144,7 +144,7 @@ export default function Home() {
                         src={trip.coverImage}
                         alt={trip.title}
                         className="w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity"
-                        style={{ filter: 'saturate(1.1)' }}
+                        style={{ filter: 'saturate(1.1)', objectPosition: trip.coverImagePosition ?? 'center' }}
                       />
                     )}
                   </div>
@@ -177,8 +177,8 @@ export default function Home() {
           className="mt-16 grid grid-cols-3 gap-6 text-center"
         >
           {[
-            { value: '10+', label: 'Events hosted' },
-            { value: '500+', label: 'Builders connected' },
+            { value: '20+', label: 'Events hosted' },
+            { value: '5000+', label: 'Builders connected' },
             { value: '3+', label: 'Products built' },
           ].map(({ value, label }) => (
             <div key={label} className="bg-white rounded-2xl p-5 shadow-card border border-blush-50">

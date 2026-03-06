@@ -1,25 +1,16 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
   title: 'Courtney Ko',
   description: 'COO of AI Valley · Builder · Community Architect',
-  icons: {
-    icon: '/logo2.png',
-  },
+  icons: { icon: '/profile.jpeg' },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="bg-[#121212] text-white antialiased overflow-hidden h-screen">
+    <html lang="en">
+      <body className="bg-blush-50 text-plum-900 antialiased">
         {children}
       </body>
     </html>
