@@ -439,7 +439,7 @@ export const trips: Trip[] = [
     id: 'ai-valley-events',
     title: 'AI Valley Events',
     subtitle: 'Building the future of AI through community and hackathons',
-    dateRange: '2024 – 2026',
+    dateRange: '2025 – 2026',
     coverImage: '/witpic.jpeg',
     coverImagePosition: 'top',
     themeColor: '#F7A8B8',
