@@ -178,8 +178,8 @@ export default function Home() {
         >
           {[
             { value: '20+', label: 'Events hosted' },
-            { value: '5000+', label: 'Builders connected' },
-            { value: '3+', label: 'Products built' },
+            { value: '5,000+', label: 'Builders connected' },
+            { value: '919%', label: 'Transaction growth' },
           ].map(({ value, label }) => (
             <div key={label} className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50">
               <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">{value}</div>
