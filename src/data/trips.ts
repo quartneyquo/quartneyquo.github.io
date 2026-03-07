@@ -468,46 +468,6 @@ export const trips: Trip[] = [
           },
         ],
       },
-      {
-        id: 'life',
-        title: 'Life Lately',
-        dateLabel: 'Right now',
-        stops: [
-          {
-            id: 'sf-life',
-            title: 'San Francisco',
-            locationLabel: 'SF, CA',
-            tag: 'Personal',
-            blurb: 'Home base. The city of builders, fog, and boba.',
-            content: [
-              {
-                type: 'bullets',
-                title: 'Lately',
-                items: [
-                  'GTC 2026 — San Jose',
-                  'AI Valley events every few weeks',
-                  'Exploring new neighborhoods with Stitch',
-                  'Karaoke nights with the community',
-                ],
-              },
-            ],
-          },
-          {
-            id: 'stitch-now',
-            title: 'Stitch',
-            locationLabel: 'Everywhere',
-            tag: 'Personal',
-            blurb: 'Good dog. Chaotic energy. Main character behavior.',
-            content: [
-              {
-                type: 'text',
-                title: 'About Stitch',
-                text: 'Named after the Disney character for obvious reasons. Stitch is Courtney\'s dog and is convinced he is the most important attendee at every event. He is not wrong.',
-              },
-            ],
-          },
-        ],
-      },
     ],
   },
 
