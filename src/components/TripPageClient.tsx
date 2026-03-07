@@ -131,11 +131,11 @@ export default function TripPageClient({ trip, allTrips }: TripPageClientProps) 
           <span className="font-bold text-plum-700 text-sm">{trip.title}</span>
         </div>
 
-        <div className="px-4 md:px-6 pt-4 md:pt-6">
+        <div className="px-4 md:px-8 pt-4 md:pt-6">
           <TripHeader trip={trip} />
 
           {/* Filters */}
-          <div className="mb-6">
+          <div className="mb-8">
             <FilterChips
               available={allTags}
               active={activeFilter}

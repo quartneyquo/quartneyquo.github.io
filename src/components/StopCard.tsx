@@ -54,11 +54,12 @@ export default function StopCard({ stop, index, isSelected, isLast, onClick }: S
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: index * 0.05, duration: 0.3 }}
-        whileHover={{ y: -2, boxShadow: '0 6px 30px rgba(43,27,46,0.10)' }}
+        whileHover={{ y: -3, boxShadow: '0 8px 32px rgba(43,27,46,0.12)' }}
+        whileTap={{ scale: 0.99 }}
         onClick={onClick}
-        className={`flex-1 mb-4 bg-white rounded-2xl border cursor-pointer transition-all overflow-hidden ${
+        className={`flex-1 mb-4 bg-white rounded-2xl border cursor-pointer transition-colors overflow-hidden ${
           isSelected
-            ? 'border-blush-300 shadow-soft-lg ring-2 ring-blush-200'
+            ? 'border-blush-300 shadow-soft-lg ring-2 ring-blush-100'
             : 'border-blush-100 shadow-card hover:border-blush-200'
         }`}
       >

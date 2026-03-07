@@ -2,7 +2,23 @@
 
 import { motion } from 'framer-motion';
 
-const ALL_FILTERS = ['All', 'Community', 'Work', 'Product', 'Study', 'Hackathon', 'Mixer', 'Personal', 'Adventure', 'Joy', 'Creative', 'Love', 'Experiment', 'Builder Event', 'Startup', 'App', 'AI Product'];
+const ALL_FILTERS = [
+  'All', 'Community', 'Work', 'Product', 'Study', 'Hackathon', 'Mixer',
+  'Personal', 'Adventure', 'Joy', 'Creative', 'Love', 'Experiment',
+  'Builder Event', 'Startup', 'App', 'AI Product',
+];
+
+const DISPLAY_LABELS: Record<string, string> = {
+  All: 'All Stops',
+  Study: 'Learning',
+  Personal: 'Life',
+  Experiment: 'Experiments',
+  'Builder Event': 'Events',
+};
+
+function label(chip: string) {
+  return DISPLAY_LABELS[chip] ?? chip;
+}
 
 interface FilterChipsProps {
   available: string[];
@@ -22,15 +38,16 @@ export default function FilterChips({ available, active, onChange }: FilterChips
           <motion.button
             key={chip}
             onClick={() => onChange(chip)}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+            whileHover={{ y: -1, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.12 }}
+            className={`px-4 py-1.5 rounded-full text-[11px] font-semibold tracking-wide transition-all ${
               isActive
-                ? 'bg-blush-400 text-white shadow-soft'
-                : 'bg-white text-plum-500 border border-blush-200 hover:border-blush-400'
+                ? 'bg-plum-700 text-white shadow-soft border border-plum-700'
+                : 'bg-white text-plum-500 border border-blush-100 hover:border-blush-300 hover:text-plum-700 shadow-card'
             }`}
           >
-            {chip}
+            {label(chip)}
           </motion.button>
         );
       })}

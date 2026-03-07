@@ -30,23 +30,25 @@ export default function TimelineDay({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: dayNumber * 0.06 }}
-      className="mb-8"
+      className="mb-10"
     >
-      {/* Day header */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-blush-400 flex items-center justify-center shadow-soft flex-shrink-0">
-            <span className="text-[10px] font-black text-white">{dayNumber}</span>
-          </div>
-          <div>
-            <h2 className="font-bold text-plum-800 text-sm leading-none">{day.title}</h2>
-            {day.dateLabel && (
-              <span className="text-[10px] text-plum-500 font-medium">{day.dateLabel}</span>
-            )}
-          </div>
+      {/* Section header */}
+      <div className="mb-5">
+        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-blush-400 mb-0.5">
+          Stop {String(dayNumber).padStart(2, '0')}
+        </p>
+        <div className="flex items-center gap-3">
+          <h2 className="font-black text-plum-800 text-base leading-none whitespace-nowrap">
+            {day.title}
+          </h2>
+          {day.dateLabel && (
+            <span className="text-[10px] text-plum-500 font-medium">{day.dateLabel}</span>
+          )}
+          <div className="flex-1 h-px bg-blush-100" />
+          <span className="text-[10px] text-plum-300 font-medium whitespace-nowrap">
+            {visibleStops.length} {visibleStops.length === 1 ? 'stop' : 'stops'}
+          </span>
         </div>
-        <div className="flex-1 h-px bg-blush-100" />
-        <span className="text-[10px] text-plum-200 font-medium">{visibleStops.length} stops</span>
       </div>
 
       <div className="pl-2">
