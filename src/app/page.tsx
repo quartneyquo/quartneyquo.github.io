@@ -82,10 +82,6 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="pt-12 pb-12 text-center"
         >
-          <div className="mb-6">
-            <img src="/favicon2.png" alt="Courtney" className="w-36 h-36 mx-auto object-contain drop-shadow-md" />
-          </div>
-
           <div className="inline-flex items-center gap-2 bg-white border border-blush-200 rounded-full px-4 py-1.5 text-xs font-semibold text-blush-500 mb-6 shadow-soft">
             <span className="w-1.5 h-1.5 rounded-full bg-blush-400 animate-pulse" />
             Currently in flight
