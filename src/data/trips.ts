@@ -161,6 +161,80 @@ export const trips: Trip[] = [
               },
             ],
           },
+          {
+            id: 'tipbrightly-work',
+            title: 'TipBrightly',
+            locationLabel: 'San Francisco, CA',
+            tag: 'Work',
+            timeLabel: 'Nov 2024 – Oct 2025',
+            blurb: 'Product Manager — shipped analytics dashboards, AI churn prediction, and A/B experiments driving NPS to 78.',
+            content: [
+              {
+                type: 'text',
+                title: 'PM Role (2024–2025)',
+                text: 'Product Manager responsible for analytics infrastructure, AI-driven retention tooling, and growth experimentation.',
+              },
+              {
+                type: 'bullets',
+                title: 'What I Shipped',
+                items: [
+                  'Real-time analytics dashboard (Python, SQL) reducing reporting latency by 96%',
+                  'AI-driven churn prediction model using behavioral signals to flag at-risk accounts',
+                  'A/B experiments optimizing onboarding and activation — increased NPS to 78',
+                ],
+              },
+              {
+                type: 'text',
+                title: 'Founding PM Role (2020–2021)',
+                text: 'Led 0→1 platform redesign as Founding PM, owning payments workflows and building instrumentation for activation, revenue, and retention.',
+              },
+              {
+                type: 'metrics',
+                title: 'Founding PM Impact',
+                items: [
+                  { label: 'Transaction Growth', value: '919%' },
+                  { label: 'Revenue', value: '$9.7K→$99K' },
+                  { label: 'NPS (2025)', value: '78' },
+                  { label: 'Latency Cut', value: '96%' },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'wells-fargo',
+            title: 'Wells Fargo',
+            locationLabel: 'San Francisco, CA',
+            tag: 'Work',
+            timeLabel: 'Aug 2021 – Mar 2023',
+            blurb: 'Design Producer (Product Design Program Manager) — led cross-functional SDK and API platform delivery across fintech products.',
+            content: [
+              {
+                type: 'text',
+                title: 'Role',
+                text: 'Design Producer (Product Design Program Manager). Led cross-functional delivery across 10+ stakeholders for SDK and API platforms powering fintech products.',
+              },
+              {
+                type: 'bullets',
+                title: 'What I Did',
+                items: [
+                  'Prioritized product development for APIs and SDKs, driving agile adoption and improving developer efficiency',
+                  'Standardized 100+ API documentation assets across 25+ products, accelerating onboarding',
+                  'Conducted customer research and A/B testing to refine transactions and increase adoption',
+                  'Launched SDK-powered credit card payment solutions across 7,500+ hotels',
+                ],
+              },
+              {
+                type: 'metrics',
+                title: 'Scale',
+                items: [
+                  { label: 'Stakeholders', value: '10+' },
+                  { label: 'API Assets', value: '100+' },
+                  { label: 'Products', value: '25+' },
+                  { label: 'Hotels', value: '7,500+' },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
@@ -286,80 +360,6 @@ export const trips: Trip[] = [
                   'Data Science and MATLAB',
                   'UX Principles and Human-Computer Interaction',
                   'JavaScript, HTML/CSS',
-                ],
-              },
-            ],
-          },
-          {
-            id: 'wells-fargo',
-            title: 'Wells Fargo',
-            locationLabel: 'San Francisco, CA',
-            tag: 'Work',
-            timeLabel: 'Aug 2021 – Mar 2023',
-            blurb: 'Design Producer (Product Design Program Manager) — led cross-functional SDK and API platform delivery across fintech products.',
-            content: [
-              {
-                type: 'text',
-                title: 'Role',
-                text: 'Design Producer (Product Design Program Manager). Led cross-functional delivery across 10+ stakeholders for SDK and API platforms powering fintech products.',
-              },
-              {
-                type: 'bullets',
-                title: 'What I Did',
-                items: [
-                  'Prioritized product development for APIs and SDKs, driving agile adoption and improving developer efficiency',
-                  'Standardized 100+ API documentation assets across 25+ products, accelerating onboarding',
-                  'Conducted customer research and A/B testing to refine transactions and increase adoption',
-                  'Launched SDK-powered credit card payment solutions across 7,500+ hotels',
-                ],
-              },
-              {
-                type: 'metrics',
-                title: 'Scale',
-                items: [
-                  { label: 'Stakeholders', value: '10+' },
-                  { label: 'API Assets', value: '100+' },
-                  { label: 'Products', value: '25+' },
-                  { label: 'Hotels', value: '7,500+' },
-                ],
-              },
-            ],
-          },
-          {
-            id: 'tipbrightly-work',
-            title: 'TipBrightly',
-            locationLabel: 'San Francisco, CA',
-            tag: 'Work',
-            timeLabel: 'Nov 2024 – Oct 2025',
-            blurb: 'Product Manager — shipped analytics dashboards, AI churn prediction, and A/B experiments driving NPS to 78.',
-            content: [
-              {
-                type: 'text',
-                title: 'PM Role (2024–2025)',
-                text: 'Product Manager responsible for analytics infrastructure, AI-driven retention tooling, and growth experimentation.',
-              },
-              {
-                type: 'bullets',
-                title: 'What I Shipped',
-                items: [
-                  'Real-time analytics dashboard (Python, SQL) reducing reporting latency by 96%',
-                  'AI-driven churn prediction model using behavioral signals to flag at-risk accounts',
-                  'A/B experiments optimizing onboarding and activation — increased NPS to 78',
-                ],
-              },
-              {
-                type: 'text',
-                title: 'Founding PM Role (2020–2021)',
-                text: 'Led 0→1 platform redesign as Founding PM, owning payments workflows and building instrumentation for activation, revenue, and retention.',
-              },
-              {
-                type: 'metrics',
-                title: 'Founding PM Impact',
-                items: [
-                  { label: 'Transaction Growth', value: '919%' },
-                  { label: 'Revenue', value: '$9.7K→$99K' },
-                  { label: 'NPS (2025)', value: '78' },
-                  { label: 'Latency Cut', value: '96%' },
                 ],
               },
             ],
