@@ -174,16 +174,16 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-16 grid grid-cols-3 gap-6 text-center"
+          className="mt-16 grid grid-cols-3 gap-3 md:gap-6 text-center"
         >
           {[
             { value: '20+', label: 'Events hosted' },
             { value: '5000+', label: 'Builders connected' },
             { value: '3+', label: 'Products built' },
           ].map(({ value, label }) => (
-            <div key={label} className="bg-white rounded-2xl p-5 shadow-card border border-blush-50">
-              <div className="text-3xl font-black text-blush-500 mb-1">{value}</div>
-              <div className="text-xs text-plum-400 font-medium">{label}</div>
+            <div key={label} className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50">
+              <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">{value}</div>
+              <div className="text-[10px] md:text-xs text-plum-400 font-medium leading-tight">{label}</div>
             </div>
           ))}
         </motion.div>
