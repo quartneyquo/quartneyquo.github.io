@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
+import { ArrowRight, MapPin, Plane, Mail } from 'lucide-react';
 import { trips } from '@/data/trips';
 import BoardingPass from '@/components/BoardingPass';
 
@@ -44,9 +44,16 @@ const socials = [
   { href: 'https://www.linkedin.com/in/courtney-ko-720b63103/', label: 'LinkedIn', Icon: IconLinkedIn },
 ];
 
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
 export default function Home() {
   const nowTrip = trips.find((t) => t.id === 'now')!;
-  const otherTrips = trips.filter((t) => t.id !== 'now');
+  const aiValleyTrip = trips.find((t) => t.id === 'ai-valley-events')!;
+  const gridTrips = trips.filter((t) => t.id !== 'now');
 
   return (
     <div className="min-h-screen bg-blush-50">
@@ -75,67 +82,179 @@ export default function Home() {
       </nav>
 
       <main className="max-w-5xl mx-auto px-6 pb-20">
+
         {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="pt-12 pb-12 text-center"
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="pt-14 pb-14 text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white border border-blush-200 rounded-full px-4 py-1.5 text-xs font-semibold text-blush-500 mb-6 shadow-soft">
+          <div className="inline-flex items-center gap-2 bg-white border border-blush-200 rounded-full px-4 py-1.5 text-xs font-semibold text-blush-500 mb-4 shadow-soft">
             <span className="w-1.5 h-1.5 rounded-full bg-blush-400 animate-pulse" />
             Currently in flight
-            <Sparkles size={11} className="text-lavender-400" />
+            <Plane size={11} className="text-blush-400" />
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black text-plum-900 mb-4 leading-tight">
-            Hi, I&apos;m{' '}
-            <span className="text-blush-500">Courtney</span>
+          <div className="flex justify-center -mb-6 -mt-4">
+            <img src="/favicon2.png" alt="Courtney Ko" className="w-56 h-56 object-contain" />
+          </div>
+
+          <h1 className="text-5xl md:text-6xl font-black text-plum-900 mb-5 leading-tight">
+            Courtney Ko
           </h1>
 
-          <p className="text-plum-400 text-lg max-w-xl mx-auto leading-relaxed mb-3">
-            Building community, product, and tech at the intersection of people and AI
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+            {['COO · AI Valley', 'Community Architect', 'Product Maker'].map((role) => (
+              <span
+                key={role}
+                className="text-xs font-semibold text-plum-600 bg-white border border-blush-100 rounded-full px-3 py-1 shadow-soft"
+              >
+                {role}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-plum-400 text-lg max-w-lg mx-auto leading-relaxed mb-4">
+            Building communities, products, and experiments at the frontier of AI
           </p>
-          <div className="flex items-center justify-center gap-1.5 text-sm text-plum-500">
+
+          <div className="flex items-center justify-center gap-1.5 text-sm text-plum-400">
             <MapPin size={13} />
             San Francisco, CA
           </div>
         </motion.div>
 
-        {/* Boarding Pass — Now trip */}
+        {/* Boarding Pass — Now */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="mb-12"
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.12 } } }}
+          className="mb-14"
         >
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">🎫 Featured Trip</h2>
+            <h2 className="text-sm font-bold text-plum-700">Current Itinerary</h2>
             <div className="flex-1 h-px bg-blush-100" />
           </div>
           <BoardingPass trip={nowTrip} />
         </motion.div>
 
-        {/* All trips grid */}
+        {/* AI Valley Spotlight */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-14"
         >
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">✈️ All Trips</h2>
+            <h2 className="text-sm font-bold text-plum-700">Main Destination</h2>
             <div className="flex-1 h-px bg-blush-100" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {otherTrips.map((trip, i) => (
+          <Link href="/trips/ai-valley-events">
+            <motion.div
+              whileHover={{ y: -3, boxShadow: '0 20px 56px rgba(173,134,144,0.22)' }}
+              transition={{ duration: 0.22 }}
+              className="relative overflow-hidden rounded-3xl bg-white border border-blush-100 shadow-card cursor-pointer group"
+            >
+              {/* Cover image with gradient overlay */}
+              <div className="h-52 relative overflow-hidden bg-blush-300">
+                {aiValleyTrip.coverImage && (
+                  <img
+                    src={aiValleyTrip.coverImage}
+                    alt="AI Valley"
+                    className="w-full h-full object-cover opacity-70 group-hover:opacity-80 transition-opacity duration-300"
+                    style={{ objectPosition: aiValleyTrip.coverImagePosition ?? 'center' }}
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/75 via-plum-900/20 to-transparent" />
+                <div className="absolute bottom-5 left-6 right-6">
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-1">
+                    Community · San Francisco
+                  </div>
+                  <h3 className="text-2xl font-black text-white leading-tight">AI Valley</h3>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-6">
+                <p className="text-sm text-plum-500 leading-relaxed mb-5">
+                  San Francisco's technical AI community — running hackathons, events, and programming that connects builders, founders, and researchers at the frontier.
+                </p>
+
+                {/* Past highlights photo strip */}
+                <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-1 px-1">
+                  {[
+                    { src: '/witpic.jpeg', label: 'WIT Hackathon' },
+                    { src: '/rota.jpg', label: 'Return of the Agents' },
+                    { src: '/nowplaying.jpeg', label: 'Community' },
+                  ].map(({ src, label }) => (
+                    <div
+                      key={src}
+                      className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200"
+                    >
+                      <img
+                        src={src}
+                        alt={label}
+                        className="w-full h-full object-cover opacity-80"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-plum-900/50 to-transparent" />
+                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/80 uppercase tracking-wide">
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="flex-shrink-0 w-36 h-24 rounded-xl border-2 border-dashed border-blush-200 flex items-center justify-center text-[10px] text-plum-300 font-medium">
+                    More coming
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3 mb-5">
+                  {[
+                    { value: '20+', label: 'Events hosted' },
+                    { value: '5,000+', label: 'Builders' },
+                    { value: '10+', label: 'Hackathons' },
+                  ].map(({ value, label }) => (
+                    <div key={label} className="bg-blush-50 border border-blush-100 rounded-xl p-3 text-center">
+                      <div className="text-lg font-black text-blush-500 leading-none mb-1">{value}</div>
+                      <div className="text-[10px] text-plum-400 font-medium">{label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-end gap-1.5 text-xs font-semibold text-blush-400 group-hover:text-blush-600 transition-colors">
+                  View events <ArrowRight size={13} />
+                </div>
+              </div>
+            </motion.div>
+          </Link>
+        </motion.div>
+
+
+        {/* All Trips Grid */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-14"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-bold text-plum-700">All Trips</h2>
+            <div className="flex-1 h-px bg-blush-100" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {gridTrips.map((trip, i) => (
               <Link key={trip.id} href={`/trips/${trip.id}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 + i * 0.08 }}
-                  whileHover={{ y: -4, boxShadow: '0 12px 36px rgba(247,168,184,0.25)' }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-card border border-blush-100 cursor-pointer group"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  whileHover={{ y: -4, boxShadow: '0 12px 36px rgba(173,134,144,0.22)' }}
+                  className="bg-white rounded-2xl overflow-hidden shadow-card border border-blush-100 cursor-pointer group h-full"
                 >
                   {/* Cover */}
                   <div className={`h-28 ${TRIP_COLORS[trip.id] || 'bg-blush-300'} relative overflow-hidden`}>
@@ -143,7 +262,7 @@ export default function Home() {
                       <img
                         src={trip.coverImage}
                         alt={trip.title}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity"
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-300"
                         style={{ filter: 'saturate(1.1)', objectPosition: trip.coverImagePosition ?? 'center' }}
                       />
                     )}
@@ -169,12 +288,43 @@ export default function Home() {
           </div>
         </motion.div>
 
+        {/* Moments photo strip */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-14"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-bold text-plum-700">Moments</h2>
+            <div className="flex-1 h-px bg-blush-100" />
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
+            {[
+              { src: '/seoul.jpeg', caption: 'Seoul, Korea', position: 'object-top' },
+              { src: '/macchupicchu.jpeg', caption: 'Machu Picchu', position: 'object-center' },
+              { src: '/sf.jpeg', caption: 'San Francisco', position: 'object-center' },
+              { src: '/china.jpeg', caption: 'China', position: 'object-center' },
+              { src: '/stitch.jpeg', caption: 'Stitch', position: 'object-center' },
+              { src: '/witpic.jpeg', caption: 'AI Valley', position: 'object-top' },
+            ].map(({ src, caption, position }) => (
+              <div key={src} className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44">
+                <img src={src} alt={caption} className={`w-full h-full object-cover ${position}`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/55 via-transparent to-transparent" />
+                <span className="absolute bottom-2 left-2.5 text-[10px] font-bold text-white/90">{caption}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Stats */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-16 grid grid-cols-3 gap-3 md:gap-6 text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-20 grid grid-cols-3 gap-3 md:gap-6 text-center"
         >
           {[
             { value: '20+', label: 'Events hosted' },
@@ -187,6 +337,50 @@ export default function Home() {
             </div>
           ))}
         </motion.div>
+
+        {/* Footer CTA */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="pt-12 border-t border-blush-100 text-center"
+        >
+          <div className="text-3xl mb-4">🦙</div>
+          <h2 className="text-2xl font-black text-plum-900 mb-2">Let's build something interesting</h2>
+          <p className="text-sm text-plum-400 leading-relaxed mb-8 max-w-sm mx-auto">
+            Whether it's a community event, a product idea, or just a good conversation — I'm always open.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+            <a
+              href="https://www.linkedin.com/in/courtney-ko-720b63103/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-2.5 bg-plum-800 text-white rounded-full text-sm font-semibold hover:bg-plum-700 transition-colors shadow-soft"
+            >
+              <Mail size={14} />
+              Connect
+            </a>
+            {socials.map(({ href, label, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={label}
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-blush-200 text-plum-400 hover:bg-blush-100 hover:text-blush-600 transition-all shadow-soft"
+              >
+                <Icon />
+              </a>
+            ))}
+          </div>
+
+          <p className="text-[10px] text-plum-300 font-medium">
+            Made with care in San Francisco · 2026
+          </p>
+        </motion.div>
+
       </main>
     </div>
   );

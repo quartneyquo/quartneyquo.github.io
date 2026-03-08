@@ -28,7 +28,13 @@ export interface MapBlock {
   countries: string[]; // ISO numeric codes as strings
 }
 
-export type ContentBlock = BulletsBlock | MetricsBlock | TextBlock | LinksBlock | MapBlock;
+export interface GalleryBlock {
+  type: 'gallery';
+  title?: string;
+  photos: { src: string; caption?: string }[];
+}
+
+export type ContentBlock = BulletsBlock | MetricsBlock | TextBlock | LinksBlock | MapBlock | GalleryBlock;
 
 export interface Stop {
   id: string;

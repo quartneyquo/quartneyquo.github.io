@@ -93,6 +93,30 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
     );
   }
 
+  if (block.type === 'gallery') {
+    return (
+      <div className="mb-5">
+        {block.title && (
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-plum-300 mb-2">
+            {block.title}
+          </h4>
+        )}
+        <div className={`grid gap-2 ${block.photos.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+          {block.photos.map(({ src, caption }, i) => (
+            <div key={i} className="relative rounded-xl overflow-hidden bg-blush-100 aspect-square">
+              <img src={src} alt={caption ?? ''} className="w-full h-full object-cover" />
+              {caption && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-plum-900/60 to-transparent px-2 pb-1.5 pt-4">
+                  <span className="text-[9px] font-bold text-white/90">{caption}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (block.type === 'map') {
     return (
       <div className="mb-5">
@@ -169,6 +193,11 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
 
             {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto px-5 py-5">
+              {stop.image && (
+                <div className="rounded-xl overflow-hidden mb-5 -mx-1">
+                  <img src={stop.image} alt={stop.title} className="w-full h-40 object-cover" />
+                </div>
+              )}
               <p className="text-sm text-plum-500 leading-relaxed mb-6 pb-5 border-b border-blush-50">
                 {stop.blurb}
               </p>
