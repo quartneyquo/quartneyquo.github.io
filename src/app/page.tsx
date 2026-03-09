@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Plane, Mail } from 'lucide-react';
+import { ArrowRight, MapPin, Plane, Mail, ExternalLink } from 'lucide-react';
 import { trips } from '@/data/trips';
 import BoardingPass from '@/components/BoardingPass';
 
@@ -44,6 +44,77 @@ const socials = [
   { href: 'https://www.linkedin.com/in/courtney-ko-720b63103/', label: 'LinkedIn', Icon: IconLinkedIn },
 ];
 
+const PROJECTS = [
+  {
+    title: 'Pearle',
+    tag: 'AI Product',
+    description: 'AI travel planning assistant — NLP pipelines turning social media posts into collaborative itineraries.',
+    outcome: '',
+    href: 'https://pearletravel.com',
+  },
+  {
+    title: 'PacaPlate',
+    tag: 'App',
+    description: 'AI calorie tracking app using computer vision — making nutrition tracking feel effortless and fun.',
+    outcome: 'In progress · 2026',
+    href: null,
+  },
+  {
+    title: 'TipBrightly',
+    tag: 'Fintech',
+    description: 'QR-code tipping platform for service workers — led product across two stints, redesigned core flows.',
+    outcome: '919% transaction growth',
+    href: 'https://tipbrightly.com',
+  },
+];
+
+const DISPATCHES = [
+  {
+    title: 'Building AI Valley community experiences',
+    description: 'Designing founder events, builder touchpoints, and community moments that feel more intentional.',
+    status: 'In progress',
+    domain: 'Community',
+    freshness: 'Updated this week',
+    accent: 'border-blush-300',
+    statusStyle: 'bg-blush-100 text-blush-600',
+  },
+  {
+    title: 'Exploring AI agents and tool-use patterns',
+    description: 'Studying orchestration patterns, workflows, and where agents feel genuinely useful vs. overhyped.',
+    status: 'Researching',
+    domain: 'AI',
+    freshness: 'Updated recently',
+    accent: 'border-lavender-300',
+    statusStyle: 'bg-lavender-100 text-lavender-600',
+  },
+  {
+    title: 'Designing travel planning tools',
+    description: 'Experimenting with interfaces for smarter trip inspiration and collaborative itinerary flow.',
+    status: 'Prototyping',
+    domain: 'Product',
+    freshness: 'Updated this month',
+    accent: 'border-plum-200',
+    statusStyle: 'bg-plum-100 text-plum-500',
+  },
+  {
+    title: 'Experimenting with new product ideas',
+    description: 'Exploring early-stage concepts at the intersection of AI, community, and everyday human needs.',
+    status: 'Exploring',
+    domain: 'Experiments',
+    freshness: 'Ongoing',
+    accent: 'border-blush-200',
+    statusStyle: 'bg-blush-50 text-blush-500',
+  },
+];
+
+const MOMENTS = [
+  { src: '/seoul.jpeg', caption: 'Seoul, Korea', context: 'Lived and explored Korean culture', position: 'object-top' },
+  { src: '/macchupicchu.jpeg', caption: 'Machu Picchu', context: 'Solo travel and exploration', position: 'object-center' },
+  { src: '/sf.jpeg', caption: 'San Francisco', context: 'Home base for building', position: 'object-center' },
+  { src: '/china.jpeg', caption: 'China', context: 'Heritage and discovery', position: 'object-center' },
+  { src: '/stitch.jpeg', caption: 'Stitch', context: 'My dog and constant companion', position: 'object-center' },
+  { src: '/witpic.jpeg', caption: 'AI Valley', context: 'Community I help lead', position: 'object-top' },
+];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -88,7 +159,7 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="pt-14 pb-14 text-center"
+          className="pt-14 pb-10 text-center"
         >
           <div className="inline-flex items-center gap-2 bg-white border border-blush-200 rounded-full px-4 py-1.5 text-xs font-semibold text-blush-500 mb-4 shadow-soft">
             <span className="w-1.5 h-1.5 rounded-full bg-blush-400 animate-pulse" />
@@ -100,24 +171,23 @@ export default function Home() {
             <img src="/favicon2.png" alt="Courtney Ko" className="w-56 h-56 object-contain" />
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black text-plum-900 mb-5 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-plum-900 mb-4 leading-tight">
             Courtney Ko
           </h1>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            {['COO · AI Valley', 'Community Architect', 'Product Maker'].map((role) => (
-              <span
-                key={role}
-                className="text-xs font-semibold text-plum-600 bg-white border border-blush-100 rounded-full px-3 py-1 shadow-soft"
-              >
-                {role}
-              </span>
-            ))}
-          </div>
+          <p className="text-sm font-semibold text-plum-500 mb-5 tracking-wide">
+            COO at AI Valley · Community Architect · Product Builder
+          </p>
 
-          <p className="text-plum-400 text-lg max-w-lg mx-auto leading-relaxed mb-4">
+          <p className="text-plum-400 text-lg max-w-lg mx-auto leading-relaxed mb-5">
             Building communities, products, and experiments at the frontier of AI
           </p>
+
+          {/* Proof point */}
+          <div className="inline-flex items-center gap-2 text-sm text-plum-500 bg-white border border-blush-100 rounded-full px-4 py-2 shadow-soft mb-4">
+            <span className="font-black text-blush-500">5,000+</span>
+            builders connected through AI Valley
+          </div>
 
           <div className="flex items-center justify-center gap-1.5 text-sm text-plum-400">
             <MapPin size={13} />
@@ -125,11 +195,36 @@ export default function Home() {
           </div>
         </motion.div>
 
+        {/* Impact Stats */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.1 } } }}
+          className="mb-14"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-bold text-plum-700">Impact</h2>
+            <div className="flex-1 h-px bg-blush-100" />
+          </div>
+          <div className="grid grid-cols-3 gap-3 md:gap-5 text-center">
+            {[
+              { value: '5,000+', label: 'Builders connected' },
+              { value: '20+', label: 'Events hosted' },
+              { value: '5+', label: 'Years building' },
+            ].map(({ value, label }) => (
+              <div key={label} className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50">
+                <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">{value}</div>
+                <div className="text-[10px] md:text-xs text-plum-400 font-medium leading-tight">{label}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Boarding Pass — Now */}
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.12 } } }}
+          variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.18 } } }}
           className="mb-14"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -158,7 +253,6 @@ export default function Home() {
               transition={{ duration: 0.22 }}
               className="relative overflow-hidden rounded-3xl bg-white border border-blush-100 shadow-card cursor-pointer group"
             >
-              {/* Cover image with gradient overlay */}
               <div className="h-52 relative overflow-hidden bg-blush-300">
                 {aiValleyTrip.coverImage && (
                   <img
@@ -177,44 +271,31 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Body */}
               <div className="p-6">
                 <p className="text-sm text-plum-500 leading-relaxed mb-5">
                   San Francisco's technical AI community — running hackathons, events, and programming that connects builders, founders, and researchers at the frontier.
                 </p>
 
-                {/* Past highlights photo strip */}
+                {/* Photo strip */}
                 <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-1 px-1">
                   {[
                     { src: '/witpic.jpeg', label: 'WIT Hackathon' },
                     { src: '/rota.jpg', label: 'Return of the Agents' },
                     { src: '/nowplaying.jpeg', label: 'Community' },
                   ].map(({ src, label }) => (
-                    <div
-                      key={src}
-                      className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200"
-                    >
-                      <img
-                        src={src}
-                        alt={label}
-                        className="w-full h-full object-cover opacity-80"
-                      />
+                    <div key={src} className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200">
+                      <img src={src} alt={label} className="w-full h-full object-cover opacity-80" />
                       <div className="absolute inset-0 bg-gradient-to-t from-plum-900/50 to-transparent" />
-                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/80 uppercase tracking-wide">
-                        {label}
-                      </span>
+                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/80 uppercase tracking-wide">{label}</span>
                     </div>
                   ))}
-                  <div className="flex-shrink-0 w-36 h-24 rounded-xl border-2 border-dashed border-blush-200 flex items-center justify-center text-[10px] text-plum-300 font-medium">
-                    More coming
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   {[
                     { value: '20+', label: 'Events hosted' },
                     { value: '5,000+', label: 'Builders' },
-                    { value: '10+', label: 'Hackathons' },
+                    { value: '5+', label: 'Years building' },
                   ].map(({ value, label }) => (
                     <div key={label} className="bg-blush-50 border border-blush-100 rounded-xl p-3 text-center">
                       <div className="text-lg font-black text-blush-500 leading-none mb-1">{value}</div>
@@ -231,6 +312,114 @@ export default function Home() {
           </Link>
         </motion.div>
 
+        {/* Projects */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-14"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-bold text-plum-700">What I've Built</h2>
+            <div className="flex-1 h-px bg-blush-100" />
+            <Link href="/trips/projects" className="text-[11px] text-blush-400 hover:text-blush-600 font-semibold transition-colors">
+              All projects <ArrowRight size={11} className="inline" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {PROJECTS.map((project, i) => (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                whileHover={{ y: -3, boxShadow: '0 12px 32px rgba(173,134,144,0.18)' }}
+                className="bg-white rounded-2xl p-5 shadow-card border border-blush-100 flex flex-col"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-3">{project.tag}</span>
+                <h3 className="font-black text-plum-900 text-lg mb-2 leading-tight">{project.title}</h3>
+                <p className="text-xs text-plum-400 leading-relaxed flex-1 mb-4">{project.description}</p>
+                <div className="flex items-center justify-between">
+                  {project.outcome && (
+                    <span className="text-[10px] font-semibold text-lavender-500 bg-lavender-50 px-2.5 py-1 rounded-full">
+                      {project.outcome}
+                    </span>
+                  )}
+                  {project.href && (
+                    <a
+                      href={project.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-blush-400 hover:text-blush-600 transition-colors"
+                    >
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Currently Building */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          className="mb-14"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-sm font-bold text-plum-700">Currently Building</h2>
+            <div className="flex-1 h-px bg-blush-100" />
+          </div>
+          <p className="text-[11px] text-plum-300 font-medium mb-5">Dispatches from the field</p>
+
+          <div className="relative">
+            {/* Connecting line */}
+            <div className="absolute left-[11px] top-4 bottom-4 w-px bg-blush-100 hidden sm:block" />
+
+            <div className="space-y-3">
+              {DISPATCHES.map(({ title, description, status, domain, freshness, accent, statusStyle }, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  className="relative sm:pl-8"
+                >
+                  {/* Timeline dot */}
+                  <div className="absolute left-0 top-5 w-[10px] h-[10px] rounded-full bg-white border-2 border-blush-300 hidden sm:block" />
+
+                  <div className={`bg-white rounded-2xl border-l-4 ${accent} border-t border-r border-b border-blush-100 shadow-card p-5`}>
+                    {/* Dispatch number */}
+                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-blush-300 mb-2">
+                      Dispatch {String(i + 1).padStart(2, '0')}
+                    </div>
+
+                    <h3 className="font-bold text-plum-900 text-sm leading-snug mb-1.5">{title}</h3>
+                    <p className="text-xs text-plum-400 leading-relaxed mb-3">{description}</p>
+
+                    {/* Meta row */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${statusStyle}`}>
+                        {status}
+                      </span>
+                      <span className="text-[10px] text-plum-300 font-medium">{domain}</span>
+                      <span className="text-plum-200 text-[10px]">·</span>
+                      <span className="text-[10px] text-plum-300 font-medium">{freshness}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
         {/* All Trips Grid */}
         <motion.div
@@ -244,7 +433,6 @@ export default function Home() {
             <h2 className="text-sm font-bold text-plum-700">All Trips</h2>
             <div className="flex-1 h-px bg-blush-100" />
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {gridTrips.map((trip, i) => (
               <Link key={trip.id} href={`/trips/${trip.id}`}>
@@ -256,7 +444,6 @@ export default function Home() {
                   whileHover={{ y: -4, boxShadow: '0 12px 36px rgba(173,134,144,0.22)' }}
                   className="bg-white rounded-2xl overflow-hidden shadow-card border border-blush-100 cursor-pointer group h-full"
                 >
-                  {/* Cover */}
                   <div className={`h-28 ${TRIP_COLORS[trip.id] || 'bg-blush-300'} relative overflow-hidden`}>
                     {trip.coverImage && (
                       <img
@@ -267,12 +454,8 @@ export default function Home() {
                       />
                     )}
                   </div>
-
-                  {/* Info */}
                   <div className="p-4">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-1">
-                      {trip.dateRange}
-                    </div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-1">{trip.dateRange}</div>
                     <h3 className="font-bold text-plum-800 text-base mb-1">{trip.title}</h3>
                     <p className="text-xs text-plum-400 leading-relaxed line-clamp-2">{trip.subtitle}</p>
                     <div className="flex items-center justify-between mt-3">
@@ -288,7 +471,7 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Moments photo strip */}
+        {/* Moments */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -300,42 +483,18 @@ export default function Home() {
             <h2 className="text-sm font-bold text-plum-700">Moments</h2>
             <div className="flex-1 h-px bg-blush-100" />
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
-            {[
-              { src: '/seoul.jpeg', caption: 'Seoul, Korea', position: 'object-top' },
-              { src: '/macchupicchu.jpeg', caption: 'Machu Picchu', position: 'object-center' },
-              { src: '/sf.jpeg', caption: 'San Francisco', position: 'object-center' },
-              { src: '/china.jpeg', caption: 'China', position: 'object-center' },
-              { src: '/stitch.jpeg', caption: 'Stitch', position: 'object-center' },
-              { src: '/witpic.jpeg', caption: 'AI Valley', position: 'object-top' },
-            ].map(({ src, caption, position }) => (
-              <div key={src} className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44">
-                <img src={src} alt={caption} className={`w-full h-full object-cover ${position}`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/55 via-transparent to-transparent" />
-                <span className="absolute bottom-2 left-2.5 text-[10px] font-bold text-white/90">{caption}</span>
+          <div className="grid grid-cols-3 gap-3">
+            {MOMENTS.map(({ src, caption, context, position }) => (
+              <div key={src} className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44 group">
+                <img src={src} alt={caption} className={`w-full h-full object-cover ${position} group-hover:scale-105 transition-transform duration-500`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                  <div className="text-[10px] font-black text-white leading-none mb-0.5">{caption}</div>
+                  <div className="text-[9px] text-white/65 leading-tight">{context}</div>
+                </div>
               </div>
             ))}
           </div>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          className="mb-20 grid grid-cols-3 gap-3 md:gap-6 text-center"
-        >
-          {[
-            { value: '20+', label: 'Events hosted' },
-            { value: '5,000+', label: 'Builders connected' },
-            { value: '919%', label: 'Transaction growth' },
-          ].map(({ value, label }) => (
-            <div key={label} className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50">
-              <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">{value}</div>
-              <div className="text-[10px] md:text-xs text-plum-400 font-medium leading-tight">{label}</div>
-            </div>
-          ))}
         </motion.div>
 
         {/* Footer CTA */}
@@ -347,7 +506,7 @@ export default function Home() {
           className="pt-12 border-t border-blush-100 text-center"
         >
           <div className="text-3xl mb-4">🦙</div>
-          <h2 className="text-2xl font-black text-plum-900 mb-2">Let's build something interesting</h2>
+          <h2 className="text-2xl font-black text-plum-900 mb-2">Let's build something interesting.</h2>
           <p className="text-sm text-plum-400 leading-relaxed mb-8 max-w-sm mx-auto">
             Whether it's a community event, a product idea, or just a good conversation — I'm always open.
           </p>
@@ -360,7 +519,7 @@ export default function Home() {
               className="flex items-center gap-2 px-5 py-2.5 bg-plum-800 text-white rounded-full text-sm font-semibold hover:bg-plum-700 transition-colors shadow-soft"
             >
               <Mail size={14} />
-              Connect
+              Connect on LinkedIn
             </a>
             {socials.map(({ href, label, Icon }) => (
               <a
