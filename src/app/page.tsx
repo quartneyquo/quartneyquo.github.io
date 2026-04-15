@@ -137,6 +137,13 @@ export default function Home() {
           <span className="font-bold text-plum-800 text-base">Courtney Ko</span>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href="/resume"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-blush-200 text-[11px] font-bold text-plum-500 hover:bg-blush-50 hover:text-blush-600 transition-all shadow-soft"
+          >
+            <Plane size={11} />
+            Flight Log
+          </Link>
           {socials.map(({ href, label, Icon }) => (
             <a
               key={label}
