@@ -103,14 +103,27 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
         )}
         <div className={`grid gap-2 ${block.photos.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
           {block.photos.map(({ src, caption }, i) => (
-            <div key={i} className="relative rounded-xl overflow-hidden bg-blush-100 aspect-square">
-              <img src={src} alt={caption ?? ''} className="w-full h-full object-cover" />
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.06, duration: 0.4, ease: 'easeOut' }}
+              whileHover={{ scale: 1.015 }}
+              className={`relative rounded-xl overflow-hidden bg-blush-100 group ${
+                block.photos.length === 1 ? 'aspect-[4/3]' : 'aspect-square'
+              }`}
+            >
+              <img
+                src={src}
+                alt={caption ?? ''}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
               {caption && (
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-plum-900/60 to-transparent px-2 pb-1.5 pt-4">
-                  <span className="text-[9px] font-bold text-white/90">{caption}</span>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-plum-900/70 to-transparent px-3 pb-2 pt-5">
+                  <span className="text-[10px] font-bold text-white/95 leading-tight">{caption}</span>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

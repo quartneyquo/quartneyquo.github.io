@@ -1,10 +1,81 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Plane, Mail, ExternalLink } from 'lucide-react';
+import { ArrowRight, MapPin, Plane, Mail, ExternalLink, Sparkles, Heart } from 'lucide-react';
 import { trips } from '@/data/trips';
 import BoardingPass from '@/components/BoardingPass';
+
+// Counts up to a target number, parsing strings like "5,000+" or "20+"
+function CountUp({ value, duration = 1.6 }: { value: string; duration?: number }) {
+  const match = value.match(/^([\d,]+)(.*)$/);
+  const target = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+  const suffix = match ? match[2] : '';
+
+  const ref = useRef<HTMLSpanElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current || hasAnimated) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasAnimated(true);
+          const controls = animate(0, target, {
+            duration,
+            ease: 'easeOut',
+            onUpdate: (v) => {
+              if (ref.current) {
+                ref.current.textContent =
+                  Math.floor(v).toLocaleString('en-US') + suffix;
+              }
+            },
+          });
+          return () => controls.stop();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, suffix, duration, hasAnimated]);
+
+  if (!match) return <>{value}</>;
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+// Slight parallax tilt on hover
+function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 20 });
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const onLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ rotateX, rotateY, transformPerspective: 800, transformStyle: 'preserve-3d' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 const TRIP_COLORS: Record<string, string> = {
   now: 'bg-lavender-300',
@@ -108,11 +179,11 @@ const DISPATCHES = [
 ];
 
 const MOMENTS = [
+  { src: '/femalebrunch.jpg', caption: 'Female Founder Brunch', context: 'Cheers to women building what\'s next', position: 'object-center' },
   { src: '/seoul.jpeg', caption: 'Seoul, Korea', context: 'Lived and explored Korean culture', position: 'object-top' },
   { src: '/macchupicchu.jpeg', caption: 'Machu Picchu', context: 'Solo travel and exploration', position: 'object-center' },
   { src: '/sf.jpeg', caption: 'San Francisco', context: 'Home base for building', position: 'object-center' },
   { src: '/china.jpeg', caption: 'China', context: 'Heritage and discovery', position: 'object-center' },
-  { src: '/stitch.jpeg', caption: 'Stitch', context: 'My dog and constant companion', position: 'object-center' },
   { src: '/witpic.jpeg', caption: 'AI Valley', context: 'Community I help lead', position: 'object-top' },
 ];
 
@@ -127,9 +198,19 @@ export default function Home() {
   const gridTrips = trips.filter((t) => t.id !== 'now');
 
   return (
-    <div className="min-h-screen bg-blush-50">
+    <div className="min-h-screen bg-blush-50 relative overflow-hidden">
+      {/* Ambient gradient blobs */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="blob-a absolute -top-20 -left-24 w-[420px] h-[420px] rounded-full bg-blush-200/50 blur-3xl" />
+        <div className="blob-b absolute top-40 -right-32 w-[480px] h-[480px] rounded-full bg-lavender-200/45 blur-3xl" />
+        <div className="blob-c absolute top-[55%] left-1/3 w-[360px] h-[360px] rounded-full bg-blush-100/50 blur-3xl" />
+        <div className="plane-drift absolute top-12 text-blush-300/60">
+          <Plane size={26} />
+        </div>
+      </div>
+
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto">
+      <nav className="relative flex items-center justify-between px-6 py-5 max-w-5xl mx-auto">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-blush-200 shadow-soft">
             <img src="/profile.jpeg" alt="Courtney" className="w-full h-full object-cover" />
@@ -159,7 +240,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-6 pb-20">
+      <main className="relative max-w-5xl mx-auto px-6 pb-20">
 
         {/* Hero */}
         <motion.div
@@ -175,10 +256,16 @@ export default function Home() {
           </div>
 
           <div className="flex justify-center -mb-6 -mt-4">
-            <img src="/favicon2.png" alt="Courtney Ko" className="w-56 h-56 object-contain" />
+            <motion.img
+              src="/favicon2.png"
+              alt="Courtney Ko"
+              className="w-56 h-56 object-contain"
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }}
+            />
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black text-plum-900 mb-4 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight shimmer-text">
             Courtney Ko
           </h1>
 
@@ -191,9 +278,26 @@ export default function Home() {
           </p>
 
           {/* Proof point */}
-          <div className="inline-flex items-center gap-2 text-sm text-plum-500 bg-white border border-blush-100 rounded-full px-4 py-2 shadow-soft mb-4">
-            <span className="font-black text-blush-500">5,000+</span>
-            builders connected through AI Valley
+          <div className="relative inline-block mb-4">
+            <Sparkles
+              size={11}
+              className="sparkle absolute -top-2 -left-3 text-blush-400"
+              style={{ animationDelay: '0s' }}
+            />
+            <Sparkles
+              size={9}
+              className="sparkle absolute -top-1 -right-2 text-lavender-400"
+              style={{ animationDelay: '1.2s' }}
+            />
+            <Sparkles
+              size={8}
+              className="sparkle absolute -bottom-2 left-6 text-blush-300"
+              style={{ animationDelay: '2.1s' }}
+            />
+            <div className="inline-flex items-center gap-2 text-sm text-plum-500 bg-white border border-blush-100 rounded-full px-4 py-2 shadow-soft">
+              <span className="font-black text-blush-500">5,000+</span>
+              builders connected through AI Valley
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-1.5 text-sm text-plum-400">
@@ -218,11 +322,21 @@ export default function Home() {
               { value: '5,000+', label: 'Builders connected' },
               { value: '20+', label: 'Events hosted' },
               { value: '5+', label: 'Years building' },
-            ].map(({ value, label }) => (
-              <div key={label} className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50">
-                <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">{value}</div>
+            ].map(({ value, label }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.45, ease: 'easeOut' }}
+                whileHover={{ y: -3, boxShadow: '0 10px 28px rgba(173,134,144,0.2)' }}
+                className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50"
+              >
+                <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">
+                  <CountUp value={value} />
+                </div>
                 <div className="text-[10px] md:text-xs text-plum-400 font-medium leading-tight">{label}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -265,11 +379,21 @@ export default function Home() {
                   <img
                     src={aiValleyTrip.coverImage}
                     alt="AI Valley"
-                    className="w-full h-full object-cover opacity-70 group-hover:opacity-80 transition-opacity duration-300"
+                    className="ken-burns w-full h-full object-cover opacity-70 group-hover:opacity-85 transition-opacity duration-500"
                     style={{ objectPosition: aiValleyTrip.coverImagePosition ?? 'center' }}
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-plum-900/75 via-plum-900/20 to-transparent" />
+                <Sparkles
+                  size={14}
+                  className="sparkle absolute top-4 right-6 text-white/80"
+                  style={{ animationDelay: '0.4s' }}
+                />
+                <Sparkles
+                  size={10}
+                  className="sparkle absolute top-10 right-16 text-blush-200"
+                  style={{ animationDelay: '1.8s' }}
+                />
                 <div className="absolute bottom-5 left-6 right-6">
                   <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-1">
                     Community · San Francisco
@@ -286,15 +410,46 @@ export default function Home() {
                 {/* Photo strip */}
                 <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-1 px-1">
                   {[
+                    { src: '/femalebrunch.jpg', label: 'Female Founder Brunch', accent: 'heart' },
                     { src: '/witpic.jpeg', label: 'WIT Hackathon' },
                     { src: '/rota.jpg', label: 'Return of the Agents' },
                     { src: '/nowplaying.jpeg', label: 'Community' },
-                  ].map(({ src, label }) => (
-                    <div key={src} className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200">
-                      <img src={src} alt={label} className="w-full h-full object-cover opacity-80" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-plum-900/50 to-transparent" />
-                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/80 uppercase tracking-wide">{label}</span>
-                    </div>
+                  ].map(({ src, label, accent }, i) => (
+                    <motion.div
+                      key={src}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08, duration: 0.45 }}
+                      whileHover={{ y: -3, scale: 1.025 }}
+                      className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200 shadow-soft"
+                    >
+                      <img src={src} alt={label} className="w-full h-full object-cover opacity-85 transition-transform duration-700 hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-plum-900/55 to-transparent" />
+                      {accent === 'heart' && (
+                        <>
+                          <Heart
+                            size={11}
+                            fill="currentColor"
+                            className="heart-float absolute bottom-3 right-3 text-blush-300"
+                            style={{ animationDelay: '0s' }}
+                          />
+                          <Heart
+                            size={9}
+                            fill="currentColor"
+                            className="heart-float absolute bottom-3 right-7 text-blush-200"
+                            style={{ animationDelay: '1.6s' }}
+                          />
+                          <Heart
+                            size={8}
+                            fill="currentColor"
+                            className="heart-float absolute bottom-3 right-10 text-lavender-300"
+                            style={{ animationDelay: '2.8s' }}
+                          />
+                        </>
+                      )}
+                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/85 uppercase tracking-wide">{label}</span>
+                    </motion.div>
                   ))}
                 </div>
 
@@ -305,7 +460,9 @@ export default function Home() {
                     { value: '5+', label: 'Years building' },
                   ].map(({ value, label }) => (
                     <div key={label} className="bg-blush-50 border border-blush-100 rounded-xl p-3 text-center">
-                      <div className="text-lg font-black text-blush-500 leading-none mb-1">{value}</div>
+                      <div className="text-lg font-black text-blush-500 leading-none mb-1">
+                        <CountUp value={value} />
+                      </div>
                       <div className="text-[10px] text-plum-400 font-medium">{label}</div>
                     </div>
                   ))}
@@ -343,30 +500,30 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                whileHover={{ y: -3, boxShadow: '0 12px 32px rgba(173,134,144,0.18)' }}
-                className="bg-white rounded-2xl p-5 shadow-card border border-blush-100 flex flex-col"
               >
-                <span className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-3">{project.tag}</span>
-                <h3 className="font-black text-plum-900 text-lg mb-2 leading-tight">{project.title}</h3>
-                <p className="text-xs text-plum-400 leading-relaxed flex-1 mb-4">{project.description}</p>
-                <div className="flex items-center justify-between">
-                  {project.outcome && (
-                    <span className="text-[10px] font-semibold text-lavender-500 bg-lavender-50 px-2.5 py-1 rounded-full">
-                      {project.outcome}
-                    </span>
-                  )}
-                  {project.href && (
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-blush-400 hover:text-blush-600 transition-colors"
-                    >
-                      <ExternalLink size={13} />
-                    </a>
-                  )}
-                </div>
+                <TiltCard className="bg-white rounded-2xl p-5 shadow-card border border-blush-100 flex flex-col h-full transition-shadow hover:shadow-soft-lg">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-3">{project.tag}</span>
+                  <h3 className="font-black text-plum-900 text-lg mb-2 leading-tight">{project.title}</h3>
+                  <p className="text-xs text-plum-400 leading-relaxed flex-1 mb-4">{project.description}</p>
+                  <div className="flex items-center justify-between">
+                    {project.outcome && (
+                      <span className="text-[10px] font-semibold text-lavender-500 bg-lavender-50 px-2.5 py-1 rounded-full">
+                        {project.outcome}
+                      </span>
+                    )}
+                    {project.href && (
+                      <a
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-blush-400 hover:text-blush-600 transition-colors"
+                      >
+                        <ExternalLink size={13} />
+                      </a>
+                    )}
+                  </div>
+                </TiltCard>
               </motion.div>
             ))}
           </div>
@@ -491,15 +648,23 @@ export default function Home() {
             <div className="flex-1 h-px bg-blush-100" />
           </div>
           <div className="grid grid-cols-3 gap-3">
-            {MOMENTS.map(({ src, caption, context, position }) => (
-              <div key={src} className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44 group">
-                <img src={src} alt={caption} className={`w-full h-full object-cover ${position} group-hover:scale-105 transition-transform duration-500`} />
+            {MOMENTS.map(({ src, caption, context, position }, i) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0, y: 16, rotate: i % 2 === 0 ? -1.2 : 1.2 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.06, duration: 0.5, ease: 'easeOut' }}
+                whileHover={{ y: -5, rotate: i % 2 === 0 ? -1.5 : 1.5, scale: 1.02 }}
+                className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44 group"
+              >
+                <img src={src} alt={caption} className={`w-full h-full object-cover ${position} group-hover:scale-110 transition-transform duration-700`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                <div className="absolute bottom-0 left-0 right-0 p-2.5 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                   <div className="text-[10px] font-black text-white leading-none mb-0.5">{caption}</div>
                   <div className="text-[9px] text-white/65 leading-tight">{context}</div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -512,7 +677,7 @@ export default function Home() {
           variants={fadeUp}
           className="pt-12 border-t border-blush-100 text-center"
         >
-          <div className="text-3xl mb-4">🦙</div>
+          <div className="text-3xl mb-4 bob inline-block">🦙</div>
           <h2 className="text-2xl font-black text-plum-900 mb-2">Let's build something interesting.</h2>
           <p className="text-sm text-plum-400 leading-relaxed mb-8 max-w-sm mx-auto">
             Whether it's a community event, a product idea, or just a good conversation — I'm always open.

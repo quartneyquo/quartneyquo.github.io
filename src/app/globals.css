@@ -37,3 +37,83 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #AD8690;
 }
+
+/* Floating gradient blobs behind hero */
+@keyframes blob-drift-a {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -25px) scale(1.06); }
+  66% { transform: translate(-22px, 18px) scale(0.96); }
+}
+@keyframes blob-drift-b {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-28px, 22px) scale(1.04); }
+  66% { transform: translate(20px, -18px) scale(0.98); }
+}
+@keyframes blob-drift-c {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(18px, 28px) scale(1.08); }
+}
+
+.blob-a { animation: blob-drift-a 18s ease-in-out infinite; }
+.blob-b { animation: blob-drift-b 22s ease-in-out infinite; }
+.blob-c { animation: blob-drift-c 26s ease-in-out infinite; }
+
+/* Subtle ken burns on hero/cover images */
+@keyframes ken-burns {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.06) translate(-1%, -1%); }
+}
+.ken-burns { animation: ken-burns 16s ease-in-out infinite; }
+
+/* Twinkling sparkle */
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+.sparkle { animation: sparkle-twinkle 3.4s ease-in-out infinite; }
+
+/* Soft bobbing for emoji/llama */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.bob { animation: bob 3.2s ease-in-out infinite; }
+
+/* Sweep shimmer for headlines / accents */
+@keyframes shimmer-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #2B1B2E 0%,
+    #2B1B2E 40%,
+    #C8AAAF 50%,
+    #2B1B2E 60%,
+    #2B1B2E 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-sweep 6s linear infinite;
+}
+
+/* Plane drifting subtly across the hero */
+@keyframes plane-drift {
+  0% { transform: translate(-12vw, 8vh) rotate(8deg); opacity: 0; }
+  10% { opacity: 0.6; }
+  50% { transform: translate(50vw, -6vh) rotate(-4deg); opacity: 0.7; }
+  90% { opacity: 0.5; }
+  100% { transform: translate(112vw, 10vh) rotate(6deg); opacity: 0; }
+}
+.plane-drift { animation: plane-drift 28s linear infinite; }
+
+/* Soft heart float for the brunch event */
+@keyframes heart-float {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  20% { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-44px) scale(1.05); }
+}
+.heart-float { animation: heart-float 4.6s ease-in-out infinite; }
