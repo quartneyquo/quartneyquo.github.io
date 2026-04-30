@@ -165,6 +165,19 @@ const toolkit = [
   { title: 'Community Growth', items: ['Event strategy', 'Partnerships', 'DevRel', 'Founder ecosystems'] },
 ];
 
+const educationCredentials = [
+  {
+    degree: 'M.A. Psychology',
+    school: 'San Francisco State University',
+    logo: '/sfsu-logo.svg',
+  },
+  {
+    degree: 'B.S. Cognitive Science',
+    school: 'UC San Diego',
+    logo: '/ucsd-logo.svg',
+  },
+];
+
 const photoMoments = [
   { src: '/seoul.jpeg', label: 'Travel research', tone: 'User context' },
   { src: '/macchupicchu.jpeg', label: 'Itinerary inspiration', tone: 'Pearle' },
@@ -689,6 +702,22 @@ export default function Home() {
           <div>
             <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-500">About</div>
             <h2 className="text-3xl font-black leading-tight text-plum-900 md:text-5xl">Warm human, rigorous operator.</h2>
+            <div className="mt-7 space-y-3">
+              {educationCredentials.map((credential) => (
+                <div
+                  key={credential.school}
+                  className="flex items-center gap-3 rounded-2xl border border-blush-100 bg-blush-50/70 p-3"
+                >
+                  <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl border border-blush-100 bg-white p-2 shadow-soft">
+                    <img src={credential.logo} alt={`${credential.school} logo`} className="h-full w-full object-contain" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-black text-plum-900">{credential.degree}</div>
+                    <div className="text-xs font-semibold text-plum-400">{credential.school}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="space-y-4 text-sm leading-relaxed text-plum-500 md:text-base">
             <p>
