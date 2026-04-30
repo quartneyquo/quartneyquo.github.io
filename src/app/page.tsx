@@ -1,717 +1,767 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Plane, Mail, ExternalLink, Sparkles, Heart } from 'lucide-react';
-import { trips } from '@/data/trips';
-import BoardingPass from '@/components/BoardingPass';
+import {
+  ArrowRight,
+  BarChart3,
+  Bot,
+  BriefcaseBusiness,
+  Code2,
+  ExternalLink,
+  Layers3,
+  Mail,
+  MapPin,
+  Network,
+  Sparkles,
+  Wand2,
+} from 'lucide-react';
 
-// Counts up to a target number, parsing strings like "5,000+" or "20+"
-function CountUp({ value, duration = 1.6 }: { value: string; duration?: number }) {
-  const match = value.match(/^([\d,]+)(.*)$/);
-  const target = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
-  const suffix = match ? match[2] : '';
-
-  const ref = useRef<HTMLSpanElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current || hasAnimated) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasAnimated(true);
-          const controls = animate(0, target, {
-            duration,
-            ease: 'easeOut',
-            onUpdate: (v) => {
-              if (ref.current) {
-                ref.current.textContent =
-                  Math.floor(v).toLocaleString('en-US') + suffix;
-              }
-            },
-          });
-          return () => controls.stop();
-        }
-      },
-      { threshold: 0.4 }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, suffix, duration, hasAnimated]);
-
-  if (!match) return <>{value}</>;
-  return <span ref={ref}>0{suffix}</span>;
-}
-
-// Slight parallax tilt on hover
-function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 200, damping: 20 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 20 });
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-  const onLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{ rotateX, rotateY, transformPerspective: 800, transformStyle: 'preserve-3d' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-const TRIP_COLORS: Record<string, string> = {
-  now: 'bg-lavender-300',
-  'ai-valley-events': 'bg-blush-400',
-  projects: 'bg-lavender-400',
-  hobbies: 'bg-blush-300',
+type CaseStudy = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  problem: string;
+  role: string;
+  process: string[];
+  built: string[];
+  metrics: { value: string; label: string }[];
+  tools: string[];
+  outcome: string;
+  image?: string;
+  accent: string;
+  roleFit: string;
+  visual: 'automation' | 'travel' | 'community';
 };
 
-const IconX = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
-
-const IconInstagram = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-  </svg>
-);
-
-const IconGitHub = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
-    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-  </svg>
-);
-
-const IconLinkedIn = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-  </svg>
-);
+const CONTACT_LINK = 'https://www.linkedin.com/in/courtney-ko-720b63103/';
 
 const socials = [
-  { href: 'https://x.com/courtneythko', label: 'X', Icon: IconX },
-  { href: 'https://instagram.com/courtneythko', label: 'Instagram', Icon: IconInstagram },
-  { href: 'https://github.com/quartneyquo', label: 'GitHub', Icon: IconGitHub },
-  { href: 'https://www.linkedin.com/in/courtney-ko-720b63103/', label: 'LinkedIn', Icon: IconLinkedIn },
+  { href: 'mailto:courtneythko@gmail.com', label: 'Email', Icon: Mail },
+  { href: 'https://www.linkedin.com/in/courtney-ko-720b63103/', label: 'LinkedIn', Icon: BriefcaseBusiness },
 ];
 
-const PROJECTS = [
+const impactStats = [
+  { value: '75%', label: 'faster enterprise workflow processing' },
+  { value: '90%', label: 'faster case review with AI summaries' },
+  { value: '3.9K+', label: 'Pearle itineraries generated in beta' },
+  { value: '8K+', label: 'AI builders connected through AI Valley' },
+];
+
+const caseStudies: CaseStudy[] = [
   {
-    title: 'Pearle',
-    tag: 'AI Product',
-    description: 'AI travel planning assistant — NLP pipelines turning social media posts into collaborative itineraries.',
-    outcome: '',
-    href: 'https://pearletravel.com',
+    id: 'nvidia',
+    eyebrow: 'NVIDIA · Automation Systems',
+    title: 'Self-serve automation for enterprise operations workflows.',
+    summary:
+      'Built internal tools that turned repetitive, high-friction operational workflows into faster self-serve systems.',
+    problem:
+      'Manual enterprise operations workflows were slow, repetitive, and dependent on specialized knowledge spread across systems and stakeholders.',
+    role:
+      'Business Analyst, Automation & Systems. I identified workflow bottlenecks, translated operational pain points into internal tools, and built Python-powered automation flows.',
+    process: [
+      'Mapped manual request workflows to isolate repeated decisions and fragile handoffs.',
+      'Partnered with stakeholders to define a self-serve workflow that non-specialists could use independently.',
+      'Prototyped automation paths, validated outputs, and tightened the experience around speed, trust, and consistency.',
+    ],
+    built: [
+      'Self-serve UI for a recurring enterprise operations workflow.',
+      'Python workflows that transform unstructured request data into structured operational inputs.',
+      'AI-powered case summarization workflows for faster review and resolution.',
+    ],
+    metrics: [
+      { value: '2h → 30m', label: 'workflow processing time' },
+      { value: '1w → 1.5h', label: 'case review time' },
+      { value: '3+', label: 'team members enabled to self-serve' },
+    ],
+    tools: ['Python', 'Internal platforms', 'AI summarization', 'Workflow automation', 'Self-serve tooling'],
+    outcome:
+      'Reduced repetitive work, improved process consistency, and gave the team a faster operating model for recurring internal workflows.',
+    accent: 'from-[#3D2540] to-[#AD8690]',
+    roleFit: 'Technical PM · AI Automation',
+    visual: 'automation',
   },
   {
-    title: 'PacaPlate',
-    tag: 'App',
-    description: 'AI calorie tracking app using computer vision — making nutrition tracking feel effortless and fun.',
-    outcome: 'In progress · 2026',
-    href: null,
+    id: 'pearle',
+    eyebrow: 'Pearle · AI Travel Platform',
+    title: 'An AI group travel planner that transformed messy inspiration into itineraries.',
+    summary:
+      'Founded and shipped a 0 to 1 AI travel product with LLM-powered itinerary generation and collaborative planning flows.',
+    problem:
+      'Group travel planning starts with scattered inspiration, screenshots, social posts, and conflicting preferences. Turning that into a shared plan is tedious.',
+    role:
+      'Founder and Product Lead. I shaped the product vision, roadmap, MVP scope, user flows, research loops, and launch priorities.',
+    process: [
+      'Interviewed beta users to understand how groups collect, compare, and commit to travel ideas.',
+      'Defined the core itinerary generation loop and prioritized the fastest path to a usable MVP.',
+      'Iterated on private beta feedback to improve clarity, collaboration, and generated itinerary quality.',
+    ],
+    built: [
+      'LLM-powered itinerary generation experience.',
+      'Structured data pipeline for turning travel inspiration into editable plans.',
+      'Collaborative planning flows for groups comparing options.',
+    ],
+    metrics: [
+      { value: '10w', label: 'MVP delivery timeline' },
+      { value: '3.9K+', label: 'itineraries generated' },
+      { value: '25+', label: 'private beta users' },
+    ],
+    tools: ['LLM APIs', 'NLP pipelines', 'Product strategy', 'User research', 'Prototyping', 'Roadmapping'],
+    outcome:
+      'Validated demand for AI-assisted group travel planning and turned a broad consumer problem into a focused, testable product experience.',
+    image: '/pearle.jpeg',
+    accent: 'from-[#2B1B2E] to-[#9F8AFF]',
+    roleFit: 'Founder · AI Product',
+    visual: 'travel',
   },
   {
-    title: 'TipBrightly',
-    tag: 'Fintech',
-    description: 'QR-code tipping platform for service workers — led product across two stints, redesigned core flows.',
-    outcome: '919% transaction growth',
-    href: 'https://tipbrightly.com',
+    id: 'ai-valley',
+    eyebrow: 'AI Valley · Community & Ecosystem',
+    title: 'High-signal AI programming for founders, engineers, and partners.',
+    summary:
+      'Scaled community operations and event systems for a technical AI ecosystem in San Francisco.',
+    problem:
+      'AI communities can become noisy quickly. Builders need useful rooms, real technical programming, strong partners, and reasons to keep returning.',
+    role:
+      'COO and community builder. I helped design programming, partnerships, event operations, and the systems behind community-led growth.',
+    process: [
+      'Designed programming around what builders actually need: hands-on API adoption, hackathons, demos, and founder relationships.',
+      'Coordinated sponsors, partners, organizers, and builders so events created value on every side.',
+      'Built repeatable operating rhythms for events, outreach, activation, and community momentum.',
+    ],
+    built: [
+      'Technical hackathons, workshops, and founder events.',
+      'Partner experiences with AI infrastructure and ecosystem companies.',
+      'San Francisco all-women AI hackathon with 500+ registrations.',
+    ],
+    metrics: [
+      { value: '8K+', label: 'engineers and founders connected' },
+      { value: '500+', label: 'hackathon registrations' },
+      { value: '20+', label: 'events hosted' },
+    ],
+    tools: ['Community-led growth', 'Event strategy', 'Partnerships', 'DevRel', 'Operations', 'AI APIs'],
+    outcome:
+      'Created a community engine that connects builders, sponsors, and founders through credible technical programming.',
+    image: '/witpic.jpeg',
+    accent: 'from-[#774050] to-[#C8AAAF]',
+    roleFit: 'PMM · Community Growth',
+    visual: 'community',
   },
 ];
 
-const DISPATCHES = [
-  {
-    title: 'Building AI Valley community experiences',
-    description: 'Designing founder events, builder touchpoints, and community moments that feel more intentional.',
-    status: 'In progress',
-    domain: 'Community',
-    freshness: 'Updated this week',
-    accent: 'border-blush-300',
-    statusStyle: 'bg-blush-100 text-blush-600',
-  },
-  {
-    title: 'Exploring AI agents and tool-use patterns',
-    description: 'Studying orchestration patterns, workflows, and where agents feel genuinely useful vs. overhyped.',
-    status: 'Researching',
-    domain: 'AI',
-    freshness: 'Updated recently',
-    accent: 'border-lavender-300',
-    statusStyle: 'bg-lavender-100 text-lavender-600',
-  },
-  {
-    title: 'Designing travel planning tools',
-    description: 'Experimenting with interfaces for smarter trip inspiration and collaborative itinerary flow.',
-    status: 'Prototyping',
-    domain: 'Product',
-    freshness: 'Updated this month',
-    accent: 'border-plum-200',
-    statusStyle: 'bg-plum-100 text-plum-500',
-  },
-  {
-    title: 'Experimenting with new product ideas',
-    description: 'Exploring early-stage concepts at the intersection of AI, community, and everyday human needs.',
-    status: 'Exploring',
-    domain: 'Experiments',
-    freshness: 'Ongoing',
-    accent: 'border-blush-200',
-    statusStyle: 'bg-blush-50 text-blush-500',
-  },
+const orderedCaseStudies = [
+  caseStudies.find((study) => study.id === 'nvidia')!,
+  caseStudies.find((study) => study.id === 'ai-valley')!,
+  caseStudies.find((study) => study.id === 'pearle')!,
 ];
 
-const MOMENTS = [
-  { src: '/femalebrunch.jpg', caption: 'Female Founder Brunch', context: 'Cheers to women building what\'s next', position: 'object-center' },
-  { src: '/seoul.jpeg', caption: 'Seoul, Korea', context: 'Lived and explored Korean culture', position: 'object-top' },
-  { src: '/macchupicchu.jpeg', caption: 'Machu Picchu', context: 'Solo travel and exploration', position: 'object-center' },
-  { src: '/sf.jpeg', caption: 'San Francisco', context: 'Home base for building', position: 'object-center' },
-  { src: '/china.jpeg', caption: 'China', context: 'Heritage and discovery', position: 'object-center' },
-  { src: '/witpic.jpeg', caption: 'AI Valley', context: 'Community I help lead', position: 'object-top' },
+const toolkit = [
+  { title: 'Product Strategy', items: ['Roadmaps', '0 to 1 MVPs', 'Experimentation', 'Launch loops'] },
+  { title: 'AI Automation', items: ['Workflow optimization', 'AI summaries', 'LLM APIs', 'Internal tools'] },
+  { title: 'Research & UX', items: ['User interviews', 'Journey mapping', 'Prototyping', 'Figma'] },
+  { title: 'Technical Fluency', items: ['Python', 'SQL', 'APIs', 'Data workflows', 'Internal systems'] },
+  { title: 'Builder Tools', items: ['Claude Code', 'Replit', 'Rapid prototypes', 'Prompt systems'] },
+  { title: 'Community Growth', items: ['Event strategy', 'Partnerships', 'DevRel', 'Founder ecosystems'] },
+];
+
+const photoMoments = [
+  { src: '/seoul.jpeg', label: 'Travel research', tone: 'User context' },
+  { src: '/macchupicchu.jpeg', label: 'Itinerary inspiration', tone: 'Pearle' },
+  { src: '/aivalley-builder-table.jpg', label: 'Builder conversations', tone: 'AI Valley' },
+  { src: '/aivalley-workshop-room.jpg', label: 'Technical workshop', tone: 'Community' },
+  { src: '/aivalley-founder-talk.jpg', label: 'Founder programming', tone: 'Female Founder Brunch' },
+  { src: '/fembrunch.jpg', label: 'Women building AI', tone: 'Ecosystem' },
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
 };
 
-export default function Home() {
-  const nowTrip = trips.find((t) => t.id === 'now')!;
-  const aiValleyTrip = trips.find((t) => t.id === 'ai-valley-events')!;
-  const gridTrips = trips.filter((t) => t.id !== 'now');
-
+function SectionHeader({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
   return (
-    <div className="min-h-screen bg-blush-50 relative overflow-hidden">
-      {/* Ambient gradient blobs */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="blob-a absolute -top-20 -left-24 w-[420px] h-[420px] rounded-full bg-blush-200/50 blur-3xl" />
-        <div className="blob-b absolute top-40 -right-32 w-[480px] h-[480px] rounded-full bg-lavender-200/45 blur-3xl" />
-        <div className="blob-c absolute top-[55%] left-1/3 w-[360px] h-[360px] rounded-full bg-blush-100/50 blur-3xl" />
-        <div className="plane-drift absolute top-12 text-blush-300/60">
-          <Plane size={26} />
+    <div className="mb-8 max-w-3xl">
+      <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-500">{eyebrow}</div>
+      <h2 className="text-3xl md:text-5xl font-black leading-tight text-plum-900">{title}</h2>
+      {description && <p className="mt-4 text-sm md:text-base leading-relaxed text-plum-400">{description}</p>}
+    </div>
+  );
+}
+
+function ButtonLink({
+  href,
+  children,
+  variant = 'primary',
+}: {
+  href: string;
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary';
+}) {
+  return (
+    <a
+      href={href}
+      target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : undefined}
+      rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+      className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition-all ${
+        variant === 'primary'
+          ? 'bg-plum-900 text-white shadow-soft hover:-translate-y-0.5 hover:bg-plum-800'
+          : 'border border-blush-200 bg-white text-plum-800 shadow-soft hover:-translate-y-0.5 hover:border-blush-300 hover:bg-blush-50'
+      }`}
+    >
+      {children}
+    </a>
+  );
+}
+
+function LogoMark({ className = '' }: { className?: string }) {
+  return (
+    <motion.span
+      aria-hidden="true"
+      className={`relative inline-flex items-center justify-center overflow-visible rounded-full border border-blush-200 bg-white shadow-soft ${className}`}
+      animate={{ y: [0, -2, 0], rotate: [-1, 1, -1] }}
+      whileHover={{ y: -3, scale: 1.04, rotate: -2 }}
+      transition={{ duration: 3.4, ease: 'easeInOut', repeat: Infinity }}
+    >
+      <img
+        src="/favicon2.png"
+        alt=""
+        className="h-[150%] w-[150%] max-w-none object-contain"
+      />
+    </motion.span>
+  );
+}
+
+function SystemMockup({ study }: { study: CaseStudy }) {
+  if (study.visual === 'automation') {
+    return (
+      <div className={`relative min-h-[420px] overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-5 text-white`}>
+        <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full border border-white/20" />
+        <div className="absolute -bottom-24 -left-16 h-56 w-56 rounded-full border border-white/15" />
+
+        <div className="relative rounded-2xl border border-white/20 bg-white/12 p-4 shadow-soft backdrop-blur">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Self-Serve Operations Console</div>
+              <div className="mt-1 text-lg font-black">Enterprise Workflow Automation</div>
+            </div>
+            <div className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-plum-900">Live flow</div>
+          </div>
+
+          <div className="grid gap-3">
+            {[
+              ['Request intake', 'Normalize fields', 'Structured output'],
+              ['Case context', 'AI summary pass', 'Review brief'],
+            ].map((row) => (
+              <div key={row.join('-')} className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-2">
+                {row.map((item, i) => (
+                  <div key={item} className="contents">
+                    <div className="rounded-xl border border-white/18 bg-white/14 px-3 py-3 text-[11px] font-bold leading-tight text-white/86">
+                      {item}
+                    </div>
+                    {i < row.length - 1 && <ArrowRight size={13} className="text-white/55" />}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative mt-4 grid grid-cols-2 gap-3">
+          {study.metrics.slice(0, 2).map((metric) => (
+            <div key={metric.label} className="rounded-2xl border border-white/20 bg-white/14 p-4 backdrop-blur">
+              <div className="text-3xl font-black">{metric.value}</div>
+              <div className="mt-1 text-[11px] leading-snug text-white/70">{metric.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="relative mt-4 rounded-2xl border border-white/20 bg-plum-900/20 p-4">
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Operator view</div>
+          <div className="space-y-2">
+            {['Validate request data', 'Generate structured inputs', 'Summarize review context'].map((item, i) => (
+              <div key={item} className="flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-black text-plum-900">{i + 1}</span>
+                <span className="text-xs font-semibold text-white/78">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+    );
+  }
 
-      {/* Nav */}
-      <nav className="relative flex items-center justify-between px-6 py-5 max-w-5xl mx-auto">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-blush-200 shadow-soft">
-            <img src="/profile.jpeg" alt="Courtney" className="w-full h-full object-cover" />
-          </div>
-          <span className="font-bold text-plum-800 text-base">Courtney Ko</span>
+  if (study.visual === 'community') {
+    return (
+      <div className={`relative self-start overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-4`}>
+        <div className="grid min-h-[392px] grid-cols-3 grid-rows-[130px_130px_130px] gap-3">
+          {[
+            { src: '/aivalley-lounge-event.jpg', label: 'Builder lounge', className: 'col-span-2 row-span-1' },
+            { src: '/aivalley-workshop-room.jpg', label: 'Technical workshop', className: 'row-span-2' },
+            { src: '/aivalley-builder-table.jpg', label: 'Builder conversations', className: 'row-span-1' },
+            { src: '/aivalley-audience.jpg', label: 'Packed AI room', className: 'row-span-1' },
+            { src: '/aivalley-founder-talk.jpg', label: 'Founder talk', className: 'row-span-1' },
+            { src: '/fembrunch.jpg', label: 'Female Founder Brunch', className: 'col-span-2 row-span-1' },
+          ].map(({ src, label, className }) => (
+            <div
+              key={src}
+              className={`relative overflow-hidden rounded-2xl bg-cover bg-center ${className}`}
+              style={{ backgroundImage: `url(${src})` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-plum-900/50 via-plum-900/0 to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3 text-xs font-black text-white">{label}</div>
+            </div>
+          ))}
         </div>
+        <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/80 backdrop-blur">
+          Community engine
+        </div>
+      </div>
+    );
+  }
+
+  if (study.image) {
+    return (
+      <div className="relative h-full min-h-[420px] overflow-hidden rounded-2xl bg-plum-900">
+        <img src={study.image} alt="" className="h-full w-full object-cover opacity-82" />
+        <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/10 to-transparent" />
+        <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/75 backdrop-blur">
+          {study.visual === 'travel' ? 'AI planning loop' : 'Community engine'}
+        </div>
+        <div className="absolute bottom-5 left-5 right-5 grid gap-3 rounded-2xl border border-white/20 bg-white/12 p-4 text-white backdrop-blur">
+          <div className="grid grid-cols-3 gap-2">
+            {study.metrics.map((metric) => (
+              <div key={metric.label} className="rounded-xl bg-white/12 p-3">
+                <div className="text-lg font-black">{metric.value}</div>
+                <div className="mt-1 text-[10px] leading-snug text-white/70">{metric.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 text-[11px] font-bold text-white/74">
+            <span className="h-1.5 w-1.5 rounded-full bg-blush-200" />
+            {study.outcome}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+function FeaturedCard({ study, index }: { study: CaseStudy; index: number }) {
+  return (
+    <motion.a
+      href={`#${study.id}`}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ delay: index * 0.08, duration: 0.45 }}
+      className="group block rounded-2xl border border-blush-100 bg-white p-5 shadow-card transition-all hover:-translate-y-1 hover:border-blush-300 hover:shadow-soft-lg"
+    >
+      <div className={`mb-5 h-1.5 w-16 rounded-full bg-gradient-to-r ${study.accent}`} />
+      <div className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-blush-500">{study.eyebrow}</div>
+      <div className="mb-3 inline-flex rounded-full bg-blush-50 px-2.5 py-1 text-[10px] font-black text-plum-500">{study.roleFit}</div>
+      <h3 className="text-xl font-black leading-tight text-plum-900">{study.title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-plum-400">{study.summary}</p>
+      <div className="mt-5 flex items-center justify-between">
+        <div className="text-sm font-black text-plum-900">{study.metrics[0].value}</div>
+        <ArrowRight size={16} className="text-blush-400 transition-transform group-hover:translate-x-1" />
+      </div>
+    </motion.a>
+  );
+}
+
+function CaseStudySection({ study, index }: { study: CaseStudy; index: number }) {
+  const isReversed = index % 2 === 1;
+
+  return (
+    <motion.article
+      id={study.id}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      variants={fadeUp}
+      className={`scroll-mt-24 rounded-[28px] border bg-white p-5 md:p-7 shadow-card ${
+        study.id === 'nvidia' ? 'border-plum-200 ring-1 ring-plum-100' : 'border-blush-100'
+      }`}
+    >
+      <div className={`grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] ${isReversed ? 'lg:[&>*:first-child]:order-2' : ''}`}>
+        <div>
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">{study.eyebrow}</div>
+          <h3 className="text-3xl md:text-4xl font-black leading-tight text-plum-900">{study.title}</h3>
+          <p className="mt-4 text-sm leading-relaxed text-plum-400">{study.summary}</p>
+
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            {study.metrics.map((metric) => (
+              <div key={metric.label} className="rounded-xl border border-blush-100 bg-blush-50 p-3">
+                <div className="text-lg md:text-2xl font-black text-plum-900">{metric.value}</div>
+                <div className="mt-1 text-[10px] leading-snug text-plum-400">{metric.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.18em] text-plum-900">Problem</h4>
+              <p className="mt-2 text-sm leading-relaxed text-plum-400">{study.problem}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.18em] text-plum-900">My Role</h4>
+              <p className="mt-2 text-sm leading-relaxed text-plum-400">{study.role}</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.18em] text-plum-900">Process</h4>
+              <ul className="mt-3 space-y-2.5">
+                {study.process.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm leading-relaxed text-plum-400">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blush-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.18em] text-plum-900">What I Built</h4>
+              <ul className="mt-3 space-y-2.5">
+                {study.built.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm leading-relaxed text-plum-400">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-lavender-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="space-y-5">
+          <SystemMockup study={study} />
+
+          <div>
+            <h4 className="text-xs font-black uppercase tracking-[0.18em] text-plum-900">Tools Used</h4>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {study.tools.map((tool) => (
+                <span key={tool} className="rounded-full border border-blush-100 bg-blush-50 px-3 py-1.5 text-[11px] font-bold text-plum-500">
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-plum-900 p-5 text-white">
+            <div className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-blush-200">Outcome</div>
+            <p className="text-sm leading-relaxed text-white/82">{study.outcome}</p>
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-[#FBF8F8] text-plum-900">
+      <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 h-[520px] bg-[linear-gradient(180deg,#F1E9EB_0%,rgba(251,248,248,0)_78%)]" />
+
+      <nav className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <Link href="/" className="flex items-center gap-3">
+          <LogoMark className="h-10 w-10 ring-2 ring-white" />
+          <span className="text-sm font-black text-plum-900">Courtney Ko</span>
+        </Link>
         <div className="flex items-center gap-2">
           <Link
             href="/resume"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-blush-200 text-[11px] font-bold text-plum-500 hover:bg-blush-50 hover:text-blush-600 transition-all shadow-soft"
+            className="hidden rounded-full border border-blush-200 bg-white px-3 py-1.5 text-[11px] font-bold text-plum-500 shadow-soft transition-colors hover:bg-blush-50 sm:inline-flex"
           >
-            <Plane size={11} />
-            Flight Log
+            Resume
           </Link>
           {socials.map(({ href, label, Icon }) => (
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
               title={label}
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-blush-200 text-plum-400 hover:bg-blush-100 hover:text-blush-600 transition-all shadow-soft"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-blush-200 bg-white text-plum-400 shadow-soft transition-colors hover:bg-blush-50 hover:text-plum-900"
             >
-              <Icon />
+              <Icon size={14} />
             </a>
           ))}
         </div>
       </nav>
 
-      <main className="relative max-w-5xl mx-auto px-6 pb-20">
+      <div className="sticky top-3 z-20 mx-auto mb-2 hidden max-w-6xl px-6 md:block">
+        <div className="ml-auto flex w-fit items-center gap-1 rounded-full border border-white/70 bg-white/95 p-1 text-[11px] font-black text-plum-700 shadow-soft-lg backdrop-blur-xl ring-1 ring-plum-900/5">
+          {[
+            ['Work', '#work'],
+            ['Case Studies', '#case-studies'],
+            ['About', '#about'],
+            ['Toolkit', '#toolkit'],
+            ['Contact', '#contact'],
+          ].map(([label, href]) => (
+            <a key={href} href={href} className="rounded-full px-3 py-1.5 transition-colors hover:bg-plum-900 hover:text-white">
+              {label}
+            </a>
+          ))}
+        </div>
+      </div>
 
-        {/* Hero */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          className="pt-14 pb-10 text-center"
-        >
-          <div className="inline-flex items-center gap-2 bg-white border border-blush-200 rounded-full px-4 py-1.5 text-xs font-semibold text-blush-500 mb-4 shadow-soft">
-            <span className="w-1.5 h-1.5 rounded-full bg-blush-400 animate-pulse" />
-            Currently in flight
-            <Plane size={11} className="text-blush-400" />
-          </div>
-
-          <div className="flex justify-center -mb-6 -mt-4">
-            <motion.img
-              src="/favicon2.png"
-              alt="Courtney Ko"
-              className="w-56 h-56 object-contain"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }}
-            />
-          </div>
-
-          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight shimmer-text">
-            Courtney Ko
-          </h1>
-
-          <p className="text-sm font-semibold text-plum-500 mb-5 tracking-wide">
-            COO at AI Valley · Community Architect · Product Builder
-          </p>
-
-          <p className="text-plum-400 text-lg max-w-lg mx-auto leading-relaxed mb-5">
-            Building communities, products, and experiments at the frontier of AI
-          </p>
-
-          {/* Proof point */}
-          <div className="relative inline-block mb-4">
-            <Sparkles
-              size={11}
-              className="sparkle absolute -top-2 -left-3 text-blush-400"
-              style={{ animationDelay: '0s' }}
-            />
-            <Sparkles
-              size={9}
-              className="sparkle absolute -top-1 -right-2 text-lavender-400"
-              style={{ animationDelay: '1.2s' }}
-            />
-            <Sparkles
-              size={8}
-              className="sparkle absolute -bottom-2 left-6 text-blush-300"
-              style={{ animationDelay: '2.1s' }}
-            />
-            <div className="inline-flex items-center gap-2 text-sm text-plum-500 bg-white border border-blush-100 rounded-full px-4 py-2 shadow-soft">
-              <span className="font-black text-blush-500">5,000+</span>
-              builders connected through AI Valley
+      <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20">
+        <section className="grid min-h-[calc(100vh-92px)] items-center gap-10 py-12 md:grid-cols-[1.08fr_0.92fr] md:py-16">
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blush-200 bg-white px-4 py-1.5 text-xs font-bold text-plum-600 shadow-soft">
+              <Sparkles size={13} className="text-blush-500" />
+              Product-minded builder across AI, automation, and community
             </div>
-          </div>
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-normal text-plum-900 md:text-7xl">
+              Building useful AI systems for messy human workflows.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-plum-500 md:text-xl">
+              I turn ambiguous product and operations problems into shipped tools, cleaner workflows, and communities that compound trust.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="#work">
+                View Work
+                <ArrowRight size={16} />
+              </ButtonLink>
+              <ButtonLink href="mailto:courtneythko@gmail.com" variant="secondary">
+                Contact
+                <Mail size={15} />
+              </ButtonLink>
+              <ButtonLink href={CONTACT_LINK} variant="secondary">
+                LinkedIn
+                <ExternalLink size={15} />
+              </ButtonLink>
+            </div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-plum-400">
+              <span className="flex items-center gap-1.5">
+                <MapPin size={14} />
+                San Francisco, CA
+              </span>
+              <span>Product strategy</span>
+              <span>AI automation</span>
+              <span>Technical PM / PMM</span>
+            </div>
+          </motion.div>
 
-          <div className="flex items-center justify-center gap-1.5 text-sm text-plum-400">
-            <MapPin size={13} />
-            San Francisco, CA
-          </div>
-        </motion.div>
-
-        {/* Impact Stats */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.1 } } }}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Impact</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-          <div className="grid grid-cols-3 gap-3 md:gap-5 text-center">
-            {[
-              { value: '5,000+', label: 'Builders connected' },
-              { value: '20+', label: 'Events hosted' },
-              { value: '5+', label: 'Years building' },
-            ].map(({ value, label }, i) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.45, ease: 'easeOut' }}
-                whileHover={{ y: -3, boxShadow: '0 10px 28px rgba(173,134,144,0.2)' }}
-                className="bg-white rounded-2xl p-3 md:p-5 shadow-card border border-blush-50"
-              >
-                <div className="text-xl md:text-3xl font-black text-blush-500 mb-1">
-                  <CountUp value={value} />
-                </div>
-                <div className="text-[10px] md:text-xs text-plum-400 font-medium leading-tight">{label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Boarding Pass — Now */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.18 } } }}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Current Itinerary</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-          <BoardingPass trip={nowTrip} />
-        </motion.div>
-
-        {/* AI Valley Spotlight */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Main Destination</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-
-          <Link href="/trips/ai-valley-events">
-            <motion.div
-              whileHover={{ y: -3, boxShadow: '0 20px 56px rgba(173,134,144,0.22)' }}
-              transition={{ duration: 0.22 }}
-              className="relative overflow-hidden rounded-3xl bg-white border border-blush-100 shadow-card cursor-pointer group"
-            >
-              <div className="h-52 relative overflow-hidden bg-blush-300">
-                {aiValleyTrip.coverImage && (
-                  <img
-                    src={aiValleyTrip.coverImage}
-                    alt="AI Valley"
-                    className="ken-burns w-full h-full object-cover opacity-70 group-hover:opacity-85 transition-opacity duration-500"
-                    style={{ objectPosition: aiValleyTrip.coverImagePosition ?? 'center' }}
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/75 via-plum-900/20 to-transparent" />
-                <Sparkles
-                  size={14}
-                  className="sparkle absolute top-4 right-6 text-white/80"
-                  style={{ animationDelay: '0.4s' }}
-                />
-                <Sparkles
-                  size={10}
-                  className="sparkle absolute top-10 right-16 text-blush-200"
-                  style={{ animationDelay: '1.8s' }}
-                />
-                <div className="absolute bottom-5 left-6 right-6">
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-1">
-                    Community · San Francisco
+          <motion.div
+            initial={{ opacity: 0, y: 24, rotate: 1 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ duration: 0.65, ease: 'easeOut', delay: 0.12 }}
+            className="relative"
+          >
+            <div className="overflow-hidden rounded-[30px] border border-blush-100 bg-white p-3 shadow-soft-lg">
+              <img src="/profile.jpeg" alt="Courtney Ko" className="aspect-[4/5] w-full rounded-2xl object-cover" />
+              <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/60 bg-white/90 p-5 shadow-soft backdrop-blur">
+                <div className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">Recent impact</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="text-2xl font-black text-plum-900">2h → 30m</div>
+                    <div className="text-[11px] leading-snug text-plum-400">workflow processing</div>
                   </div>
-                  <h3 className="text-2xl font-black text-white leading-tight">AI Valley</h3>
+                  <div>
+                    <div className="text-2xl font-black text-plum-900">1w → 1.5h</div>
+                    <div className="text-[11px] leading-snug text-plum-400">case review workflow</div>
+                  </div>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        </section>
 
-              <div className="p-6">
-                <p className="text-sm text-plum-500 leading-relaxed mb-5">
-                  San Francisco's technical AI community — running hackathons, events, and programming that connects builders, founders, and researchers at the frontier.
-                </p>
-
-                {/* Photo strip */}
-                <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-1 px-1">
-                  {[
-                    { src: '/femalebrunch.jpg', label: 'Female Founder Brunch', accent: 'heart' },
-                    { src: '/witpic.jpeg', label: 'WIT Hackathon' },
-                    { src: '/rota.jpg', label: 'Return of the Agents' },
-                    { src: '/nowplaying.jpeg', label: 'Community' },
-                  ].map(({ src, label, accent }, i) => (
-                    <motion.div
-                      key={src}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.08, duration: 0.45 }}
-                      whileHover={{ y: -3, scale: 1.025 }}
-                      className="relative flex-shrink-0 w-36 h-24 rounded-xl overflow-hidden bg-blush-200 shadow-soft"
-                    >
-                      <img src={src} alt={label} className="w-full h-full object-cover opacity-85 transition-transform duration-700 hover:scale-110" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-plum-900/55 to-transparent" />
-                      {accent === 'heart' && (
-                        <>
-                          <Heart
-                            size={11}
-                            fill="currentColor"
-                            className="heart-float absolute bottom-3 right-3 text-blush-300"
-                            style={{ animationDelay: '0s' }}
-                          />
-                          <Heart
-                            size={9}
-                            fill="currentColor"
-                            className="heart-float absolute bottom-3 right-7 text-blush-200"
-                            style={{ animationDelay: '1.6s' }}
-                          />
-                          <Heart
-                            size={8}
-                            fill="currentColor"
-                            className="heart-float absolute bottom-3 right-10 text-lavender-300"
-                            style={{ animationDelay: '2.8s' }}
-                          />
-                        </>
-                      )}
-                      <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-white/85 uppercase tracking-wide">{label}</span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 mb-5">
-                  {[
-                    { value: '20+', label: 'Events hosted' },
-                    { value: '5,000+', label: 'Builders' },
-                    { value: '5+', label: 'Years building' },
-                  ].map(({ value, label }) => (
-                    <div key={label} className="bg-blush-50 border border-blush-100 rounded-xl p-3 text-center">
-                      <div className="text-lg font-black text-blush-500 leading-none mb-1">
-                        <CountUp value={value} />
-                      </div>
-                      <div className="text-[10px] text-plum-400 font-medium">{label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-end gap-1.5 text-xs font-semibold text-blush-400 group-hover:text-blush-600 transition-colors">
-                  View events <ArrowRight size={13} />
-                </div>
-              </div>
-            </motion.div>
-          </Link>
-        </motion.div>
-
-        {/* Projects */}
-        <motion.div
+        <motion.section
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, margin: '-80px' }}
           variants={fadeUp}
-          className="mb-14"
+          className="mb-20 grid grid-cols-2 gap-3 rounded-[28px] border border-blush-100 bg-white p-4 shadow-card md:grid-cols-4"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">What I've Built</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-            <Link href="/trips/projects" className="text-[11px] text-blush-400 hover:text-blush-600 font-semibold transition-colors">
-              All projects <ArrowRight size={11} className="inline" />
-            </Link>
+          {impactStats.map((stat) => (
+            <div key={stat.label} className="rounded-2xl bg-blush-50 p-4">
+              <div className="text-2xl font-black text-plum-900 md:text-3xl">{stat.value}</div>
+              <div className="mt-1 text-xs leading-snug text-plum-400">{stat.label}</div>
+            </div>
+          ))}
+        </motion.section>
+
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          variants={fadeUp}
+          className="mb-24"
+        >
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <div className="mb-2 text-[11px] font-black uppercase tracking-[0.22em] text-blush-500">Product Context</div>
+              <h2 className="max-w-2xl text-3xl font-black leading-tight text-plum-900 md:text-5xl">
+                Real people, real places, real builder rooms.
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-plum-400">
+              Pearle came from lived travel behavior. AI Valley comes from creating rooms where technical people actually want to build.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {PROJECTS.map((project, i) => (
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-6">
+            {photoMoments.map((photo, index) => (
               <motion.div
-                key={project.title}
+                key={photo.src}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
+                transition={{ delay: index * 0.04, duration: 0.42 }}
+                className={`group relative overflow-hidden rounded-2xl border border-blush-100 bg-white shadow-card ${
+                  index === 0 || index === 2 ? 'md:col-span-2 md:row-span-2' : 'md:col-span-1'
+                }`}
               >
-                <TiltCard className="bg-white rounded-2xl p-5 shadow-card border border-blush-100 flex flex-col h-full transition-shadow hover:shadow-soft-lg">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-3">{project.tag}</span>
-                  <h3 className="font-black text-plum-900 text-lg mb-2 leading-tight">{project.title}</h3>
-                  <p className="text-xs text-plum-400 leading-relaxed flex-1 mb-4">{project.description}</p>
-                  <div className="flex items-center justify-between">
-                    {project.outcome && (
-                      <span className="text-[10px] font-semibold text-lavender-500 bg-lavender-50 px-2.5 py-1 rounded-full">
-                        {project.outcome}
-                      </span>
-                    )}
-                    {project.href && (
-                      <a
-                        href={project.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-blush-400 hover:text-blush-600 transition-colors"
-                      >
-                        <ExternalLink size={13} />
-                      </a>
-                    )}
-                  </div>
-                </TiltCard>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Currently Building */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-sm font-bold text-plum-700">Currently Building</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-          <p className="text-[11px] text-plum-300 font-medium mb-5">Dispatches from the field</p>
-
-          <div className="relative">
-            {/* Connecting line */}
-            <div className="absolute left-[11px] top-4 bottom-4 w-px bg-blush-100 hidden sm:block" />
-
-            <div className="space-y-3">
-              {DISPATCHES.map(({ title, description, status, domain, freshness, accent, statusStyle }, i) => (
-                <motion.div
-                  key={title}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.4 }}
-                  className="relative sm:pl-8"
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute left-0 top-5 w-[10px] h-[10px] rounded-full bg-white border-2 border-blush-300 hidden sm:block" />
-
-                  <div className={`bg-white rounded-2xl border-l-4 ${accent} border-t border-r border-b border-blush-100 shadow-card p-5`}>
-                    {/* Dispatch number */}
-                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-blush-300 mb-2">
-                      Dispatch {String(i + 1).padStart(2, '0')}
-                    </div>
-
-                    <h3 className="font-bold text-plum-900 text-sm leading-snug mb-1.5">{title}</h3>
-                    <p className="text-xs text-plum-400 leading-relaxed mb-3">{description}</p>
-
-                    {/* Meta row */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${statusStyle}`}>
-                        {status}
-                      </span>
-                      <span className="text-[10px] text-plum-300 font-medium">{domain}</span>
-                      <span className="text-plum-200 text-[10px]">·</span>
-                      <span className="text-[10px] text-plum-300 font-medium">{freshness}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* All Trips Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">All Trips</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {gridTrips.map((trip, i) => (
-              <Link key={trip.id} href={`/trips/${trip.id}`}>
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.4 }}
-                  whileHover={{ y: -4, boxShadow: '0 12px 36px rgba(173,134,144,0.22)' }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-card border border-blush-100 cursor-pointer group h-full"
-                >
-                  <div className={`h-28 ${TRIP_COLORS[trip.id] || 'bg-blush-300'} relative overflow-hidden`}>
-                    {trip.coverImage && (
-                      <img
-                        src={trip.coverImage}
-                        alt={trip.title}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-300"
-                        style={{ filter: 'saturate(1.1)', objectPosition: trip.coverImagePosition ?? 'center' }}
-                      />
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-blush-400 mb-1">{trip.dateRange}</div>
-                    <h3 className="font-bold text-plum-800 text-base mb-1">{trip.title}</h3>
-                    <p className="text-xs text-plum-400 leading-relaxed line-clamp-2">{trip.subtitle}</p>
-                    <div className="flex items-center justify-between mt-3">
-                      <span className="text-[10px] font-semibold text-plum-300">
-                        {trip.days.reduce((a, d) => a + d.stops.length, 0)} stops
-                      </span>
-                      <ArrowRight size={13} className="text-blush-300 group-hover:text-blush-500 transition-colors" />
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Moments */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          className="mb-14"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Moments</h2>
-            <div className="flex-1 h-px bg-blush-100" />
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {MOMENTS.map(({ src, caption, context, position }, i) => (
-              <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 16, rotate: i % 2 === 0 ? -1.2 : 1.2 }}
-                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * 0.06, duration: 0.5, ease: 'easeOut' }}
-                whileHover={{ y: -5, rotate: i % 2 === 0 ? -1.5 : 1.5, scale: 1.02 }}
-                className="relative rounded-2xl overflow-hidden bg-blush-200 shadow-card h-36 sm:h-44 group"
-              >
-                <img src={src} alt={caption} className={`w-full h-full object-cover ${position} group-hover:scale-110 transition-transform duration-700`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-2.5 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="text-[10px] font-black text-white leading-none mb-0.5">{caption}</div>
-                  <div className="text-[9px] text-white/65 leading-tight">{context}</div>
+                <img
+                  src={photo.src}
+                  alt={photo.label}
+                  className={`h-full min-h-44 w-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+                    index === 0 || index === 2 ? 'md:min-h-[356px]' : 'md:min-h-[172px]'
+                  }`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/5 to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3">
+                  <div className="text-[10px] font-black uppercase tracking-[0.16em] text-white/62">{photo.tone}</div>
+                  <div className="mt-1 text-sm font-black text-white">{photo.label}</div>
                 </div>
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </motion.section>
 
-        {/* Footer CTA */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="pt-12 border-t border-blush-100 text-center"
-        >
-          <div className="text-3xl mb-4 bob inline-block">🦙</div>
-          <h2 className="text-2xl font-black text-plum-900 mb-2">Let's build something interesting.</h2>
-          <p className="text-sm text-plum-400 leading-relaxed mb-8 max-w-sm mx-auto">
-            Whether it's a community event, a product idea, or just a good conversation — I'm always open.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-            <a
-              href="https://www.linkedin.com/in/courtney-ko-720b63103/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-2.5 bg-plum-800 text-white rounded-full text-sm font-semibold hover:bg-plum-700 transition-colors shadow-soft"
-            >
-              <Mail size={14} />
-              Connect on LinkedIn
-            </a>
-            {socials.map(({ href, label, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={label}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-blush-200 text-plum-400 hover:bg-blush-100 hover:text-blush-600 transition-all shadow-soft"
-              >
-                <Icon />
-              </a>
+        <section id="work" className="mb-24 scroll-mt-24">
+          <SectionHeader
+            eyebrow="Featured Work"
+            title="Three proof points across automation, AI product, and ecosystem building."
+            description="Each project shows the same pattern: find the real workflow, build the minimum useful system, and make the outcome measurable."
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {orderedCaseStudies.map((study, index) => (
+              <FeaturedCard key={study.id} study={study} index={index} />
             ))}
           </div>
+        </section>
 
-          <p className="text-[10px] text-plum-300 font-medium">
-            Made with care in San Francisco · 2026
-          </p>
-        </motion.div>
+        <section id="case-studies" className="mb-24 scroll-mt-24 space-y-8">
+          <SectionHeader
+            eyebrow="Case Studies"
+            title="Detailed work, without the fluff."
+            description="Problem, role, process, build, tools, and outcomes for the work recruiters and hiring teams are most likely to care about."
+          />
+          <div className="rounded-[28px] border border-plum-200 bg-plum-900 p-6 text-white shadow-soft-lg md:p-8">
+            <div className="grid items-center gap-6 md:grid-cols-[1fr_auto]">
+              <div>
+                <div className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-blush-200">Flagship case study</div>
+                <h3 className="text-2xl font-black md:text-4xl">NVIDIA Automation Systems</h3>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/72">
+                  The clearest proof of technical PM range: workflow diagnosis, internal tooling, Python automation, AI-assisted summaries, and measurable operations impact.
+                </p>
+              </div>
+              <a
+                href="#nvidia"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-plum-900 transition-transform hover:-translate-y-0.5"
+              >
+                Jump to NVIDIA
+                <ArrowRight size={15} />
+              </a>
+            </div>
+          </div>
+          {orderedCaseStudies.map((study, index) => (
+            <CaseStudySection key={study.id} study={study} index={index} />
+          ))}
+        </section>
 
+        <section id="about" className="mb-24 scroll-mt-24 grid gap-8 rounded-[28px] border border-blush-100 bg-white p-6 shadow-card md:grid-cols-[0.85fr_1.15fr] md:p-8">
+          <div>
+            <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-500">About</div>
+            <h2 className="text-3xl font-black leading-tight text-plum-900 md:text-5xl">Warm human, rigorous operator.</h2>
+          </div>
+          <div className="space-y-4 text-sm leading-relaxed text-plum-500 md:text-base">
+            <p>
+              My background sits between UX, psychology, product, AI tools, and community building. I like problems where the user need is real, the workflow is tangled, and the best solution requires both taste and systems thinking.
+            </p>
+            <p>
+              I have led 0 to 1 product work, built automation for enterprise operations, designed AI-powered workflows, and created rooms where technical builders actually want to spend time.
+            </p>
+            <p>
+              The throughline is simple: I make complex things feel usable, credible, and momentum-building.
+            </p>
+          </div>
+        </section>
+
+        <section id="toolkit" className="mb-24 scroll-mt-24">
+          <SectionHeader
+            eyebrow="Skills / Toolkit"
+            title="Product judgment with technical fluency."
+            description="A practical mix of strategy, research, automation, prototyping, and community-led growth."
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {toolkit.map((group, index) => (
+              <motion.div
+                key={group.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ delay: index * 0.04, duration: 0.4 }}
+                className="rounded-2xl border border-blush-100 bg-white p-5 shadow-card"
+              >
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-plum-900 text-white">
+                  {[Layers3, Bot, Wand2, Code2, BarChart3, Network][index] &&
+                    (() => {
+                      const Icon = [Layers3, Bot, Wand2, Code2, BarChart3, Network][index];
+                      return <Icon size={18} />;
+                    })()}
+                </div>
+                <h3 className="font-black text-plum-900">{group.title}</h3>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <span key={item} className="rounded-full border border-blush-100 bg-blush-50 px-3 py-1 text-[11px] font-bold text-plum-500">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="scroll-mt-24 overflow-hidden rounded-[32px] bg-plum-900 p-7 text-white shadow-soft-lg md:p-10">
+          <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
+            <div>
+              <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-200">Contact</div>
+              <h2 className="max-w-2xl text-3xl font-black leading-tight md:text-5xl">
+                Interested in AI product, automation, or community-led growth?
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/72">
+                I’m always happy to talk with teams building useful products, better internal systems, and thoughtful technical communities.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <ButtonLink href="mailto:courtneythko@gmail.com" variant="secondary">
+                Email
+                <Mail size={15} />
+              </ButtonLink>
+              <ButtonLink href={CONTACT_LINK} variant="secondary">
+                LinkedIn
+                <ExternalLink size={15} />
+              </ButtonLink>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

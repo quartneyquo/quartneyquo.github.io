@@ -14,7 +14,7 @@ interface Flight {
   role: string;
   roleCode: string;
   dateRange: string;
-  status: 'In Flight' | 'Landed';
+  status: 'Current' | 'Past';
   categories: Exclude<Category, 'All'>[];
   bullets: string[];
 }
@@ -27,12 +27,13 @@ const FLIGHTS: Flight[] = [
     role: 'Chief Operating Officer',
     roleCode: 'COO',
     dateRange: 'Sep 2025 → Present',
-    status: 'In Flight',
+    status: 'Current',
     categories: ['AI', 'Community'],
     bullets: [
-      'Scaled a 0→1 developer community to 5,000+ engineers and founders by identifying user needs and designing high-signal technical programming (hackathons, workshops, events).',
+      'Scaled a 0→1 developer community to 8,000+ engineers and founders by identifying user needs and designing high-signal technical programming (hackathons, workshops, events).',
       'Defined and executed product strategy for community growth, improving activation, engagement, and retention through structured onboarding and event experiences.',
       'Led cross-functional execution across sponsors, partners, and internal teams to deliver multi-sided platform value (builders, sponsors, and organizers).',
+      'Partnered with AI infrastructure companies to drive real-world API adoption through hands-on product experiences.',
       "Launched and scaled San Francisco's largest all-women AI hackathon (500+ registrations), improving accessibility and participation in technical communities.",
     ],
   },
@@ -40,17 +41,17 @@ const FLIGHTS: Flight[] = [
     id: 'nvidia',
     company: 'NVIDIA',
     companyCode: 'NVD',
-    role: 'Business Operations Analyst (Contract)',
+    role: 'Business Analyst, Automation & Systems',
     roleCode: 'ENT',
     dateRange: 'Oct 2025 → Present',
-    status: 'In Flight',
+    status: 'Current',
     categories: ['AI', 'Enterprise'],
     bullets: [
-      'Owned internal product workflows across Salesforce and SAP for licensing and entitlement systems, improving scalability of enterprise operations.',
-      'Built a Python-based automation to convert Salesforce CLI requests into SAP sales orders, reducing processing time from 2–3 hours to under 5 minutes (95%+ reduction).',
-      'Led workflow redesign to eliminate manual steps, reduce error rates, and improve system reliability for order processing.',
-      'Partnered with engineering, finance, and support to define requirements, resolve edge cases, and maintain pricing and entitlement logic.',
-      'Built dashboards to monitor system performance, enabling data-driven decisions on escalations, latency, and process improvements.',
+      'Identified high-friction manual workflows and built automation solutions to improve operational scalability across internal enterprise processes.',
+      'Built an end-to-end automation system with a self-serve UI, reducing processing time from 2 hours to 30 minutes and enabling 3+ team members to complete the workflow independently.',
+      'Developed Python workflows that transform unstructured request data into structured operational inputs, improving consistency and reducing manual effort.',
+      'Created AI-powered case summarization workflows that reduced review time from 1 week to 1.5 hours, significantly accelerating investigation and resolution.',
+      'Partnered with cross-functional stakeholders to translate operational pain points into adopted internal tools.',
     ],
   },
   {
@@ -60,7 +61,7 @@ const FLIGHTS: Flight[] = [
     role: 'Founder / Product Lead',
     roleCode: 'AI',
     dateRange: 'Mar 2025 → Sep 2025',
-    status: 'Landed',
+    status: 'Past',
     categories: ['AI', 'Product'],
     bullets: [
       'Built and launched a 0→1 AI-powered group travel platform, defining product vision, roadmap, and core user flows.',
@@ -76,7 +77,7 @@ const FLIGHTS: Flight[] = [
     role: 'Product Manager',
     roleCode: 'FIN',
     dateRange: 'Nov 2024 → Oct 2025',
-    status: 'Landed',
+    status: 'Past',
     categories: ['Product'],
     bullets: [
       'Shipped real-time analytics dashboard (Python, SQL) reducing reporting latency by 96%.',
@@ -91,7 +92,7 @@ const FLIGHTS: Flight[] = [
     role: 'Independent Product Prototyping & Advisory',
     roleCode: 'SFO',
     dateRange: 'Mar 2023 → Sep 2024',
-    status: 'Landed',
+    status: 'Past',
     categories: ['AI', 'Product'],
     bullets: [
       'Built early-stage AI prototypes exploring LLM-based workflows and automation opportunities.',
@@ -105,7 +106,7 @@ const FLIGHTS: Flight[] = [
     role: 'Design Producer (Product Design PM)',
     roleCode: 'DEV',
     dateRange: 'Aug 2021 → Mar 2023',
-    status: 'Landed',
+    status: 'Past',
     categories: ['Developer'],
     bullets: [
       'Led delivery for API and SDK platforms across 10+ stakeholders, improving developer experience and integration workflows.',
@@ -120,7 +121,7 @@ const FLIGHTS: Flight[] = [
     role: 'Founding Product Manager',
     roleCode: 'FIN',
     dateRange: 'Jun 2020 → Aug 2021',
-    status: 'Landed',
+    status: 'Past',
     categories: ['Product'],
     bullets: [
       'Led 0→1 platform redesign driving 919% transaction growth (to $99K).',
@@ -152,7 +153,7 @@ const TAG_STYLE: Record<Exclude<Category, 'All'>, string> = {
 const SKILLS: Record<string, string[]> = {
   Product: ['Product Strategy', 'Roadmapping', 'Experimentation', 'A/B Testing', 'User Research'],
   Technical: ['Python', 'SQL', 'LLM APIs', 'NLP Pipelines', 'API/SDK Integrations', 'Workflow Automation'],
-  Systems: ['Salesforce', 'SAP', 'AWS', 'Jira', 'Figma'],
+  Systems: ['Internal Tools', 'Data Workflows', 'AWS', 'Jira', 'Figma'],
 };
 
 const EDUCATION = [
@@ -174,7 +175,7 @@ export default function ResumePage() {
       ? FLIGHTS
       : FLIGHTS.filter((f) => f.categories.includes(activeCategory as Exclude<Category, 'All'>));
 
-  const inFlight = FLIGHTS.filter((f) => f.status === 'In Flight').length;
+  const currentRoles = FLIGHTS.filter((f) => f.status === 'Current').length;
 
   return (
     <div className="min-h-screen bg-blush-50">
@@ -197,9 +198,9 @@ export default function ResumePage() {
 
       <main className="max-w-5xl mx-auto px-6 pb-20">
 
-        {/* Boarding pass header */}
+        {/* Header */}
         <motion.div initial="hidden" animate="visible" variants={fadeUp} className="pt-8 pb-10">
-          <div className="relative overflow-hidden rounded-3xl bg-blush-400 p-7 mb-8">
+          <div className="relative overflow-hidden rounded-2xl bg-plum-900 p-7 mb-8">
             <div className="absolute -top-10 -right-10 w-52 h-52 bg-white/10 rounded-full" />
             <div className="absolute -bottom-16 -left-8 w-44 h-44 bg-white/10 rounded-full" />
 
@@ -207,23 +208,23 @@ export default function ResumePage() {
               {/* Top row */}
               <div className="flex items-start justify-between mb-7">
                 <div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Passenger</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Profile</div>
                   <div className="text-3xl font-black text-white leading-tight">Courtney Ko</div>
-                  <div className="text-sm text-white/70 mt-1">COO · Community Architect · Product Builder</div>
+                  <div className="text-sm text-white/70 mt-1">AI Product Operator · Automation Builder · Community Growth</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Status</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Focus</div>
                   <div className="flex items-center gap-1.5 text-white font-bold text-sm">
-                    <Plane size={14} className="animate-pulse" />
-                    In flight
+                    <Plane size={14} />
+                    AI systems
                   </div>
                 </div>
               </div>
 
-              {/* Route */}
+              {/* Positioning */}
               <div className="flex items-center gap-3 mb-7">
                 <div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Origin</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Base</div>
                   <div className="text-3xl font-black text-white">SFO</div>
                   <div className="text-[10px] text-white/70">San Francisco</div>
                 </div>
@@ -233,9 +234,9 @@ export default function ResumePage() {
                   <div className="flex-1 h-px border-t-2 border-dashed border-white/40" />
                 </div>
                 <div className="text-right">
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Destination</div>
-                  <div className="text-3xl font-black text-white">∞</div>
-                  <div className="text-[10px] text-white/70">Frontier of AI</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Strength</div>
+                  <div className="text-3xl font-black text-white">0→1</div>
+                  <div className="text-[10px] text-white/70">Products & systems</div>
                 </div>
               </div>
 
@@ -249,12 +250,12 @@ export default function ResumePage() {
               {/* Stats row */}
               <div className="grid grid-cols-4 gap-4 mt-5">
                 <div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Flights Logged</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Experience</div>
                   <div className="text-2xl font-black text-white">{FLIGHTS.length}</div>
                 </div>
                 <div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Active</div>
-                  <div className="text-2xl font-black text-white">{inFlight}</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Current</div>
+                  <div className="text-2xl font-black text-white">{currentRoles}</div>
                 </div>
                 <div>
                   <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">Home Base</div>
@@ -271,15 +272,15 @@ export default function ResumePage() {
           {/* Manifest (summary) */}
           <div className="bg-white rounded-2xl p-6 shadow-card border border-blush-100">
             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-blush-400 mb-2">
-              Passenger Manifest
+              Summary
             </div>
             <p className="text-sm text-plum-500 leading-relaxed">
-              Product manager by background. Community builder at heart. Currently Business Analyst at NVIDIA and COO of AI Valley — a technical builder community in SF running hackathons, cofounder mixers, and hands-on events with partners including NVIDIA, Afore Capital, MiniMax, and Hanwha AI Center. Drawn to DevRel, ecosystem strategy, and community-driven product — where community is the growth lever.
+              Product manager and builder focused on data-driven, user-centric systems across AI, developer platforms, and internal tooling. Experience leading 0→1 products, optimizing user workflows, and driving measurable impact through automation, experimentation, and cross-functional collaboration.
             </p>
           </div>
         </motion.div>
 
-        {/* Flight Log */}
+        {/* Experience */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -287,9 +288,9 @@ export default function ResumePage() {
           className="mb-14"
         >
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Flight Log</h2>
+            <h2 className="text-sm font-bold text-plum-700">Experience</h2>
             <div className="flex-1 h-px bg-blush-100" />
-            <span className="text-[11px] text-plum-300 font-medium">Experience</span>
+            <span className="text-[11px] text-plum-300 font-medium">Selected impact</span>
           </div>
 
           {/* Filter chips */}
@@ -363,12 +364,12 @@ export default function ResumePage() {
                           <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
                             <div
                               className={`flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full ${
-                                flight.status === 'In Flight'
+                                flight.status === 'Current'
                                   ? 'bg-blush-100 text-blush-600'
                                   : 'bg-plum-50 text-plum-400'
                               }`}
                             >
-                              {flight.status === 'In Flight' && (
+                              {flight.status === 'Current' && (
                                 <span className="w-1.5 h-1.5 rounded-full bg-blush-400 animate-pulse" />
                               )}
                               {flight.status}
@@ -434,7 +435,7 @@ export default function ResumePage() {
           </div>
         </motion.div>
 
-        {/* Skills — Cargo Manifest */}
+        {/* Skills */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -443,9 +444,9 @@ export default function ResumePage() {
           className="mb-14"
         >
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Cargo Manifest</h2>
+            <h2 className="text-sm font-bold text-plum-700">Skills</h2>
             <div className="flex-1 h-px bg-blush-100" />
-            <span className="text-[11px] text-plum-300 font-medium">Skills</span>
+            <span className="text-[11px] text-plum-300 font-medium">Product, technical, systems</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -467,7 +468,7 @@ export default function ResumePage() {
           </div>
         </motion.div>
 
-        {/* Education — Clearances */}
+        {/* Education */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -476,9 +477,9 @@ export default function ResumePage() {
           className="mb-10"
         >
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-plum-700">Clearances</h2>
+            <h2 className="text-sm font-bold text-plum-700">Education</h2>
             <div className="flex-1 h-px bg-blush-100" />
-            <span className="text-[11px] text-plum-300 font-medium">Education</span>
+            <span className="text-[11px] text-plum-300 font-medium">Academic background</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -501,11 +502,8 @@ export default function ResumePage() {
 
         {/* Footer */}
         <div className="pt-6 border-t border-blush-100 flex flex-col items-center gap-3">
-          <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-blush-200 shadow-soft">
-            <img src="/stitch.jpeg" alt="Stitch" className="w-full h-full object-cover" />
-          </div>
           <p className="text-[10px] text-plum-300 font-medium">
-            Co-piloted by Stitch · Courtney Ko · San Francisco, CA · 2026
+            Courtney Ko · San Francisco, CA · 2026
           </p>
         </div>
 

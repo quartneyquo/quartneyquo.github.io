@@ -29,7 +29,7 @@ export const trips: Trip[] = [
             locationLabel: 'San Francisco, CA',
             tag: 'Community',
             timeLabel: 'Sep 2025 – Present',
-            blurb: 'Chief Operating Officer — scaled AI ecosystem to 5,000+ members through technical hackathons and community programming.',
+            blurb: 'Chief Operating Officer — scaled AI ecosystem to 8,000+ members through technical hackathons and community programming.',
             content: [
               {
                 type: 'text',
@@ -40,7 +40,7 @@ export const trips: Trip[] = [
                 type: 'bullets',
                 title: 'Highlights',
                 items: [
-                  'Scaled AI ecosystem to 5,000+ members through technical hackathons',
+                  'Scaled AI ecosystem to 8,000+ members through technical hackathons',
                   'Hosted the largest all-women AI hackathon in San Francisco — 150+ participants, 40+ teams, 40+ projects in under one day',
                   'Led events focused on LLM agents, RAG systems, and multimodal workflows',
                   'Aligned sponsors, engineers, and founders to ship production-ready systems',
@@ -50,7 +50,7 @@ export const trips: Trip[] = [
                 type: 'metrics',
                 title: 'Community Stats',
                 items: [
-                  { label: 'Members', value: '5,000+' },
+                  { label: 'Members', value: '8,000+' },
                   { label: 'WIT Hackathon', value: '150+' },
                   { label: 'Events', value: '20+' },
                   { label: 'Hackathons', value: '10+' },

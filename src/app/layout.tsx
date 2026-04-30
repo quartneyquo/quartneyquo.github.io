@@ -5,8 +5,9 @@ import './globals.css';
 const GA_ID = 'G-NCMQCSCFZP';
 
 export const metadata: Metadata = {
-  title: 'Courtney Ko',
-  description: 'COO of AI Valley · Builder · Community Architect',
+  title: 'Courtney Ko | AI Product & Automation Builder',
+  description:
+    'Product-minded builder across AI, automation, internal tools, and community-led growth. Case studies in NVIDIA automation, Pearle, and AI Valley.',
   icons: { icon: '/favicon2.png' },
 };
 
