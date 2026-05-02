@@ -49,6 +49,13 @@ type WorldStop = {
   icon: typeof Bot;
 };
 
+type NavItem = {
+  label: string;
+  shortLabel: string;
+  href: string;
+  icon: typeof Bot;
+};
+
 const CONTACT_LINK = 'https://www.linkedin.com/in/courtney-ko-720b63103/';
 
 const socials = [
@@ -276,6 +283,15 @@ const worldStops: WorldStop[] = [
   },
 ];
 
+const navItems: NavItem[] = [
+  { label: 'World', shortLabel: 'World', href: '#world', icon: MapPin },
+  { label: 'Work', shortLabel: 'Work', href: '#work', icon: BriefcaseBusiness },
+  { label: 'Case Studies', shortLabel: 'Cases', href: '#case-studies', icon: Layers3 },
+  { label: 'About', shortLabel: 'About', href: '#about', icon: Sparkles },
+  { label: 'Toolkit', shortLabel: 'Tools', href: '#toolkit', icon: Wand2 },
+  { label: 'Contact', shortLabel: 'Contact', href: '#contact', icon: Mail },
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
@@ -381,7 +397,7 @@ function OpacaWorldHero() {
   };
 
   return (
-    <section className="py-6 sm:py-10 md:py-14">
+    <section id="world" className="scroll-mt-24 py-6 sm:py-10 md:py-14">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -546,25 +562,26 @@ function OpacaWorldHero() {
           ))}
 
           <div className="absolute left-4 right-4 top-4 z-40 flex flex-col gap-3 sm:left-5 sm:right-5 sm:top-5 lg:flex-row lg:items-start lg:justify-between">
-            <div className="rounded-full border border-white/70 bg-white/82 px-4 py-3 shadow-soft backdrop-blur sm:px-5">
+            <div className="max-w-2xl rounded-[22px] border-2 border-white/70 bg-white/90 px-4 py-3 shadow-soft sm:px-5">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-blush-500">
                   <Sparkles size={13} />
                   Opaca quest map
                 </span>
-                <span className="text-sm font-black text-plum-900 sm:text-base">Pick a place in Courtney&apos;s world</span>
+                <span className="text-sm font-black text-plum-900 sm:text-base">AI product builder turning messy workflows into shipped systems.</span>
               </div>
+              <p className="mt-1 text-xs font-semibold text-plum-500">Click a stop to follow Opaca through the work.</p>
             </div>
 
             <div className="flex flex-wrap gap-2 rounded-[22px] border-2 border-[#9A7348]/40 bg-[#F8E2AB] p-1.5 shadow-[0_5px_0_rgba(98,65,38,0.18)]">
-              <a href="#work" className="rounded-full bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_3px_0_rgba(43,27,46,0.24)] transition-transform hover:-translate-y-0.5">
+              <button type="button" onClick={() => selectStop(worldStops[0].id)} className="rounded-full bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_3px_0_rgba(43,27,46,0.24)] transition-transform hover:-translate-y-0.5">
+                Start Journey
+              </button>
+              <a href="#work" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
                 View Work
               </a>
               <a href="/resume" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
                 Resume
-              </a>
-              <a href="mailto:courtneythko@gmail.com" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
-                Contact
               </a>
             </div>
           </div>
@@ -663,23 +680,23 @@ function OpacaWorldHero() {
               initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.32 }}
-              className="absolute bottom-4 left-4 right-4 z-40 max-h-[48%] overflow-y-auto rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-3 text-plum-900 shadow-[0_9px_0_rgba(98,65,38,0.22),0_22px_42px_rgba(43,27,46,0.18)] sm:bottom-5 sm:left-5 sm:right-5 sm:max-h-none sm:p-4 lg:left-auto lg:right-6 lg:w-[min(720px,calc(100%-3rem))]"
+              className="absolute bottom-5 right-6 z-40 hidden w-[480px] overflow-hidden rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-4 text-plum-900 shadow-[0_9px_0_rgba(98,65,38,0.22),0_22px_42px_rgba(43,27,46,0.18)] lg:block"
             >
               <div className="absolute inset-x-0 top-0 h-2 bg-[#D4A15D]" />
-              <div className="relative grid min-w-0 gap-3 sm:grid-cols-[84px_minmax(0,1fr)] sm:items-start">
-                <div className="hidden h-20 overflow-hidden rounded-xl border-2 border-[#B88951] bg-plum-900 sm:block">
+              <div className="relative grid min-w-0 gap-3 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-start">
+                <div className="hidden h-16 overflow-hidden rounded-xl border-2 border-[#B88951] bg-plum-900 sm:block">
                   <img src={activeStop.image} alt="" className="h-full w-full object-cover opacity-85" />
                 </div>
                 <div className="min-w-0">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/58 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-blush-500">
                       <ActiveIcon size={12} />
-                      {activeStop.eyebrow}
+                      Opaca arrived
                     </span>
                   </div>
-                  <h2 className="text-xl font-black leading-tight text-plum-900 sm:text-2xl">{activeStop.title}</h2>
-                  <p className="mt-1 text-sm leading-relaxed text-plum-600">{activeStop.blurb}</p>
-                  <div className="mt-2 rounded-xl border border-[#D4A15D]/40 bg-white/48 px-3 py-2 text-xs font-black text-plum-700 sm:hidden">{activeStop.metric}</div>
+                  <h2 className="text-xl font-black leading-tight text-plum-900">{activeStop.title}</h2>
+                  <div className="mt-2 rounded-xl border border-[#D4A15D]/40 bg-white/48 px-3 py-2 text-xs font-black text-plum-700">{activeStop.metric}</div>
+                  <p className="mt-2 text-sm leading-relaxed text-plum-600">{activeStop.blurb}</p>
                 </div>
                 <div className="flex min-w-0 flex-wrap gap-2 sm:col-span-2 sm:justify-end">
                   <a
@@ -709,6 +726,47 @@ function OpacaWorldHero() {
           )}
         </div>
 
+        {activeStop && ActiveIcon && (
+          <motion.div
+            key={`${activeStop.id}-mobile`}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28 }}
+            className="mt-3 rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-4 text-plum-900 shadow-[0_6px_0_rgba(98,65,38,0.18)] lg:hidden"
+          >
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/58 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-blush-500">
+              <ActiveIcon size={12} />
+              Opaca arrived
+            </div>
+            <h2 className="text-xl font-black leading-tight">{activeStop.title}</h2>
+            <div className="mt-2 rounded-xl border border-[#D4A15D]/40 bg-white/48 px-3 py-2 text-xs font-black text-plum-700">{activeStop.metric}</div>
+            <p className="mt-2 text-sm leading-relaxed text-plum-600">{activeStop.blurb}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a
+                href={activeStop.cta.href}
+                className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_4px_0_rgba(43,27,46,0.28)]"
+              >
+                {activeStop.cta.label}
+                <ArrowRight size={14} />
+              </a>
+              <button
+                type="button"
+                onClick={goToNextStop}
+                className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl border-2 border-[#B88951] bg-white/62 px-4 py-2 text-xs font-black text-plum-700"
+              >
+                Next
+              </button>
+              <button
+                type="button"
+                onClick={() => setTargetStopId(null)}
+                className="inline-flex min-h-10 items-center justify-center rounded-xl border-2 border-[#B88951] bg-white/42 px-4 py-2 text-xs font-black text-plum-500"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
+        )}
+
         <div className="mt-3 flex snap-x gap-2 overflow-x-auto pb-1 lg:hidden">
           {worldStops.map((stop) => (
             <button
@@ -729,6 +787,61 @@ function OpacaWorldHero() {
         </div>
       </motion.div>
     </section>
+  );
+}
+
+function SideNav() {
+  const [hasPassedWorld, setHasPassedWorld] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const updateVisibility = () => {
+      const worldSection = document.getElementById('world');
+
+      if (!worldSection) {
+        setHasPassedWorld(true);
+        return;
+      }
+
+      setHasPassedWorld(worldSection.getBoundingClientRect().bottom < window.innerHeight * 0.28);
+    };
+
+    updateVisibility();
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', updateVisibility);
+      window.removeEventListener('resize', updateVisibility);
+    };
+  }, []);
+
+  return (
+    <motion.aside
+      aria-hidden={!hasPassedWorld}
+      initial={false}
+      animate={hasPassedWorld ? { opacity: 1, x: 0, pointerEvents: 'auto' } : { opacity: 0, x: -16, pointerEvents: 'none' }}
+      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.28, ease: 'easeOut' }}
+      className="fixed left-4 top-1/2 z-30 hidden -translate-y-1/2 xl:block"
+    >
+      <nav aria-label="Portfolio sections" className="rounded-[24px] border-2 border-[#9A7348]/45 bg-[#F8E2AB] p-2 shadow-[0_7px_0_rgba(98,65,38,0.18),0_20px_50px_rgba(43,27,46,0.12)]">
+        <div className="mb-2 px-2 pt-1 text-[9px] font-black uppercase tracking-[0.16em] text-blush-500">Map</div>
+        <div className="flex flex-col gap-1">
+          {navItems.map(({ label, href, icon: Icon }) => (
+            <a
+              key={href}
+              href={href}
+              className="group flex items-center gap-2 rounded-2xl px-2.5 py-2 text-xs font-black text-plum-700 transition-colors hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blush-300/50"
+            >
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border-2 border-[#B88951] bg-white text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.13)] transition-transform group-hover:-translate-y-0.5">
+                <Icon size={15} />
+              </span>
+              <span className="w-20">{label}</span>
+            </a>
+          ))}
+        </div>
+      </nav>
+    </motion.aside>
   );
 }
 
@@ -965,6 +1078,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FBF8F8] text-plum-900">
       <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 h-[520px] bg-[linear-gradient(180deg,#F1E9EB_0%,rgba(251,248,248,0)_78%)]" />
+      <SideNav />
 
       <nav className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
         <Link href="/" className="flex items-center gap-3">
@@ -993,18 +1107,12 @@ export default function Home() {
         </div>
       </nav>
 
-      <div className="sticky top-2 z-20 mx-auto mb-2 max-w-6xl px-4 sm:px-6 md:top-3">
+      <div className="sticky top-2 z-20 mx-auto mb-2 max-w-6xl px-4 sm:px-6 md:top-3 xl:hidden">
         <div className="ml-auto flex w-fit items-center gap-1 rounded-full border border-white/70 bg-white/95 p-1 text-[11px] font-black text-plum-700 shadow-soft-lg backdrop-blur-xl ring-1 ring-plum-900/5">
-          {[
-            ['Work', '#work'],
-            ['Cases', '#case-studies', 'Case Studies'],
-            ['About', '#about'],
-            ['Toolkit', '#toolkit'],
-            ['Contact', '#contact'],
-          ].map(([label, href, desktopLabel]) => (
+          {navItems.map(({ shortLabel, label, href }) => (
             <a key={href} href={href} className="rounded-full px-2.5 py-1.5 transition-colors hover:bg-plum-900 hover:text-white sm:px-3">
-              <span className={desktopLabel ? 'sm:hidden' : ''}>{label}</span>
-              {desktopLabel && <span className="hidden sm:inline">{desktopLabel}</span>}
+              <span className={label !== shortLabel ? 'sm:hidden' : ''}>{shortLabel}</span>
+              {label !== shortLabel && <span className="hidden sm:inline">{label}</span>}
             </a>
           ))}
         </div>
