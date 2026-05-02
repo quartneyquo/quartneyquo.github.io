@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -33,6 +34,19 @@ type CaseStudy = {
   accent: string;
   roleFit: string;
   visual: 'automation' | 'travel' | 'community';
+};
+
+type WorldStop = {
+  id: string;
+  title: string;
+  eyebrow: string;
+  blurb: string;
+  metric: string;
+  cta: { label: string; href: string };
+  x: number;
+  y: number;
+  image: string;
+  icon: typeof Bot;
 };
 
 const CONTACT_LINK = 'https://www.linkedin.com/in/courtney-ko-720b63103/';
@@ -187,6 +201,81 @@ const photoMoments = [
   { src: '/fembrunch.jpg', label: 'Women building AI', tone: 'Ecosystem' },
 ];
 
+const worldStops: WorldStop[] = [
+  {
+    id: 'nvidia-lab',
+    title: 'NVIDIA Lab',
+    eyebrow: 'Enterprise Automation',
+    blurb: 'Workflow diagnosis, self-serve tooling, Python automation, and AI summaries for faster internal operations.',
+    metric: '2h -> 30m workflow processing',
+    cta: { label: 'Open case study', href: '#nvidia' },
+    x: 17,
+    y: 28,
+    image: '/projects.png',
+    icon: Bot,
+  },
+  {
+    id: 'ai-valley-hub',
+    title: 'AI Valley Hub',
+    eyebrow: 'Community Engine',
+    blurb: 'High-signal rooms for builders, founders, partners, technical workshops, and community-led growth.',
+    metric: '8K+ builders connected',
+    cta: { label: 'Visit the hub', href: '#ai-valley' },
+    x: 47,
+    y: 30,
+    image: '/aivalley-lounge-event.jpg',
+    icon: Network,
+  },
+  {
+    id: 'pearle-port',
+    title: 'Pearle Port',
+    eyebrow: 'AI Travel Product',
+    blurb: 'A 0 to 1 group travel planner that turns messy inspiration into collaborative itineraries.',
+    metric: '3.9K+ itineraries generated',
+    cta: { label: 'See Pearle', href: '#pearle' },
+    x: 76,
+    y: 27,
+    image: '/pearle.jpeg',
+    icon: Sparkles,
+  },
+  {
+    id: 'basecamp',
+    title: 'Courtney Basecamp',
+    eyebrow: 'About',
+    blurb: 'UX, psychology, product strategy, AI tools, and a very real love of making complex things feel usable.',
+    metric: 'Warm human, rigorous operator',
+    cta: { label: 'Meet Courtney', href: '#about' },
+    x: 24,
+    y: 66,
+    image: '/profile.jpeg',
+    icon: MapPin,
+  },
+  {
+    id: 'travel-atlas',
+    title: 'Travel Atlas',
+    eyebrow: 'Worldview',
+    blurb: 'Travel research, cultural curiosity, and lived inspiration for building products people actually use.',
+    metric: '20 countries and counting',
+    cta: { label: 'View context', href: '#work' },
+    x: 55,
+    y: 68,
+    image: '/macchupicchu.jpeg',
+    icon: MapPin,
+  },
+  {
+    id: 'contact-terminal',
+    title: 'Contact Terminal',
+    eyebrow: 'Next Step',
+    blurb: 'For teams building AI products, automation systems, or technical communities with taste and momentum.',
+    metric: 'Open to product, AI, PMM',
+    cta: { label: 'Start a conversation', href: 'mailto:courtneythko@gmail.com' },
+    x: 82,
+    y: 63,
+    image: '/sf.jpeg',
+    icon: Mail,
+  },
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
@@ -224,7 +313,7 @@ function ButtonLink({
       href={href}
       target={href.startsWith('http') || href.startsWith('mailto:') ? '_blank' : undefined}
       rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-      className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition-all ${
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition-all ${
         variant === 'primary'
           ? 'bg-plum-900 text-white shadow-soft hover:-translate-y-0.5 hover:bg-plum-800'
           : 'border border-blush-200 bg-white text-plum-800 shadow-soft hover:-translate-y-0.5 hover:border-blush-300 hover:bg-blush-50'
@@ -253,20 +342,410 @@ function LogoMark({ className = '' }: { className?: string }) {
   );
 }
 
+function OpacaWorldHero() {
+  const [targetStopId, setTargetStopId] = useState<string | null>(null);
+  const [arrivedStopId, setArrivedStopId] = useState<string | null>(null);
+  const targetIndex = worldStops.findIndex((stop) => stop.id === targetStopId);
+  const targetStop = targetIndex >= 0 ? worldStops[targetIndex] : null;
+  const activeStop = worldStops.find((stop) => stop.id === arrivedStopId) ?? null;
+  const shouldReduceMotion = useReducedMotion();
+  const ActiveIcon = activeStop?.icon;
+  const opacaPosition = targetStop ? { x: targetStop.x, y: targetStop.y } : { x: 51, y: 54 };
+  const isTraveling = Boolean(targetStop && !activeStop);
+
+  useEffect(() => {
+    if (!targetStopId) {
+      setArrivedStopId(null);
+      return undefined;
+    }
+
+    if (shouldReduceMotion) {
+      setArrivedStopId(targetStopId);
+      return undefined;
+    }
+
+    setArrivedStopId(null);
+    const arriveTimer = window.setTimeout(() => {
+      setArrivedStopId(targetStopId);
+    }, 880);
+
+    return () => window.clearTimeout(arriveTimer);
+  }, [shouldReduceMotion, targetStopId]);
+
+  const selectStop = (stopId: string) => {
+    setTargetStopId(stopId);
+  };
+
+  const goToNextStop = () => {
+    setTargetStopId(worldStops[((targetIndex >= 0 ? targetIndex : -1) + 1) % worldStops.length].id);
+  };
+
+  return (
+    <section className="py-6 sm:py-10 md:py-14">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, ease: 'easeOut' }}
+        className="relative overflow-hidden rounded-[34px] border border-blush-100 bg-[#F7ECEF] p-3 shadow-soft-lg sm:p-4"
+      >
+        <div className="relative min-h-[760px] overflow-hidden rounded-[28px] border border-white/70 bg-[#83C96B] shadow-[inset_0_0_70px_rgba(41,82,39,0.18)] sm:min-h-[780px] lg:min-h-[720px]">
+          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,255,205,0.26)_0_2px,transparent_3px),radial-gradient(circle_at_82%_72%,rgba(56,112,54,0.17)_0_2px,transparent_4px),radial-gradient(circle_at_48%_46%,rgba(255,255,255,0.18),transparent_31%),linear-gradient(135deg,rgba(255,255,255,0.1),transparent_38%,rgba(42,107,53,0.16))] [background-size:34px_34px,42px_42px,100%_100%,100%_100%]" />
+
+          <svg
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <filter id="softTerrain" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" />
+                <feDisplacementMap in="SourceGraphic" scale="1.15" />
+              </filter>
+            </defs>
+            <path
+              d="M 8 39 C 17 31, 30 35, 35 46 C 42 61, 28 74, 14 69 C 1 65, -2 50, 8 39 Z"
+              fill="#A7D978"
+              opacity="0.62"
+              filter="url(#softTerrain)"
+            />
+            <path
+              d="M 61 12 C 76 3, 93 11, 95 27 C 98 45, 78 53, 65 44 C 53 36, 49 20, 61 12 Z"
+              fill="#A2D276"
+              opacity="0.58"
+              filter="url(#softTerrain)"
+            />
+            <path
+              d="M 64 63 C 80 54, 98 62, 98 79 C 99 95, 82 103, 67 96 C 52 89, 50 72, 64 63 Z"
+              fill="#A9DC86"
+              opacity="0.55"
+              filter="url(#softTerrain)"
+            />
+            <path
+              d="M -8 9 C 10 2, 22 7, 29 16 C 39 29, 24 37, 12 31 C 2 26, -5 24, -8 19 Z"
+              fill="#69B8BD"
+              filter="url(#softTerrain)"
+            />
+            <path
+              d="M -8 9 C 10 2, 22 7, 29 16 C 39 29, 24 37, 12 31 C 2 26, -5 24, -8 19"
+              fill="none"
+              stroke="#D8F0DA"
+              strokeWidth="2.3"
+            />
+            <path
+              d="M 103 74 C 89 72, 78 80, 82 92 C 85 102, 100 101, 106 95 Z"
+              fill="#70B8C8"
+              filter="url(#softTerrain)"
+            />
+            <path
+              d="M 103 74 C 89 72, 78 80, 82 92 C 85 102, 100 101, 106 95"
+              fill="none"
+              stroke="#D8F0DA"
+              strokeWidth="2.3"
+            />
+            {[
+              'M 17 28 C 28 22, 37 23, 47 30 C 57 36, 68 32, 76 27 C 76 39, 66 52, 50 58 C 38 63, 30 64, 24 66 C 33 73, 45 74, 55 68 C 64 63, 74 61, 82 63',
+              'M -7 78 C 4 73, 15 69, 24 66',
+              'M 82 63 C 91 60, 99 55, 107 48',
+            ].map((path) => (
+              <g key={path}>
+                <path d={path} fill="none" stroke="#8C6C44" strokeLinecap="round" strokeLinejoin="round" strokeWidth="10" opacity="0.22" />
+                <path d={path} fill="none" stroke="#C79A63" strokeLinecap="round" strokeLinejoin="round" strokeWidth="8.5" />
+                <path d={path} fill="none" stroke="#E7C58D" strokeLinecap="round" strokeLinejoin="round" strokeWidth="6.4" />
+                <path d={path} fill="none" stroke="#F4D9A9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4" opacity="0.26" />
+              </g>
+            ))}
+            <path
+              d="M 17 28 C 28 22, 37 23, 47 30 C 57 36, 68 32, 76 27 C 76 39, 66 52, 50 58 C 38 63, 30 64, 24 66 C 33 73, 45 74, 55 68 C 64 63, 74 61, 82 63"
+              fill="none"
+              stroke="rgba(43,27,46,0.18)"
+              strokeDasharray="1.5 2.4"
+              strokeLinecap="round"
+              strokeWidth="0.56"
+            />
+            <motion.path
+              d="M 17 28 C 28 22, 37 23, 47 30 C 57 36, 68 32, 76 27 C 76 39, 66 52, 50 58 C 38 63, 30 64, 24 66 C 33 73, 45 74, 55 68 C 64 63, 74 61, 82 63"
+              fill="none"
+              stroke="rgba(255,255,255,0.42)"
+              strokeDasharray="1.4 2.5"
+              strokeLinecap="round"
+              strokeWidth="0.32"
+              animate={shouldReduceMotion ? undefined : { strokeDashoffset: [0, -14] }}
+              transition={{ duration: 11, ease: 'linear', repeat: Infinity }}
+            />
+          </svg>
+
+          {[
+            ['left-[7%] top-[42%]', 'scale-95'],
+            ['left-[10%] top-[46%]', 'scale-75'],
+            ['left-[13%] top-[43%]', 'scale-90'],
+            ['left-[34%] top-[45%]', 'scale-80'],
+            ['left-[40%] top-[40%]', 'scale-95'],
+            ['left-[63%] top-[22%]', 'scale-75'],
+            ['left-[83%] top-[37%]', 'scale-90'],
+            ['left-[88%] top-[42%]', 'scale-75'],
+            ['left-[74%] top-[72%]', 'scale-95'],
+            ['left-[79%] top-[76%]', 'scale-80'],
+            ['left-[18%] top-[78%]', 'scale-75'],
+            ['left-[14%] top-[80%]', 'scale-95'],
+          ].map(([position, scale]) => (
+            <div key={position} aria-hidden className={`absolute ${position} ${scale} h-11 w-10`}>
+              <div className="absolute left-1/2 top-6 h-5 w-2 -translate-x-1/2 rounded-sm bg-[#8B6841]" />
+              <div className="absolute left-0 top-2 h-8 w-8 rounded-full bg-[#2E7C43] shadow-[inset_-5px_-6px_0_rgba(20,67,34,0.22)]" />
+              <div className="absolute left-4 top-0 h-8 w-8 rounded-full bg-[#3F9651] shadow-[inset_-5px_-6px_0_rgba(20,67,34,0.2)]" />
+              <div className="absolute left-2 top-5 h-8 w-8 rounded-full bg-[#347F45] shadow-[inset_-5px_-6px_0_rgba(20,67,34,0.2)]" />
+            </div>
+          ))}
+
+          {[
+            'left-[22%] top-[24%]',
+            'left-[30%] top-[18%]',
+            'left-[51%] top-[20%]',
+            'left-[68%] top-[18%]',
+            'left-[91%] top-[27%]',
+            'left-[7%] top-[65%]',
+            'left-[41%] top-[76%]',
+            'left-[62%] top-[80%]',
+            'left-[91%] top-[61%]',
+          ].map((position) => (
+            <div key={position} aria-hidden className={`absolute ${position} h-5 w-7 rounded-[50%] bg-[#7C8863] shadow-[inset_-4px_-3px_0_rgba(43,27,46,0.16)]`} />
+          ))}
+
+          {[
+            ['left-[25%] top-[36%]', 'bg-[#FFE6F1]'],
+            ['left-[54%] top-[48%]', 'bg-[#FFF2A6]'],
+            ['left-[72%] top-[50%]', 'bg-[#FFE6F1]'],
+            ['left-[16%] top-[58%]', 'bg-[#FFF2A6]'],
+            ['left-[37%] top-[66%]', 'bg-[#D9F6FF]'],
+            ['left-[89%] top-[55%]', 'bg-[#FFE6F1]'],
+            ['left-[6%] top-[30%]', 'bg-[#D9F6FF]'],
+            ['left-[61%] top-[26%]', 'bg-[#FFF2A6]'],
+          ].map(([position, color]) => (
+            <div key={position} aria-hidden className={`absolute ${position} h-3 w-3 rounded-full ${color} shadow-[0_0_0_2px_rgba(255,255,255,0.45)]`} />
+          ))}
+
+          {[
+            ['left-[12%] top-[33%]', '#FFE6F1'],
+            ['left-[19%] top-[50%]', '#FFF2A6'],
+            ['left-[28%] top-[73%]', '#D9F6FF'],
+            ['left-[35%] top-[31%]', '#FFE6F1'],
+            ['left-[44%] top-[52%]', '#FFF2A6'],
+            ['left-[57%] top-[24%]', '#D9F6FF'],
+            ['left-[65%] top-[59%]', '#FFE6F1'],
+            ['left-[73%] top-[77%]', '#FFF2A6'],
+            ['left-[84%] top-[45%]', '#D9F6FF'],
+            ['left-[92%] top-[69%]', '#FFE6F1'],
+          ].map(([position, color]) => (
+            <div key={`${position}-cluster`} aria-hidden className={`absolute ${position} h-5 w-5`}>
+              <span className="absolute left-2 top-3 h-2 w-0.5 rounded-full bg-[#3F8A45]" />
+              <span className="absolute left-1 top-1 h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+              <span className="absolute left-3 top-1 h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+              <span className="absolute left-2 top-0 h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+              <span className="absolute left-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F7D47B]" />
+            </div>
+          ))}
+
+          <div className="absolute left-4 right-4 top-4 z-40 flex flex-col gap-3 sm:left-5 sm:right-5 sm:top-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="rounded-full border border-white/70 bg-white/82 px-4 py-3 shadow-soft backdrop-blur sm:px-5">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-blush-500">
+                  <Sparkles size={13} />
+                  Opaca quest map
+                </span>
+                <span className="text-sm font-black text-plum-900 sm:text-base">Pick a place in Courtney&apos;s world</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 rounded-[22px] border-2 border-[#9A7348]/40 bg-[#F8E2AB] p-1.5 shadow-[0_5px_0_rgba(98,65,38,0.18)]">
+              <a href="#work" className="rounded-full bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_3px_0_rgba(43,27,46,0.24)] transition-transform hover:-translate-y-0.5">
+                View Work
+              </a>
+              <a href="/resume" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
+                Resume
+              </a>
+              <a href="mailto:courtneythko@gmail.com" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
+                Contact
+              </a>
+            </div>
+          </div>
+
+          {worldStops.map((stop, index) => {
+            const Icon = stop.icon;
+            const isActive = stop.id === targetStop?.id;
+
+            return (
+              <button
+                key={stop.id}
+                type="button"
+                onClick={() => selectStop(stop.id)}
+                aria-pressed={isActive}
+                aria-label={`Open ${stop.title}`}
+                className={`group absolute z-30 flex w-[94px] flex-col items-center gap-1 rounded-[24px] text-plum-900 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-blush-300/50 sm:w-[118px] ${
+                  isActive
+                    ? '-translate-y-1'
+                    : 'hover:-translate-y-1'
+                }`}
+                style={{ left: `${stop.x}%`, top: `${stop.y}%`, transform: 'translate(-50%, -50%)' }}
+              >
+                <div className="relative flex h-16 w-16 items-center justify-center sm:h-20 sm:w-20">
+                  <div className="absolute bottom-1 h-7 w-12 rounded-[50%] bg-plum-900/14" />
+                  <div className={`relative flex h-12 w-12 items-center justify-center rounded-[18px] border-2 shadow-[0_5px_0_rgba(98,65,38,0.45)] transition-colors sm:h-14 sm:w-14 ${
+                    isActive ? 'border-plum-900 bg-[#FFF4C9] text-plum-900' : 'border-[#9A7348] bg-[#F0C980] text-plum-700'
+                  }`}>
+                    <Icon size={20} />
+                  </div>
+                  <div className="absolute -right-1 top-0 flex h-5 w-5 items-center justify-center rounded-full border border-white/80 bg-plum-900 text-[10px] font-black text-white">
+                    {index + 1}
+                  </div>
+                </div>
+                <span
+                  className={`rounded-md border px-2.5 py-1 text-center text-[10px] font-black leading-tight shadow-[0_3px_0_rgba(98,65,38,0.18)] sm:text-xs ${
+                    isActive ? 'border-plum-900 bg-plum-900 text-white' : 'border-[#A77C4C] bg-[#F8E2AB] text-plum-700'
+                  }`}
+                >
+                  {stop.title}
+                </span>
+              </button>
+            );
+          })}
+
+          <motion.div
+            aria-hidden="true"
+            className="absolute z-[35] h-32 w-32 sm:h-44 sm:w-44"
+            initial={false}
+            animate={{ left: `${opacaPosition.x}%`, top: `${opacaPosition.y}%` }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.88, ease: [0.22, 0.68, 0.26, 1] }}
+            style={{ transform: 'translate(-50%, -72%)' }}
+          >
+            <motion.div
+              className="absolute bottom-0 left-1/2 h-5 w-20 -translate-x-1/2 rounded-full bg-plum-900/18 blur-[1px]"
+              animate={shouldReduceMotion ? undefined : isTraveling ? { scaleX: [0.82, 1.08, 0.86], opacity: [0.12, 0.22, 0.14] } : { scaleX: [1, 0.94, 1], opacity: [0.15, 0.2, 0.15] }}
+              transition={{ duration: isTraveling ? 0.34 : 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.img
+              src="/opaca.png"
+              alt=""
+              className="relative h-full w-full object-contain [image-rendering:pixelated] drop-shadow-[0_18px_24px_rgba(43,27,46,0.2)]"
+              animate={shouldReduceMotion ? undefined : isTraveling ? { y: [0, -10, 0, -7, 0], rotate: [-4, 5, -3, 4, -2], scaleX: [1, 0.96, 1.03, 0.97, 1] } : { y: [0, -4, 0], rotate: [-0.6, 0.6, -0.6] }}
+              transition={{ duration: isTraveling ? 0.44 : 2.8, ease: 'easeInOut', repeat: Infinity }}
+            />
+            {isTraveling && !shouldReduceMotion && (
+              <motion.div
+                className="absolute bottom-7 left-5 h-3 w-3 rounded-full bg-[#E7C58D]/80"
+                animate={{ x: [-4, -18, -28], y: [0, 3, 6], scale: [0.8, 1.15, 0.2], opacity: [0, 0.62, 0] }}
+                transition={{ duration: 0.52, repeat: Infinity, ease: 'easeOut' }}
+              />
+            )}
+          </motion.div>
+
+          {!targetStop && (
+            <div className="absolute bottom-5 left-5 z-40 hidden rounded-2xl border-2 border-[#9A7348] bg-[#F8E2AB] p-3 text-plum-900 shadow-[0_6px_0_rgba(98,65,38,0.24)] sm:block">
+              <div className="text-[10px] font-black uppercase tracking-[0.16em] text-blush-500">Choose a landmark</div>
+              <div className="mt-2 flex items-center gap-1.5">
+                {worldStops.map((stop, index) => (
+                  <button
+                    key={stop.id}
+                    type="button"
+                    onClick={() => selectStop(stop.id)}
+                    aria-label={`Start at ${stop.title}`}
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-white/70 text-[10px] font-black text-plum-700 transition-colors hover:bg-plum-900 hover:text-white"
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeStop && ActiveIcon && (
+            <motion.div
+              key={activeStop.id}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.32 }}
+              className="absolute bottom-4 left-4 right-4 z-40 max-h-[48%] overflow-y-auto rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-3 text-plum-900 shadow-[0_9px_0_rgba(98,65,38,0.22),0_22px_42px_rgba(43,27,46,0.18)] sm:bottom-5 sm:left-5 sm:right-5 sm:max-h-none sm:p-4 lg:left-auto lg:right-6 lg:w-[min(720px,calc(100%-3rem))]"
+            >
+              <div className="absolute inset-x-0 top-0 h-2 bg-[#D4A15D]" />
+              <div className="relative grid min-w-0 gap-3 sm:grid-cols-[84px_minmax(0,1fr)] sm:items-start">
+                <div className="hidden h-20 overflow-hidden rounded-xl border-2 border-[#B88951] bg-plum-900 sm:block">
+                  <img src={activeStop.image} alt="" className="h-full w-full object-cover opacity-85" />
+                </div>
+                <div className="min-w-0">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/58 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-blush-500">
+                      <ActiveIcon size={12} />
+                      {activeStop.eyebrow}
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-black leading-tight text-plum-900 sm:text-2xl">{activeStop.title}</h2>
+                  <p className="mt-1 text-sm leading-relaxed text-plum-600">{activeStop.blurb}</p>
+                  <div className="mt-2 rounded-xl border border-[#D4A15D]/40 bg-white/48 px-3 py-2 text-xs font-black text-plum-700 sm:hidden">{activeStop.metric}</div>
+                </div>
+                <div className="flex min-w-0 flex-wrap gap-2 sm:col-span-2 sm:justify-end">
+                  <a
+                    href={activeStop.cta.href}
+                    className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_4px_0_rgba(43,27,46,0.28)] transition-transform hover:-translate-y-0.5 sm:flex-none"
+                  >
+                    {activeStop.cta.label}
+                    <ArrowRight size={14} />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={goToNextStop}
+                    className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl border-2 border-[#B88951] bg-white/62 px-4 py-2 text-xs font-black text-plum-700 transition-colors hover:bg-white sm:flex-none"
+                  >
+                    Next
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTargetStopId(null)}
+                    className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl border-2 border-[#B88951] bg-white/42 px-4 py-2 text-xs font-black text-plum-500 transition-colors hover:bg-white hover:text-plum-700 sm:flex-none"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        <div className="mt-3 flex snap-x gap-2 overflow-x-auto pb-1 lg:hidden">
+          {worldStops.map((stop) => (
+            <button
+              key={stop.id}
+              type="button"
+              onClick={() => selectStop(stop.id)}
+              className={`min-w-[72%] snap-start rounded-2xl border p-3 text-left transition-colors sm:min-w-[42%] ${
+                stop.id === targetStop?.id
+                  ? 'border-plum-900 bg-white text-plum-900'
+                  : 'border-blush-100 bg-white/78 text-plum-500'
+              }`}
+            >
+              <div className="text-[10px] font-black uppercase tracking-[0.16em] text-blush-500">{stop.eyebrow}</div>
+              <div className="mt-1 text-sm font-black">{stop.title}</div>
+              <div className="mt-1 text-xs leading-snug text-plum-400">{stop.metric}</div>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 function SystemMockup({ study }: { study: CaseStudy }) {
   if (study.visual === 'automation') {
     return (
-      <div className={`relative min-h-[420px] overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-5 text-white`}>
+      <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-4 text-white sm:min-h-[420px] sm:p-5`}>
         <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full border border-white/20" />
         <div className="absolute -bottom-24 -left-16 h-56 w-56 rounded-full border border-white/15" />
 
         <div className="relative rounded-2xl border border-white/20 bg-white/12 p-4 shadow-soft backdrop-blur">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Self-Serve Operations Console</div>
-              <div className="mt-1 text-lg font-black">Enterprise Workflow Automation</div>
+              <div className="text-[10px] font-black uppercase tracking-[0.16em] text-white/60 sm:tracking-[0.2em]">Self-Serve Operations Console</div>
+              <div className="mt-1 text-base font-black sm:text-lg">Enterprise Workflow Automation</div>
             </div>
-            <div className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-plum-900">Live flow</div>
+            <div className="w-fit rounded-full bg-white px-3 py-1 text-[10px] font-black text-plum-900">Live flow</div>
           </div>
 
           <div className="grid gap-3">
@@ -274,13 +753,13 @@ function SystemMockup({ study }: { study: CaseStudy }) {
               ['Request intake', 'Normalize fields', 'Structured output'],
               ['Case context', 'AI summary pass', 'Review brief'],
             ].map((row) => (
-              <div key={row.join('-')} className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-2">
+              <div key={row.join('-')} className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
                 {row.map((item, i) => (
                   <div key={item} className="contents">
                     <div className="rounded-xl border border-white/18 bg-white/14 px-3 py-3 text-[11px] font-bold leading-tight text-white/86">
                       {item}
                     </div>
-                    {i < row.length - 1 && <ArrowRight size={13} className="text-white/55" />}
+                    {i < row.length - 1 && <ArrowRight size={13} className="hidden text-white/55 sm:block" />}
                   </div>
                 ))}
               </div>
@@ -288,10 +767,10 @@ function SystemMockup({ study }: { study: CaseStudy }) {
           </div>
         </div>
 
-        <div className="relative mt-4 grid grid-cols-2 gap-3">
+        <div className="relative mt-4 grid gap-3 sm:grid-cols-2">
           {study.metrics.slice(0, 2).map((metric) => (
             <div key={metric.label} className="rounded-2xl border border-white/20 bg-white/14 p-4 backdrop-blur">
-              <div className="text-3xl font-black">{metric.value}</div>
+              <div className="text-2xl font-black sm:text-3xl">{metric.value}</div>
               <div className="mt-1 text-[11px] leading-snug text-white/70">{metric.label}</div>
             </div>
           ))}
@@ -314,15 +793,15 @@ function SystemMockup({ study }: { study: CaseStudy }) {
 
   if (study.visual === 'community') {
     return (
-      <div className={`relative self-start overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-4`}>
-        <div className="grid min-h-[392px] grid-cols-3 grid-rows-[130px_130px_130px] gap-3">
+      <div className={`relative self-start overflow-hidden rounded-2xl bg-gradient-to-br ${study.accent} p-3 sm:p-4`}>
+        <div className="grid min-h-[336px] grid-cols-2 grid-rows-[112px_112px_112px] gap-2 sm:min-h-[392px] sm:grid-cols-3 sm:grid-rows-[130px_130px_130px] sm:gap-3">
           {[
             { src: '/aivalley-lounge-event.jpg', label: 'Builder lounge', className: 'col-span-2 row-span-1' },
-            { src: '/aivalley-workshop-room.jpg', label: 'Technical workshop', className: 'row-span-2' },
+            { src: '/aivalley-workshop-room.jpg', label: 'Technical workshop', className: 'row-span-1 sm:row-span-2' },
             { src: '/aivalley-builder-table.jpg', label: 'Builder conversations', className: 'row-span-1' },
             { src: '/aivalley-audience.jpg', label: 'Packed AI room', className: 'row-span-1' },
             { src: '/aivalley-founder-talk.jpg', label: 'Founder talk', className: 'row-span-1' },
-            { src: '/fembrunch.jpg', label: 'Female Founder Brunch', className: 'col-span-2 row-span-1' },
+            { src: '/fembrunch.jpg', label: 'Female Founder Brunch', className: 'row-span-1 sm:col-span-2' },
           ].map(({ src, label, className }) => (
             <div
               key={src}
@@ -330,11 +809,11 @@ function SystemMockup({ study }: { study: CaseStudy }) {
               style={{ backgroundImage: `url(${src})` }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-plum-900/50 via-plum-900/0 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 text-xs font-black text-white">{label}</div>
+              <div className="absolute bottom-2 left-2 right-2 text-[11px] font-black leading-tight text-white sm:bottom-3 sm:left-3 sm:right-3 sm:text-xs">{label}</div>
             </div>
           ))}
         </div>
-        <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/80 backdrop-blur">
+        <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-white/80 backdrop-blur sm:left-5 sm:top-5 sm:text-[10px] sm:tracking-[0.18em]">
           Community engine
         </div>
       </div>
@@ -343,14 +822,14 @@ function SystemMockup({ study }: { study: CaseStudy }) {
 
   if (study.image) {
     return (
-      <div className="relative h-full min-h-[420px] overflow-hidden rounded-2xl bg-plum-900">
-        <img src={study.image} alt="" className="h-full w-full object-cover opacity-82" />
+      <div className="relative overflow-hidden rounded-2xl bg-plum-900 sm:min-h-[420px]">
+        <img src={study.image} alt="" className="min-h-[520px] w-full object-cover opacity-82 sm:h-full sm:min-h-[420px]" />
         <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/10 to-transparent" />
         <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/75 backdrop-blur">
           {study.visual === 'travel' ? 'AI planning loop' : 'Community engine'}
         </div>
-        <div className="absolute bottom-5 left-5 right-5 grid gap-3 rounded-2xl border border-white/20 bg-white/12 p-4 text-white backdrop-blur">
-          <div className="grid grid-cols-3 gap-2">
+        <div className="absolute bottom-4 left-4 right-4 grid gap-3 rounded-2xl border border-white/20 bg-white/12 p-3 text-white backdrop-blur sm:bottom-5 sm:left-5 sm:right-5 sm:p-4">
+          <div className="grid gap-2 sm:grid-cols-3">
             {study.metrics.map((metric) => (
               <div key={metric.label} className="rounded-xl bg-white/12 p-3">
                 <div className="text-lg font-black">{metric.value}</div>
@@ -401,17 +880,17 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={fadeUp}
-      className={`scroll-mt-24 rounded-[28px] border bg-white p-5 md:p-7 shadow-card ${
+      className={`scroll-mt-24 rounded-[24px] border bg-white p-4 shadow-card sm:rounded-[28px] sm:p-5 md:p-7 ${
         study.id === 'nvidia' ? 'border-plum-200 ring-1 ring-plum-100' : 'border-blush-100'
       }`}
     >
       <div className={`grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] ${isReversed ? 'lg:[&>*:first-child]:order-2' : ''}`}>
         <div>
           <div className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">{study.eyebrow}</div>
-          <h3 className="text-3xl md:text-4xl font-black leading-tight text-plum-900">{study.title}</h3>
+          <h3 className="text-2xl font-black leading-tight text-plum-900 sm:text-3xl md:text-4xl">{study.title}</h3>
           <p className="mt-4 text-sm leading-relaxed text-plum-400">{study.summary}</p>
 
-          <div className="mt-6 grid grid-cols-3 gap-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {study.metrics.map((metric) => (
               <div key={metric.label} className="rounded-xl border border-blush-100 bg-blush-50 p-3">
                 <div className="text-lg md:text-2xl font-black text-plum-900">{metric.value}</div>
@@ -487,7 +966,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#FBF8F8] text-plum-900">
       <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 h-[520px] bg-[linear-gradient(180deg,#F1E9EB_0%,rgba(251,248,248,0)_78%)]" />
 
-      <nav className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+      <nav className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
         <Link href="/" className="flex items-center gap-3">
           <LogoMark className="h-10 w-10 ring-2 ring-white" />
           <span className="text-sm font-black text-plum-900">Courtney Ko</span>
@@ -514,91 +993,32 @@ export default function Home() {
         </div>
       </nav>
 
-      <div className="sticky top-3 z-20 mx-auto mb-2 hidden max-w-6xl px-6 md:block">
+      <div className="sticky top-2 z-20 mx-auto mb-2 max-w-6xl px-4 sm:px-6 md:top-3">
         <div className="ml-auto flex w-fit items-center gap-1 rounded-full border border-white/70 bg-white/95 p-1 text-[11px] font-black text-plum-700 shadow-soft-lg backdrop-blur-xl ring-1 ring-plum-900/5">
           {[
             ['Work', '#work'],
-            ['Case Studies', '#case-studies'],
+            ['Cases', '#case-studies', 'Case Studies'],
             ['About', '#about'],
             ['Toolkit', '#toolkit'],
             ['Contact', '#contact'],
-          ].map(([label, href]) => (
-            <a key={href} href={href} className="rounded-full px-3 py-1.5 transition-colors hover:bg-plum-900 hover:text-white">
-              {label}
+          ].map(([label, href, desktopLabel]) => (
+            <a key={href} href={href} className="rounded-full px-2.5 py-1.5 transition-colors hover:bg-plum-900 hover:text-white sm:px-3">
+              <span className={desktopLabel ? 'sm:hidden' : ''}>{label}</span>
+              {desktopLabel && <span className="hidden sm:inline">{desktopLabel}</span>}
             </a>
           ))}
         </div>
       </div>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20">
-        <section className="grid min-h-[calc(100vh-92px)] items-center gap-10 py-12 md:grid-cols-[1.08fr_0.92fr] md:py-16">
-          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blush-200 bg-white px-4 py-1.5 text-xs font-bold text-plum-600 shadow-soft">
-              <Sparkles size={13} className="text-blush-500" />
-              Product-minded builder across AI, automation, and community
-            </div>
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-normal text-plum-900 md:text-7xl">
-              Building useful AI systems for messy human workflows.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-plum-500 md:text-xl">
-              I turn ambiguous product and operations problems into shipped tools, cleaner workflows, and communities that compound trust.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="#work">
-                View Work
-                <ArrowRight size={16} />
-              </ButtonLink>
-              <ButtonLink href="mailto:courtneythko@gmail.com" variant="secondary">
-                Contact
-                <Mail size={15} />
-              </ButtonLink>
-              <ButtonLink href={CONTACT_LINK} variant="secondary">
-                LinkedIn
-                <ExternalLink size={15} />
-              </ButtonLink>
-            </div>
-            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-plum-400">
-              <span className="flex items-center gap-1.5">
-                <MapPin size={14} />
-                San Francisco, CA
-              </span>
-              <span>Product strategy</span>
-              <span>AI automation</span>
-              <span>Technical PM / PMM</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24, rotate: 1 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ duration: 0.65, ease: 'easeOut', delay: 0.12 }}
-            className="relative"
-          >
-            <div className="overflow-hidden rounded-[30px] border border-blush-100 bg-white p-3 shadow-soft-lg">
-              <img src="/profile.jpeg" alt="Courtney Ko" className="aspect-[4/5] w-full rounded-2xl object-cover" />
-              <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/60 bg-white/90 p-5 shadow-soft backdrop-blur">
-                <div className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">Recent impact</div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <div className="text-2xl font-black text-plum-900">2h → 30m</div>
-                    <div className="text-[11px] leading-snug text-plum-400">workflow processing</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-black text-plum-900">1w → 1.5h</div>
-                    <div className="text-[11px] leading-snug text-plum-400">case review workflow</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </section>
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 sm:px-6 sm:pb-20">
+        <OpacaWorldHero />
 
         <motion.section
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           variants={fadeUp}
-          className="mb-20 grid grid-cols-2 gap-3 rounded-[28px] border border-blush-100 bg-white p-4 shadow-card md:grid-cols-4"
+          className="mb-16 grid gap-3 rounded-[24px] border border-blush-100 bg-white p-3 shadow-card min-[430px]:grid-cols-2 sm:mb-20 sm:rounded-[28px] sm:p-4 md:grid-cols-4"
         >
           {impactStats.map((stat) => (
             <div key={stat.label} className="rounded-2xl bg-blush-50 p-4">
@@ -613,7 +1033,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           variants={fadeUp}
-          className="mb-24"
+          className="mb-20 sm:mb-24"
         >
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
@@ -636,14 +1056,14 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.04, duration: 0.42 }}
                 className={`group relative overflow-hidden rounded-2xl border border-blush-100 bg-white shadow-card ${
-                  index === 0 || index === 2 ? 'md:col-span-2 md:row-span-2' : 'md:col-span-1'
+                  index === 0 || index === 2 ? 'col-span-2 md:col-span-2 md:row-span-2' : 'md:col-span-1'
                 }`}
               >
                 <img
                   src={photo.src}
                   alt={photo.label}
                   className={`h-full min-h-44 w-full object-cover transition-transform duration-700 group-hover:scale-105 ${
-                    index === 0 || index === 2 ? 'md:min-h-[356px]' : 'md:min-h-[172px]'
+                    index === 0 || index === 2 ? 'min-h-56 md:min-h-[356px]' : 'md:min-h-[172px]'
                   }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-plum-900/70 via-plum-900/5 to-transparent" />
@@ -656,7 +1076,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <section id="work" className="mb-24 scroll-mt-24">
+        <section id="work" className="mb-20 scroll-mt-24 sm:mb-24">
           <SectionHeader
             eyebrow="Featured Work"
             title="Three proof points across automation, AI product, and ecosystem building."
@@ -669,13 +1089,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="case-studies" className="mb-24 scroll-mt-24 space-y-8">
+        <section id="case-studies" className="mb-20 scroll-mt-24 space-y-6 sm:mb-24 sm:space-y-8">
           <SectionHeader
             eyebrow="Case Studies"
             title="Detailed work, without the fluff."
             description="Problem, role, process, build, tools, and outcomes for the work recruiters and hiring teams are most likely to care about."
           />
-          <div className="rounded-[28px] border border-plum-200 bg-plum-900 p-6 text-white shadow-soft-lg md:p-8">
+          <div className="rounded-[24px] border border-plum-200 bg-plum-900 p-5 text-white shadow-soft-lg sm:rounded-[28px] sm:p-6 md:p-8">
             <div className="grid items-center gap-6 md:grid-cols-[1fr_auto]">
               <div>
                 <div className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-blush-200">Flagship case study</div>
@@ -698,7 +1118,7 @@ export default function Home() {
           ))}
         </section>
 
-        <section id="about" className="mb-24 scroll-mt-24 grid gap-8 rounded-[28px] border border-blush-100 bg-white p-6 shadow-card md:grid-cols-[0.85fr_1.15fr] md:p-8">
+        <section id="about" className="mb-20 scroll-mt-24 grid gap-8 rounded-[24px] border border-blush-100 bg-white p-5 shadow-card sm:mb-24 sm:rounded-[28px] sm:p-6 md:grid-cols-[0.85fr_1.15fr] md:p-8">
           <div>
             <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-500">About</div>
             <h2 className="text-3xl font-black leading-tight text-plum-900 md:text-5xl">Warm human, rigorous operator.</h2>
@@ -732,7 +1152,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="toolkit" className="mb-24 scroll-mt-24">
+        <section id="toolkit" className="mb-20 scroll-mt-24 sm:mb-24">
           <SectionHeader
             eyebrow="Skills / Toolkit"
             title="Product judgment with technical fluency."
@@ -768,7 +1188,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="contact" className="scroll-mt-24 overflow-hidden rounded-[32px] bg-plum-900 p-7 text-white shadow-soft-lg md:p-10">
+        <section id="contact" className="scroll-mt-24 overflow-hidden rounded-[26px] bg-plum-900 p-5 text-white shadow-soft-lg sm:rounded-[32px] sm:p-7 md:p-10">
           <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
             <div>
               <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-blush-200">Contact</div>
