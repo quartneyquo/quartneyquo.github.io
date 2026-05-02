@@ -211,7 +211,7 @@ const worldStops: WorldStop[] = [
     cta: { label: 'Open case study', href: '#nvidia' },
     x: 17,
     y: 28,
-    image: '/projects.png',
+    image: '/nowplaying.jpeg',
     icon: Bot,
   },
   {
