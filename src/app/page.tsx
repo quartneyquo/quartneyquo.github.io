@@ -70,26 +70,28 @@ const impactStats = [
   { value: '8K+', label: 'AI builders connected through AI Valley' },
 ];
 
+const roleTargets = ['Product Manager', 'Technical PM', 'AI Automation', 'PMM / Community Growth'];
+
 const caseStudies: CaseStudy[] = [
   {
     id: 'nvidia',
     eyebrow: 'NVIDIA · Automation Systems',
     title: 'Self-serve automation for enterprise operations workflows.',
     summary:
-      'Built internal tools that turned repetitive, high-friction operational workflows into faster self-serve systems.',
+      'Owned workflow diagnosis, self-serve tooling, and Python automation that turned repetitive operations into faster self-serve systems.',
     problem:
       'Manual enterprise operations workflows were slow, repetitive, and dependent on specialized knowledge spread across systems and stakeholders.',
     role:
-      'Business Analyst, Automation & Systems. I identified workflow bottlenecks, translated operational pain points into internal tools, and built Python-powered automation flows.',
+      'Business Analyst, Automation & Systems. I identified workflow bottlenecks, translated operational pain points into scoped tooling, and built Python-powered automation flows.',
     process: [
       'Mapped manual request workflows to isolate repeated decisions and fragile handoffs.',
       'Partnered with stakeholders to define a self-serve workflow that non-specialists could use independently.',
       'Prototyped automation paths, validated outputs, and tightened the experience around speed, trust, and consistency.',
     ],
     built: [
-      'Self-serve UI for a recurring enterprise operations workflow.',
-      'Python workflows that transform unstructured request data into structured operational inputs.',
-      'AI-powered case summarization workflows for faster review and resolution.',
+      'Self-serve UI for recurring operations requests.',
+      'Python workflows that transform unstructured request data into structured inputs.',
+      'AI-powered summarization workflows for faster review and resolution.',
     ],
     metrics: [
       { value: '2h → 30m', label: 'workflow processing time' },
@@ -98,7 +100,7 @@ const caseStudies: CaseStudy[] = [
     ],
     tools: ['Python', 'Internal platforms', 'AI summarization', 'Workflow automation', 'Self-serve tooling'],
     outcome:
-      'Reduced repetitive work, improved process consistency, and gave the team a faster operating model for recurring internal workflows.',
+      'Reduced repetitive work, improved process consistency, and gave the team a faster operating model without exposing sensitive internal details.',
     accent: 'from-[#3D2540] to-[#AD8690]',
     roleFit: 'Technical PM · AI Automation',
     visual: 'automation',
@@ -108,11 +110,11 @@ const caseStudies: CaseStudy[] = [
     eyebrow: 'Pearle · AI Travel Platform',
     title: 'An AI group travel planner that transformed messy inspiration into itineraries.',
     summary:
-      'Founded and shipped a 0 to 1 AI travel product with LLM-powered itinerary generation and collaborative planning flows.',
+      'Founded, scoped, and shipped a 0 to 1 AI travel product with LLM-powered itinerary generation and collaborative planning flows.',
     problem:
       'Group travel planning starts with scattered inspiration, screenshots, social posts, and conflicting preferences. Turning that into a shared plan is tedious.',
     role:
-      'Founder and Product Lead. I shaped the product vision, roadmap, MVP scope, user flows, research loops, and launch priorities.',
+      'Founder and Product Lead. I owned product vision, roadmap, MVP scope, user flows, research loops, and launch priorities.',
     process: [
       'Interviewed beta users to understand how groups collect, compare, and commit to travel ideas.',
       'Defined the core itinerary generation loop and prioritized the fastest path to a usable MVP.',
@@ -141,11 +143,11 @@ const caseStudies: CaseStudy[] = [
     eyebrow: 'AI Valley · Community & Ecosystem',
     title: 'High-signal AI programming for founders, engineers, and partners.',
     summary:
-      'Scaled community operations and event systems for a technical AI ecosystem in San Francisco.',
+      'Owned programming, partnerships, and operating systems for a technical AI ecosystem in San Francisco.',
     problem:
       'AI communities can become noisy quickly. Builders need useful rooms, real technical programming, strong partners, and reasons to keep returning.',
     role:
-      'COO and community builder. I helped design programming, partnerships, event operations, and the systems behind community-led growth.',
+      'COO and community builder. I owned programming design, partnerships, event operations, and the systems behind community-led growth.',
     process: [
       'Designed programming around what builders actually need: hands-on API adoption, hackathons, demos, and founder relationships.',
       'Coordinated sponsors, partners, organizers, and builders so events created value on every side.',
@@ -1039,6 +1041,12 @@ function SystemMockup({ study }: { study: CaseStudy }) {
 }
 
 function FeaturedCard({ study, index }: { study: CaseStudy; index: number }) {
+  const proofLine = study.id === 'nvidia'
+    ? 'Owned automation from workflow diagnosis to self-serve tooling.'
+    : study.id === 'pearle'
+      ? 'Founded the product and shipped the MVP from zero to beta.'
+      : 'Scaled programming, partnerships, and community operations.';
+
   return (
     <motion.a
       href={`#${study.id}`}
@@ -1053,6 +1061,7 @@ function FeaturedCard({ study, index }: { study: CaseStudy; index: number }) {
       <div className="mb-3 inline-flex rounded-full bg-blush-50 px-2.5 py-1 text-[10px] font-black text-plum-500">{study.roleFit}</div>
       <h3 className="text-xl font-black leading-tight text-plum-900">{study.title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-plum-400">{study.summary}</p>
+      <p className="mt-3 rounded-xl bg-plum-50 px-3 py-2 text-xs font-black leading-snug text-plum-700">{proofLine}</p>
       <div className="mt-5 flex items-center justify-between">
         <div className="text-sm font-black text-plum-900">{study.metrics[0].value}</div>
         <ArrowRight size={16} className="text-blush-400 transition-transform group-hover:translate-x-1" />
@@ -1206,14 +1215,24 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           variants={fadeUp}
-          className="mb-16 grid gap-3 rounded-[24px] border border-blush-100 bg-white p-3 shadow-card min-[430px]:grid-cols-2 sm:mb-20 sm:rounded-[28px] sm:p-4 md:grid-cols-4"
+          className="mb-16 rounded-[24px] border border-blush-100 bg-white p-3 shadow-card sm:mb-20 sm:rounded-[28px] sm:p-4"
         >
-          {impactStats.map((stat) => (
-            <div key={stat.label} className="rounded-2xl bg-blush-50 p-4">
-              <div className="text-2xl font-black text-plum-900 md:text-3xl">{stat.value}</div>
-              <div className="mt-1 text-xs leading-snug text-plum-400">{stat.label}</div>
-            </div>
-          ))}
+          <div className="grid gap-3 min-[430px]:grid-cols-2 md:grid-cols-4">
+            {impactStats.map((stat) => (
+              <div key={stat.label} className="rounded-2xl bg-blush-50 p-4">
+                <div className="text-2xl font-black text-plum-900 md:text-3xl">{stat.value}</div>
+                <div className="mt-1 text-xs leading-snug text-plum-400">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-blush-100 bg-white px-3 py-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.18em] text-blush-500">Role fit</span>
+            {roleTargets.map((role) => (
+              <span key={role} className="rounded-full bg-plum-900 px-3 py-1.5 text-[11px] font-black text-white">
+                {role}
+              </span>
+            ))}
+          </div>
         </motion.section>
 
         <motion.section
