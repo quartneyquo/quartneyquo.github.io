@@ -358,6 +358,73 @@ function LogoMark({ className = '' }: { className?: string }) {
   );
 }
 
+function PearlShellIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 25.5C11.2 16 17.4 10 24 10s12.8 6 14 15.5" strokeWidth="3.4" />
+      <path d="M14 24.8c2.7-4.2 5.8-6.5 10-6.5s7.3 2.3 10 6.5" strokeWidth="2.8" />
+      <path d="M18.3 22.4l-4-5.4M24 21.2V14M29.7 22.4l4-5.4" strokeWidth="2.2" />
+      <path d="M11.5 29.2c3.2-1.7 6.3-1.3 8.3.8 2.2-2.1 6.2-2.1 8.4 0 2-2.1 5.1-2.5 8.3-.8-1.9 5.9-6.6 9.2-12.5 9.2s-10.6-3.3-12.5-9.2Z" strokeWidth="3.4" />
+      <circle cx="24" cy="28.1" r="5.3" fill="white" strokeWidth="3" />
+    </svg>
+  );
+}
+
+function WorldStopMarkerIcon({ id, className = '' }: { id: string; className?: string }) {
+  if (id === 'pearle-port') {
+    return <PearlShellIcon className={className} />;
+  }
+
+  if (id === 'nvidia-lab') {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="13" y="15" width="22" height="20" rx="5" strokeWidth="3.2" />
+        <path d="M18 15v-4M24 15V9M30 15v-4M18 35v4M24 35v4M30 35v4M13 21H9M13 29H9M35 21h4M35 29h4" strokeWidth="2.5" />
+        <path d="M18.5 26.5h5l2-5 4 10 1.8-5h3.2" strokeWidth="2.6" />
+      </svg>
+    );
+  }
+
+  if (id === 'ai-valley-hub') {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="13" r="5.4" strokeWidth="3.2" />
+        <circle cx="13" cy="32" r="5.4" strokeWidth="3.2" />
+        <circle cx="35" cy="32" r="5.4" strokeWidth="3.2" />
+        <path d="M21.4 17.8l-5.7 9.5M26.6 17.8l5.7 9.5M18.8 32h10.4" strokeWidth="2.7" />
+      </svg>
+    );
+  }
+
+  if (id === 'basecamp') {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 36h32L24 11 8 36Z" strokeWidth="3.2" />
+        <path d="M24 11v25M24 36l7-11M24 36l-7-11" strokeWidth="2.6" />
+        <path d="M12 36h24" strokeWidth="3.2" />
+      </svg>
+    );
+  }
+
+  if (id === 'travel-atlas') {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="24" r="16" strokeWidth="3.2" />
+        <path d="M24 8c5 4.5 7.5 9.8 7.5 16S29 35.5 24 40M24 8c-5 4.5-7.5 9.8-7.5 16S19 35.5 24 40M9 24h30M13 15.5h22M13 32.5h22" strokeWidth="2.2" />
+        <path d="M28.5 19.5l-3 8.7-6 2.3 3-8.7 6-2.3Z" fill="currentColor" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="10" y="13" width="28" height="22" rx="4" strokeWidth="3.2" />
+      <path d="M15 20l8 6 10-6M15 31h18" strokeWidth="2.7" />
+      <path d="M35 9v7M31.5 12.5h7" strokeWidth="2.4" />
+    </svg>
+  );
+}
+
 function OpacaWorldHero() {
   const [targetStopId, setTargetStopId] = useState<string | null>(null);
   const [arrivedStopId, setArrivedStopId] = useState<string | null>(null);
@@ -397,14 +464,14 @@ function OpacaWorldHero() {
   };
 
   return (
-    <section id="world" className="scroll-mt-24 py-6 sm:py-10 md:py-14">
+    <section id="world" className="scroll-mt-24 py-3 sm:py-10 md:py-14">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65, ease: 'easeOut' }}
-        className="relative overflow-hidden rounded-[34px] border border-blush-100 bg-[#F7ECEF] p-3 shadow-soft-lg sm:p-4"
+        className="relative overflow-hidden rounded-[26px] border border-blush-100 bg-[#F7ECEF] p-2 shadow-soft-lg sm:rounded-[34px] sm:p-4"
       >
-        <div className="relative min-h-[760px] overflow-hidden rounded-[28px] border border-white/70 bg-[#83C96B] shadow-[inset_0_0_70px_rgba(41,82,39,0.18)] sm:min-h-[780px] lg:min-h-[720px]">
+        <div className="relative min-h-[560px] overflow-hidden rounded-[22px] border border-white/70 bg-[#83C96B] shadow-[inset_0_0_70px_rgba(41,82,39,0.18)] sm:min-h-[780px] sm:rounded-[28px] lg:min-h-[720px]">
           <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,255,205,0.26)_0_2px,transparent_3px),radial-gradient(circle_at_82%_72%,rgba(56,112,54,0.17)_0_2px,transparent_4px),radial-gradient(circle_at_48%_46%,rgba(255,255,255,0.18),transparent_31%),linear-gradient(135deg,rgba(255,255,255,0.1),transparent_38%,rgba(42,107,53,0.16))] [background-size:34px_34px,42px_42px,100%_100%,100%_100%]" />
 
           <svg
@@ -561,33 +628,44 @@ function OpacaWorldHero() {
             </div>
           ))}
 
-          <div className="absolute left-4 right-4 top-4 z-40 flex flex-col gap-3 sm:left-5 sm:right-5 sm:top-5 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-2xl rounded-[22px] border-2 border-white/70 bg-white/90 px-4 py-3 shadow-soft sm:px-5">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="absolute left-3 right-3 top-3 z-40 flex flex-col gap-2 sm:left-5 sm:right-5 sm:top-5 sm:gap-3 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl rounded-[16px] border-2 border-[#9A7348]/55 bg-[#FFF3C7] px-3 py-2 text-plum-900 shadow-[0_5px_0_rgba(98,65,38,0.18),0_18px_36px_rgba(43,27,46,0.12)] sm:rounded-[22px] sm:px-5 sm:py-3">
+              <div className="flex flex-col gap-0.5 sm:gap-1.5">
                 <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-blush-500">
                   <Sparkles size={13} />
                   Opaca quest map
                 </span>
-                <span className="text-sm font-black text-plum-900 sm:text-base">AI product builder turning messy workflows into shipped systems.</span>
+                <span className="text-[12px] font-black leading-tight min-[430px]:text-sm sm:text-lg">AI product builder turning messy workflows into shipped systems.</span>
               </div>
-              <p className="mt-1 text-xs font-semibold text-plum-500">Click a stop to follow Opaca through the work.</p>
+              <p className="mt-0.5 text-[11px] font-bold text-plum-600 sm:mt-1 sm:text-sm">Tap a stop. Opaca runs there.</p>
             </div>
 
-            <div className="flex flex-wrap gap-2 rounded-[22px] border-2 border-[#9A7348]/40 bg-[#F8E2AB] p-1.5 shadow-[0_5px_0_rgba(98,65,38,0.18)]">
-              <button type="button" onClick={() => selectStop(worldStops[0].id)} className="rounded-full bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_3px_0_rgba(43,27,46,0.24)] transition-transform hover:-translate-y-0.5">
+            <div className="hidden w-fit max-w-full flex-wrap gap-1.5 rounded-[18px] border-2 border-[#9A7348]/40 bg-[#F8E2AB] p-1 shadow-[0_5px_0_rgba(98,65,38,0.18)] sm:flex sm:gap-2 sm:rounded-[22px] sm:p-1.5">
+              <button type="button" onClick={() => selectStop(worldStops[0].id)} className="rounded-full bg-plum-900 px-3 py-2 text-[11px] font-black text-white shadow-[0_3px_0_rgba(43,27,46,0.24)] transition-transform hover:-translate-y-0.5 sm:px-4 sm:text-xs">
                 Start Journey
               </button>
-              <a href="#work" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
+              <a href="#work" className="rounded-full border-2 border-[#B88951] bg-white px-3 py-2 text-[11px] font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5 sm:px-4 sm:text-xs">
                 View Work
               </a>
-              <a href="/resume" className="rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5">
+              <a href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer" className="hidden rounded-full border-2 border-[#B88951] bg-white px-4 py-2 text-xs font-black text-plum-900 shadow-[0_3px_0_rgba(98,65,38,0.16)] transition-transform hover:-translate-y-0.5 min-[430px]:inline-block">
                 Resume
               </a>
             </div>
           </div>
 
+          <div className="absolute bottom-3 left-3 right-3 z-40 flex gap-1.5 rounded-[18px] border-2 border-[#9A7348]/40 bg-[#F8E2AB] p-1 shadow-[0_5px_0_rgba(98,65,38,0.18)] sm:hidden">
+            <button type="button" onClick={() => selectStop(worldStops[0].id)} className="flex-1 rounded-full bg-plum-900 px-3 py-2 text-[11px] font-black text-white">
+              Start
+            </button>
+            <a href="#work" className="flex-1 rounded-full border-2 border-[#B88951] bg-white px-3 py-2 text-center text-[11px] font-black text-plum-900">
+              Work
+            </a>
+            <a href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer" className="flex-1 rounded-full border-2 border-[#B88951] bg-white px-3 py-2 text-center text-[11px] font-black text-plum-900">
+              Resume
+            </a>
+          </div>
+
           {worldStops.map((stop, index) => {
-            const Icon = stop.icon;
             const isActive = stop.id === targetStop?.id;
 
             return (
@@ -597,26 +675,26 @@ function OpacaWorldHero() {
                 onClick={() => selectStop(stop.id)}
                 aria-pressed={isActive}
                 aria-label={`Open ${stop.title}`}
-                className={`group absolute z-30 flex w-[94px] flex-col items-center gap-1 rounded-[24px] text-plum-900 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-blush-300/50 sm:w-[118px] ${
+                className={`group absolute z-30 flex w-14 flex-col items-center gap-1 rounded-[20px] text-plum-900 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-blush-300/50 sm:w-[118px] sm:rounded-[24px] ${
                   isActive
                     ? '-translate-y-1'
                     : 'hover:-translate-y-1'
                 }`}
                 style={{ left: `${stop.x}%`, top: `${stop.y}%`, transform: 'translate(-50%, -50%)' }}
               >
-                <div className="relative flex h-16 w-16 items-center justify-center sm:h-20 sm:w-20">
-                  <div className="absolute bottom-1 h-7 w-12 rounded-[50%] bg-plum-900/14" />
-                  <div className={`relative flex h-12 w-12 items-center justify-center rounded-[18px] border-2 shadow-[0_5px_0_rgba(98,65,38,0.45)] transition-colors sm:h-14 sm:w-14 ${
+                <div className="relative flex h-12 w-12 items-center justify-center sm:h-20 sm:w-20">
+                  <div className="absolute bottom-1 h-5 w-10 rounded-[50%] bg-plum-900/14 sm:h-7 sm:w-12" />
+                  <div className={`relative flex h-9 w-9 items-center justify-center rounded-[14px] border-2 shadow-[0_4px_0_rgba(98,65,38,0.42)] transition-colors sm:h-14 sm:w-14 sm:rounded-[18px] sm:shadow-[0_5px_0_rgba(98,65,38,0.45)] ${
                     isActive ? 'border-plum-900 bg-[#FFF4C9] text-plum-900' : 'border-[#9A7348] bg-[#F0C980] text-plum-700'
                   }`}>
-                    <Icon size={20} />
+                    <WorldStopMarkerIcon id={stop.id} className="h-6 w-6 sm:h-8 sm:w-8" />
                   </div>
                   <div className="absolute -right-1 top-0 flex h-5 w-5 items-center justify-center rounded-full border border-white/80 bg-plum-900 text-[10px] font-black text-white">
                     {index + 1}
                   </div>
                 </div>
                 <span
-                  className={`rounded-md border px-2.5 py-1 text-center text-[10px] font-black leading-tight shadow-[0_3px_0_rgba(98,65,38,0.18)] sm:text-xs ${
+                  className={`hidden rounded-md border px-2.5 py-1 text-center text-[10px] font-black leading-tight shadow-[0_3px_0_rgba(98,65,38,0.18)] sm:inline-block sm:text-xs ${
                     isActive ? 'border-plum-900 bg-plum-900 text-white' : 'border-[#A77C4C] bg-[#F8E2AB] text-plum-700'
                   }`}
                 >
@@ -628,7 +706,7 @@ function OpacaWorldHero() {
 
           <motion.div
             aria-hidden="true"
-            className="absolute z-[35] h-32 w-32 sm:h-44 sm:w-44"
+            className="absolute z-[35] h-24 w-24 sm:h-44 sm:w-44"
             initial={false}
             animate={{ left: `${opacaPosition.x}%`, top: `${opacaPosition.y}%` }}
             transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.88, ease: [0.22, 0.68, 0.26, 1] }}
@@ -732,19 +810,19 @@ function OpacaWorldHero() {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.28 }}
-            className="mt-3 rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-4 text-plum-900 shadow-[0_6px_0_rgba(98,65,38,0.18)] lg:hidden"
+            className="mt-3 rounded-[18px] border-2 border-[#9A7348] bg-[#F8E2AB] p-3 text-plum-900 shadow-[0_6px_0_rgba(98,65,38,0.18)] sm:p-4 lg:hidden"
           >
             <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/58 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-blush-500">
               <ActiveIcon size={12} />
               Opaca arrived
             </div>
-            <h2 className="text-xl font-black leading-tight">{activeStop.title}</h2>
+            <h2 className="text-lg font-black leading-tight sm:text-xl">{activeStop.title}</h2>
             <div className="mt-2 rounded-xl border border-[#D4A15D]/40 bg-white/48 px-3 py-2 text-xs font-black text-plum-700">{activeStop.metric}</div>
-            <p className="mt-2 text-sm leading-relaxed text-plum-600">{activeStop.blurb}</p>
+            <p className="mt-2 text-sm leading-relaxed text-plum-600 sm:text-base">{activeStop.blurb}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <a
                 href={activeStop.cta.href}
-                className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_4px_0_rgba(43,27,46,0.28)]"
+                className="inline-flex min-h-10 flex-[2] items-center justify-center gap-2 rounded-xl bg-plum-900 px-4 py-2 text-xs font-black text-white shadow-[0_4px_0_rgba(43,27,46,0.28)]"
               >
                 {activeStop.cta.label}
                 <ArrowRight size={14} />
@@ -773,7 +851,7 @@ function OpacaWorldHero() {
               key={stop.id}
               type="button"
               onClick={() => selectStop(stop.id)}
-              className={`min-w-[72%] snap-start rounded-2xl border p-3 text-left transition-colors sm:min-w-[42%] ${
+              className={`min-w-[64%] snap-start rounded-2xl border p-3 text-left transition-colors min-[430px]:min-w-[46%] sm:min-w-[42%] ${
                 stop.id === targetStop?.id
                   ? 'border-plum-900 bg-white text-plum-900'
                   : 'border-blush-100 bg-white/78 text-plum-500'
@@ -1087,7 +1165,9 @@ export default function Home() {
         </Link>
         <div className="flex items-center gap-2">
           <Link
-            href="/resume"
+            href="/Courtney_Ko_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden rounded-full border border-blush-200 bg-white px-3 py-1.5 text-[11px] font-bold text-plum-500 shadow-soft transition-colors hover:bg-blush-50 sm:inline-flex"
           >
             Resume
@@ -1155,7 +1235,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-6">
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-6">
             {photoMoments.map((photo, index) => (
               <motion.div
                 key={photo.src}
@@ -1164,7 +1244,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.04, duration: 0.42 }}
                 className={`group relative overflow-hidden rounded-2xl border border-blush-100 bg-white shadow-card ${
-                  index === 0 || index === 2 ? 'col-span-2 md:col-span-2 md:row-span-2' : 'md:col-span-1'
+                  index === 0 || index === 2 ? 'sm:col-span-2 md:col-span-2 md:row-span-2' : 'md:col-span-1'
                 }`}
               >
                 <img
