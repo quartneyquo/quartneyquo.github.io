@@ -179,6 +179,18 @@ const orderedCaseStudies = [
   caseStudies.find((study) => study.id === 'pearle')!,
 ];
 
+const personalProducts = [
+  {
+    title: 'PacaPlate',
+    eyebrow: 'Live AI product',
+    summary:
+      'A playful AI meal-planning app with an alpaca companion, recipe suggestions, and grocery-list generation.',
+    impact: 'Shows product taste, AI workflow design, and end-to-end shipping.',
+    image: '/opaca.png',
+    href: 'https://paca-plate.vercel.app/',
+  },
+];
+
 const toolkit = [
   { title: 'Product Strategy', items: ['Roadmaps', '0 to 1 MVPs', 'Experimentation', 'Launch loops'] },
   { title: 'AI Automation', items: ['Workflow optimization', 'AI summaries', 'LLM APIs', 'Internal tools'] },
@@ -1292,6 +1304,42 @@ export default function Home() {
           <div className="grid gap-4 md:grid-cols-3">
             {orderedCaseStudies.map((study, index) => (
               <FeaturedCard key={study.id} study={study} index={index} />
+            ))}
+          </div>
+          <div className="mt-4 grid gap-4">
+            {personalProducts.map((product) => (
+              <motion.a
+                key={product.title}
+                href={product.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+                className="group grid overflow-hidden rounded-[24px] border border-blush-100 bg-white shadow-card transition-shadow hover:shadow-soft-lg md:grid-cols-[220px_1fr_auto]"
+              >
+                <div className="relative min-h-48 overflow-hidden bg-[#FFF1C4] md:min-h-full">
+                  <img
+                    src={product.image}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute left-4 top-4 rounded-full bg-plum-900 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white">
+                    Live
+                  </div>
+                </div>
+                <div className="p-5 sm:p-6">
+                  <div className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">{product.eyebrow}</div>
+                  <h3 className="text-2xl font-black leading-tight text-plum-900 sm:text-3xl">{product.title}</h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-plum-500">{product.summary}</p>
+                  <p className="mt-4 w-fit rounded-full bg-blush-50 px-3 py-1 text-xs font-black text-plum-700">{product.impact}</p>
+                </div>
+                <div className="flex items-center justify-start px-5 pb-5 md:justify-center md:p-6">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-plum-900 px-5 py-3 text-sm font-black text-white transition-transform group-hover:-translate-y-0.5">
+                    Visit PacaPlate
+                    <ExternalLink size={15} />
+                  </span>
+                </div>
+              </motion.a>
             ))}
           </div>
         </section>
