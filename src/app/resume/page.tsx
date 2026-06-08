@@ -50,7 +50,7 @@ const FLIGHTS: Flight[] = [
       'Identified high-friction manual workflows and built automation solutions to improve operational scalability across internal enterprise processes.',
       'Built an end-to-end automation system with a self-serve UI, reducing processing time from 2 hours to 30 minutes and enabling 3+ team members to complete the workflow independently.',
       'Developed Python workflows that transform unstructured request data into structured operational inputs, improving consistency and reducing manual effort.',
-      'Created AI-powered case summarization workflows that reduced review time from 1 week to 1.5 hours, significantly accelerating investigation and resolution.',
+      'Created AI-powered case summarization workflows that helped accelerate investigation and resolution workflows.',
       'Partnered with cross-functional stakeholders to translate operational pain points into adopted internal tools.',
     ],
   },

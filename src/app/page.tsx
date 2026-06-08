@@ -65,7 +65,7 @@ const socials = [
 
 const impactStats = [
   { value: '75%', label: 'faster enterprise workflow processing' },
-  { value: '90%', label: 'faster case review with AI summaries' },
+  { value: 'AI', label: 'case summarization workflows for faster review' },
   { value: '3.9K+', label: 'Pearle itineraries generated in beta' },
   { value: '8K+', label: 'AI builders connected through AI Valley' },
 ];
@@ -95,8 +95,8 @@ const caseStudies: CaseStudy[] = [
     ],
     metrics: [
       { value: '2h → 30m', label: 'workflow processing time' },
-      { value: '1w → 1.5h', label: 'case review time' },
       { value: '3+', label: 'team members enabled to self-serve' },
+      { value: 'AI', label: 'summaries for faster review workflows' },
     ],
     tools: ['Python', 'Internal platforms', 'AI summarization', 'Workflow automation', 'Self-serve tooling'],
     outcome:
