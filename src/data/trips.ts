@@ -877,7 +877,7 @@ export const trips: Trip[] = [
     themeColor: '#B9A6FF',
     description: 'Case studies from Courtney\'s work designing and shipping real products across fintech, consumer, and AI.',
     stats: [
-      { label: 'Projects', value: '7+' },
+      { label: 'Projects', value: '9+' },
       { label: 'Roles', value: 'UX + PM' },
       { label: 'Users', value: '7,000%↑' },
       { label: 'Focus', value: 'Human-first' },
@@ -949,13 +949,14 @@ export const trips: Trip[] = [
             title: 'PacaPlate',
             tag: 'App',
             timeLabel: '2026',
-            image: '/opaca.png',
+            image: '/pacaplate-logo.png',
+            imageFit: 'contain',
             blurb: 'AI meal planning app with a lovable alpaca mascot that turns weekly food decisions into a calmer, more delightful system.',
             content: [
               {
                 type: 'gallery',
                 title: 'Product Direction',
-                photos: [{ src: '/opaca.png', caption: 'Paca, the meal planning companion' }],
+                photos: [{ src: '/pacaplate-logo.png', caption: 'PacaPlate product identity', fit: 'contain' }],
               },
               {
                 type: 'text',
@@ -996,6 +997,106 @@ export const trips: Trip[] = [
                 type: 'links',
                 title: 'Links',
                 items: [{ label: 'Visit PacaPlate →', href: 'https://paca-plate.vercel.app/' }],
+              },
+            ],
+          },
+          {
+            id: 'pacalife',
+            title: 'PacaLife',
+            tag: 'App',
+            timeLabel: '2026',
+            image: '/pacalife-logo.png',
+            imageFit: 'contain',
+            blurb: 'A cozy personal operating system for goals, habits, reflection, and everyday momentum.',
+            content: [
+              {
+                type: 'gallery',
+                title: 'Product Direction',
+                photos: [{ src: '/pacalife-logo.png', caption: 'PacaLife product identity', fit: 'contain' }],
+              },
+              {
+                type: 'text',
+                title: 'The Product',
+                text: 'PacaLife helps people turn fuzzy intentions into clearer routines, goals, and reflection loops without making self-improvement feel cold or punitive.',
+              },
+              {
+                type: 'text',
+                title: 'My Role',
+                text: 'Designed and shipped the product concept, interaction model, and friendly companion layer that makes life planning feel lighter and more usable.',
+              },
+              {
+                type: 'metrics',
+                title: 'Focus',
+                items: [
+                  { label: 'Product Type', value: 'Life OS' },
+                  { label: 'Experience', value: 'Cozy UX' },
+                  { label: 'Workflow', value: 'Goals → habits' },
+                  { label: 'Status', value: 'Live' },
+                ],
+              },
+              {
+                type: 'bullets',
+                title: 'What I Built',
+                items: [
+                  'Goal and routine flows that make progress easier to revisit.',
+                  'A warm product voice for reflection, motivation, and planning.',
+                  'A lightweight personal system that balances structure with emotional ease.',
+                ],
+              },
+              {
+                type: 'links',
+                title: 'Links',
+                items: [{ label: 'Visit PacaLife →', href: 'https://pacalife.app/' }],
+              },
+            ],
+          },
+          {
+            id: 'pacamoney',
+            title: 'PacaMoney',
+            tag: 'App',
+            timeLabel: '2026',
+            image: '/pacamoney-logo.png',
+            imageFit: 'contain',
+            blurb: 'A friendly personal finance product that makes budgeting and money tracking feel approachable.',
+            content: [
+              {
+                type: 'gallery',
+                title: 'Product Direction',
+                photos: [{ src: '/pacamoney-logo.png', caption: 'PacaMoney product identity', fit: 'contain' }],
+              },
+              {
+                type: 'text',
+                title: 'The Product',
+                text: 'PacaMoney brings a softer, more usable interface to personal finance: helping people understand spending, plan budgets, and stay engaged without shame.',
+              },
+              {
+                type: 'text',
+                title: 'My Role',
+                text: 'Designed and shipped the product concept, companion-led UX, and finance workflow structure from idea to live app.',
+              },
+              {
+                type: 'metrics',
+                title: 'Focus',
+                items: [
+                  { label: 'Product Type', value: 'Fintech' },
+                  { label: 'Experience', value: 'Friendly UX' },
+                  { label: 'Workflow', value: 'Track → plan' },
+                  { label: 'Status', value: 'Live' },
+                ],
+              },
+              {
+                type: 'bullets',
+                title: 'What I Built',
+                items: [
+                  'Budgeting and tracking flows for everyday money decisions.',
+                  'A softer companion-led approach to a sensitive user workflow.',
+                  'A live product experience that turns practical finance tasks into clearer habits.',
+                ],
+              },
+              {
+                type: 'links',
+                title: 'Links',
+                items: [{ label: 'Visit PacaMoney →', href: 'https://paca-money.vercel.app/' }],
               },
             ],
           },

@@ -102,7 +102,7 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
           </h4>
         )}
         <div className={`grid gap-2 ${block.photos.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
-          {block.photos.map(({ src, caption }, i) => (
+          {block.photos.map(({ src, caption, fit = 'cover' }, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.96 }}
@@ -116,7 +116,9 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
               <img
                 src={src}
                 alt={caption ?? ''}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className={`h-full w-full transition-transform duration-700 group-hover:scale-105 ${
+                  fit === 'contain' ? 'object-contain bg-[#FFF8E8] p-3' : 'object-cover'
+                }`}
               />
               {caption && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-plum-900/70 to-transparent px-3 pb-2 pt-5">
@@ -207,8 +209,12 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
             {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto px-5 py-5">
               {stop.image && (
-                <div className="rounded-xl overflow-hidden mb-5 -mx-1">
-                  <img src={stop.image} alt={stop.title} className="w-full h-40 object-cover" />
+                <div className="mb-5 -mx-1 overflow-hidden rounded-xl bg-[#FFF8E8]">
+                  <img
+                    src={stop.image}
+                    alt={stop.title}
+                    className={`h-40 w-full ${stop.imageFit === 'contain' ? 'object-contain p-3' : 'object-cover'}`}
+                  />
                 </div>
               )}
               <p className="text-sm text-plum-500 leading-relaxed mb-6 pb-5 border-b border-blush-50">

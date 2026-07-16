@@ -31,7 +31,7 @@ export interface MapBlock {
 export interface GalleryBlock {
   type: 'gallery';
   title?: string;
-  photos: { src: string; caption?: string }[];
+  photos: { src: string; caption?: string; fit?: 'cover' | 'contain' }[];
 }
 
 export type ContentBlock = BulletsBlock | MetricsBlock | TextBlock | LinksBlock | MapBlock | GalleryBlock;
@@ -44,6 +44,7 @@ export interface Stop {
   tag: string;
   blurb: string;
   image?: string;
+  imageFit?: 'cover' | 'contain';
   content: ContentBlock[];
 }
 
