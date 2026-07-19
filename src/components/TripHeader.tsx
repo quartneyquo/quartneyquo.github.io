@@ -12,7 +12,7 @@ export default function TripHeader({ trip }: TripHeaderProps) {
   const totalStops = trip.days.reduce((acc, d) => acc + d.stops.length, 0);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl mb-8 shadow-soft-lg min-h-[260px] flex flex-col justify-end">
+    <div className="relative mb-6 flex min-h-[228px] flex-col justify-end overflow-hidden rounded-2xl shadow-soft-lg sm:min-h-[260px] md:mb-8">
       {/* Base fallback */}
       <div className="absolute inset-0 bg-plum-800" />
 
@@ -42,7 +42,7 @@ export default function TripHeader({ trip }: TripHeaderProps) {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="relative z-10 px-7 py-7"
+        className="relative z-10 px-5 py-5 sm:px-7 sm:py-7"
       >
         {/* Eyebrow */}
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-2">
@@ -50,7 +50,7 @@ export default function TripHeader({ trip }: TripHeaderProps) {
         </p>
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-black text-white leading-none mb-3">
+        <h1 className="mb-3 text-[2rem] font-black leading-[0.98] text-white sm:text-4xl md:text-5xl">
           {trip.title}
         </h1>
 
@@ -68,16 +68,16 @@ export default function TripHeader({ trip }: TripHeaderProps) {
         </div>
 
         {/* Description */}
-        <p className="text-white/60 text-sm leading-relaxed mb-5 max-w-sm">
+        <p className="mb-4 max-w-sm text-[13px] leading-relaxed text-white/72 sm:mb-5 sm:text-sm">
           {trip.subtitle}
         </p>
 
         {/* Travel tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
           {trip.stats.map(({ label, value }) => (
             <div
               key={label}
-              className="flex items-center gap-1.5 rounded-full px-3 py-1 border border-white/20 backdrop-blur-sm"
+              className="flex min-w-0 items-center justify-between gap-1.5 rounded-full border border-white/25 px-3 py-1 backdrop-blur-sm sm:justify-start"
               style={{ background: 'rgba(255,255,255,0.1)' }}
             >
               <span className="text-[9px] uppercase tracking-wide text-white/45 font-semibold">

@@ -8,6 +8,7 @@ import {
   BarChart3,
   Bot,
   BriefcaseBusiness,
+  CalendarDays,
   Code2,
   ExternalLink,
   Layers3,
@@ -62,6 +63,15 @@ const socials = [
   { href: 'mailto:courtneythko@gmail.com', label: 'Email', Icon: Mail },
   { href: 'https://www.linkedin.com/in/courtney-ko-720b63103/', label: 'LinkedIn', Icon: BriefcaseBusiness },
 ];
+
+const upcomingEvent = {
+  date: 'Aug 22, 2026',
+  title: 'AI Valley × Pet Zen Dog-a-thon',
+  summary: 'Builders, rescue dogs, and $10K+ in prizes for a day of playful, useful AI experiments.',
+  href: '/trips/ai-valley-events',
+  image:
+    'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=600,height=300/uploads/9z/07032863-3051-429c-8b13-3e6e237145dd.png',
+};
 
 const impactStats = [
   { value: '75%', label: 'faster enterprise workflow processing' },
@@ -256,7 +266,7 @@ const worldStops: WorldStop[] = [
     eyebrow: 'Community Engine',
     blurb: 'High-signal rooms for builders, founders, partners, technical workshops, and community-led growth.',
     metric: '8K+ builders connected',
-    cta: { label: 'Visit the hub', href: '#ai-valley' },
+    cta: { label: 'See upcoming events', href: '/trips/ai-valley-events' },
     x: 47,
     y: 30,
     image: '/aivalley-lounge-event.jpg',
@@ -1116,6 +1126,16 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
           <div className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-blush-500">{study.eyebrow}</div>
           <h3 className="text-2xl font-black leading-tight text-plum-900 sm:text-3xl md:text-4xl">{study.title}</h3>
           <p className="mt-4 text-sm leading-relaxed text-plum-400">{study.summary}</p>
+          {study.id === 'ai-valley' && (
+            <Link
+              href="/trips/ai-valley-events"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-blush-200 bg-blush-50 px-4 py-2 text-xs font-black text-plum-900 transition-colors hover:border-plum-300 hover:bg-white"
+            >
+              <CalendarDays size={14} />
+              Explore upcoming events
+              <ArrowRight size={14} />
+            </Link>
+          )}
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {study.metrics.map((metric) => (
@@ -1201,6 +1221,15 @@ export default function Home() {
         </Link>
         <div className="flex items-center gap-2">
           <Link
+            href="/trips/ai-valley-events"
+            aria-label="Upcoming AI Valley events"
+            title="Upcoming AI Valley events"
+            className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-blush-200 bg-white px-2.5 text-[11px] font-bold text-plum-500 shadow-soft transition-colors hover:bg-blush-50 hover:text-plum-900 sm:px-3"
+          >
+            <CalendarDays size={14} />
+            <span>Events</span>
+          </Link>
+          <Link
             href="/Courtney_Ko_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
@@ -1259,6 +1288,46 @@ export default function Home() {
                 {role}
               </span>
             ))}
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          variants={fadeUp}
+          aria-labelledby="upcoming-event-title"
+          className="mb-16 overflow-hidden rounded-[24px] border border-[#D9B46D] bg-[#FFF1C7] shadow-card sm:mb-20 sm:rounded-[28px]"
+        >
+          <div className="grid md:grid-cols-[0.8fr_1.2fr]">
+            <div className="relative min-h-44 overflow-hidden md:min-h-64">
+              <img
+                src={upcomingEvent.image}
+                alt="AI Valley Dog-a-thon event artwork"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-plum-900/55 via-transparent to-transparent" />
+              <span className="absolute bottom-4 left-4 rounded-full bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-plum-900 shadow-soft">
+                Upcoming event
+              </span>
+            </div>
+            <div className="flex flex-col justify-center p-5 sm:p-7 md:p-8">
+              <div className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.18em] text-blush-500">
+                <CalendarDays size={15} />
+                {upcomingEvent.date}
+              </div>
+              <h2 id="upcoming-event-title" className="text-2xl font-black leading-tight text-plum-900 sm:text-3xl">
+                {upcomingEvent.title}
+              </h2>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-plum-500">{upcomingEvent.summary}</p>
+              <Link
+                href={upcomingEvent.href}
+                className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-plum-900 px-5 py-3 text-sm font-black text-white shadow-soft transition-transform hover:-translate-y-0.5"
+              >
+                See upcoming events
+                <ArrowRight size={15} />
+              </Link>
+            </div>
           </div>
         </motion.section>
 

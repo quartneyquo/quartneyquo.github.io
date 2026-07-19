@@ -30,14 +30,14 @@ export default function TimelineDay({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: dayNumber * 0.06 }}
-      className="mb-10"
+      className="mb-8 md:mb-10"
     >
       {/* Section header */}
-      <div className="mb-5">
+      <div className="mb-4 md:mb-5">
         <p className="text-[9px] font-black uppercase tracking-[0.2em] text-blush-400 mb-0.5">
           Stop {String(dayNumber).padStart(2, '0')}
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <h2 className="font-black text-plum-800 text-base leading-none whitespace-nowrap">
             {day.title}
           </h2>
@@ -51,7 +51,7 @@ export default function TimelineDay({
         </div>
       </div>
 
-      <div className="pl-2">
+      <div className="pl-0 sm:pl-2">
         {visibleStops.map((stop, i) => (
           <StopCard
             key={stop.id}

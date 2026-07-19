@@ -119,23 +119,24 @@ export default function TripPageClient({ trip, allTrips }: TripPageClientProps) 
       />
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-12 md:pb-20">
         {/* Mobile top bar */}
-        <div className="md:hidden flex items-center gap-3 px-4 pt-4 pb-2">
+        <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-blush-100/80 bg-blush-50/92 px-4 py-3 backdrop-blur-md md:hidden">
           <button
             onClick={() => setIsMobileSidebarOpen(true)}
-            className="p-2 rounded-xl bg-white shadow-card text-plum-500"
+            aria-label="Open navigation"
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-plum-500 shadow-card"
           >
             <Menu size={18} />
           </button>
-          <span className="font-bold text-plum-700 text-sm">{trip.title}</span>
+          <span className="truncate text-sm font-bold text-plum-700">{trip.title}</span>
         </div>
 
-        <div className="px-4 md:px-8 pt-4 md:pt-6">
+        <div className="px-4 pt-3 md:px-8 md:pt-6">
           <TripHeader trip={trip} />
 
           {/* Filters */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <FilterChips
               available={allTags}
               active={activeFilter}

@@ -53,7 +53,7 @@ export const trips: Trip[] = [
                   { label: 'Members', value: '8,000+' },
                   { label: 'WIT Hackathon', value: '150+' },
                   { label: 'Events', value: '20+' },
-                  { label: 'Hackathons', value: '10+' },
+                  { label: 'Hackathons', value: '20+' },
                 ],
               },
               {
@@ -481,7 +481,7 @@ export const trips: Trip[] = [
     id: 'ai-valley-events',
     title: 'AI Valley Events',
     subtitle: 'Building the future of AI through community and hackathons',
-    dateRange: '2025 – 2026',
+    dateRange: '2025 – Present',
     coverImage: '/witpic.jpeg',
     coverImagePosition: 'top',
     themeColor: '#F7A8B8',
@@ -489,33 +489,53 @@ export const trips: Trip[] = [
       'Every event AI Valley runs is a bet that the best ideas come from people in a room together.',
     stats: [
       { label: 'Events', value: '20+' },
-      { label: 'Builders', value: '5000+' },
-      { label: 'Hackathons', value: '10+' },
+      { label: 'Builders', value: '8K+' },
+      { label: 'Hackathons', value: '20+' },
       { label: 'Cities', value: '3+' },
     ],
     days: [
       {
-        id: 'upcoming',
-        title: 'Coming Up',
-        dateLabel: 'Stay tuned',
+        id: 'latest',
+        title: 'Latest',
+        dateLabel: 'August 2026',
         stops: [
           {
-            id: 'next-up-teaser',
-            title: 'More events in the works',
-            timeLabel: 'Summer 2026',
+            id: 'pet-zen-dogathon',
+            title: 'AI Valley × Pet Zen Dog-a-thon',
+            timeLabel: 'Aug 22, 2026',
             locationLabel: 'San Francisco, CA',
-            tag: 'Community',
-            blurb: 'New hackathons, founder gatherings, and builder meetups in the pipeline. Follow along on Luma for the next drop.',
+            tag: 'Hackathon',
+            image: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=600,height=300/uploads/9z/07032863-3051-429c-8b13-3e6e237145dd.png',
+            blurb: 'A mission-driven AI hackathon where 200 builders created tools for dog rescue, shelter operations, fostering, and adoption.',
             content: [
               {
                 type: 'text',
-                title: 'What\'s Next',
-                text: 'AI Valley is queueing up the next round of programming — flagship hackathons, intimate founder dinners, and partner events with the labs and funds shaping what builders ship next.',
+                title: 'The Concept',
+                text: 'AI Valley partnered with Pet Zen and Copper\'s Dream to put real rescue needs at the center of the build. Adoptable dogs met participants on-site, then multidisciplinary teams spent the day shipping products for rescues, shelters, fosters, adopters, and the dogs themselves.',
+              },
+              {
+                type: 'metrics',
+                title: 'Impact',
+                items: [
+                  { label: 'Builders', value: '200' },
+                  { label: 'Prizes', value: '$10K+' },
+                  { label: 'Format', value: 'Full-day' },
+                  { label: 'Mission', value: 'Dog rescue' },
+                ],
+              },
+              {
+                type: 'bullets',
+                title: 'What Teams Built For',
+                items: [
+                  'Adoption matching and foster support.',
+                  'Volunteer coordination and shelter operations.',
+                  'AI copilots grounded in real rescue workflows.',
+                ],
               },
               {
                 type: 'links',
-                title: 'Stay in the Loop',
-                items: [{ label: 'Follow on Luma →', href: 'https://lu.ma/aivalley' }],
+                title: 'Event',
+                items: [{ label: 'View on Luma →', href: 'https://luma.com/rklrsomo' }],
               },
             ],
           },
@@ -526,6 +546,99 @@ export const trips: Trip[] = [
         title: 'Past Highlights',
         dateLabel: '2025 – 2026',
         stops: [
+          {
+            id: 'boba-thon',
+            title: 'Boba-thon: Build AI Workflows Over Boba',
+            tag: 'Builder Event',
+            timeLabel: 'Jun 25, 2026',
+            locationLabel: 'San Francisco, CA',
+            image: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=600,height=300/uploads/39/d5cd945d-e32f-4ec3-8ef2-30ed6e0c3237.png',
+            blurb: 'A lower-pressure build night with AI Valley × Workato: builders formed teams, prototyped AI workflows, and shared live demos over boba.',
+            content: [
+              {
+                type: 'text',
+                title: 'Why It Worked',
+                text: 'Boba-thon traded the intensity of an overnight hackathon for a welcoming, high-signal evening. Engineers, founders, students, designers, and operators could arrive with a project, a half-formed idea, or simply curiosity and still leave having built alongside someone new.',
+              },
+              {
+                type: 'metrics',
+                title: 'Format',
+                items: [
+                  { label: 'Partner', value: 'Workato' },
+                  { label: 'Activity', value: 'AI workflows' },
+                  { label: 'Finish', value: 'Live demos' },
+                  { label: 'Vibe', value: 'Low pressure' },
+                ],
+              },
+              {
+                type: 'links',
+                title: 'Event',
+                items: [{ label: 'View on Luma →', href: 'https://luma.com/axp8kxos' }],
+              },
+            ],
+          },
+          {
+            id: 'agents-you-love',
+            title: 'Agents You Love: Hackathon',
+            tag: 'Hackathon',
+            timeLabel: 'Jun 21, 2026',
+            locationLabel: 'San Francisco, CA',
+            image: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=600,height=300/uploads/hy/e9c499ce-d287-415a-8ebf-b1eb561baa55.jpg',
+            blurb: '456 builders explored a human-centered question: what makes an AI agent useful, personal, and delightful enough to return to?',
+            content: [
+              {
+                type: 'text',
+                title: 'Build Brief',
+                text: 'Teams built AI agents that understand context, retain useful memory, automate real workflows, connect to tools, and help people make decisions. The emphasis was on products people would actually use — not another wrapper demo.',
+              },
+              {
+                type: 'metrics',
+                title: 'Scale',
+                items: [
+                  { label: 'Attendees', value: '456' },
+                  { label: 'Format', value: 'In-person' },
+                  { label: 'Focus', value: 'Useful agents' },
+                  { label: 'Location', value: 'SF' },
+                ],
+              },
+              {
+                type: 'links',
+                title: 'Event',
+                items: [{ label: 'View on Luma →', href: 'https://luma.com/b7chd233' }],
+              },
+            ],
+          },
+          {
+            id: 'female-founders-demo-mixer',
+            title: 'Female Founders Demo & Mixer',
+            tag: 'Mixer',
+            timeLabel: 'Jun 11, 2026',
+            locationLabel: 'San Francisco, CA',
+            image: 'https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,background=white,quality=75,width=600,height=300/uploads/ad/8beeaaea-2b2c-44ff-aaf2-239d9bc569a4.png',
+            blurb: 'A curated room of 100+ founders, investors, and operators featuring ten women-led startup demos and intentional matchmaking.',
+            content: [
+              {
+                type: 'text',
+                title: 'The Room',
+                text: 'AI Valley × FoundHers brought together women founders across AI, deep tech, fintech, climate, enterprise, and consumer products. Ten founders delivered focused demos, followed by a networking dinner designed around useful introductions rather than surface-level exchanges.',
+              },
+              {
+                type: 'metrics',
+                title: 'Impact',
+                items: [
+                  { label: 'Attendees', value: '100+' },
+                  { label: 'Founder demos', value: '10' },
+                  { label: 'Format', value: 'Curated' },
+                  { label: 'Focus', value: 'Women founders' },
+                ],
+              },
+              {
+                type: 'links',
+                title: 'Event',
+                items: [{ label: 'View on Luma →', href: 'https://luma.com/caqn15wl' }],
+              },
+            ],
+          },
           {
             id: 'female-founder-brunch',
             title: 'Female Founder Brunch',

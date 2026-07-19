@@ -20,7 +20,7 @@ export default function MiniBar({ currentStop, prevStop, nextStop, onNavigate }:
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-2rem)] max-w-md"
+      className="fixed bottom-4 left-1/2 z-30 hidden w-[calc(100%-2rem)] max-w-md -translate-x-1/2 md:block"
     >
       <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-soft-lg border border-blush-100 flex items-center gap-3 px-4 py-3">
         {/* Dot */}

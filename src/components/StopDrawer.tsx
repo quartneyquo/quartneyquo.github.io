@@ -172,10 +172,10 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-            className="fixed right-0 top-0 bottom-0 w-full md:w-[380px] bg-white shadow-soft-lg z-50 flex flex-col border-l border-blush-100"
+            className="fixed inset-0 z-50 flex h-dvh w-full flex-col border-l border-blush-100 bg-white shadow-soft-lg md:inset-y-0 md:left-auto md:w-[380px]"
           >
             {/* Header */}
-            <div className="flex-shrink-0 px-5 py-5 border-b border-blush-100 bg-blush-50">
+            <div className="flex-shrink-0 border-b border-blush-100 bg-blush-50 px-4 py-4 sm:px-5 sm:py-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1.5">
@@ -199,7 +199,8 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
                 </div>
                 <button
                   onClick={onClose}
-                  className="flex-shrink-0 w-8 h-8 rounded-full bg-white border border-blush-200 flex items-center justify-center text-plum-400 hover:text-plum-700 hover:border-blush-400 transition-all shadow-soft"
+                  aria-label="Close event details"
+                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-blush-200 bg-white text-plum-400 shadow-soft transition-all hover:border-blush-400 hover:text-plum-700 md:h-8 md:w-8"
                 >
                   <X size={15} />
                 </button>
@@ -207,13 +208,13 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
             </div>
 
             {/* Scrollable body */}
-            <div className="flex-1 overflow-y-auto px-5 py-5">
+            <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
               {stop.image && (
                 <div className="mb-5 -mx-1 overflow-hidden rounded-xl bg-[#FFF8E8]">
                   <img
                     src={stop.image}
                     alt={stop.title}
-                    className={`h-40 w-full ${stop.imageFit === 'contain' ? 'object-contain p-3' : 'object-cover'}`}
+                    className={`h-44 w-full sm:h-40 ${stop.imageFit === 'contain' ? 'object-contain p-3' : 'object-cover'}`}
                   />
                 </div>
               )}
@@ -242,14 +243,15 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
             </div>
 
             {/* Footer nav */}
-            <div className="flex-shrink-0 flex items-center justify-between gap-3 px-5 py-4 border-t border-blush-100 bg-white">
+            <div className="flex flex-shrink-0 items-center justify-between gap-2 border-t border-blush-100 bg-white px-4 py-3 sm:gap-3 sm:px-5 sm:py-4">
               <button
                 disabled={!prevStop}
                 onClick={() => prevStop && onNavigate(prevStop)}
                 className="flex items-center gap-1.5 text-xs font-semibold text-plum-400 disabled:opacity-30 hover:text-blush-500 transition-colors disabled:cursor-not-allowed"
               >
                 <ChevronLeft size={15} />
-                {prevStop?.title ?? 'Start'}
+                <span className="md:hidden">Previous</span>
+                <span className="hidden max-w-[112px] truncate md:inline">{prevStop?.title ?? 'Start'}</span>
               </button>
               <div className="text-[10px] text-plum-200 font-medium">
                 {currentIndex + 1} / {allStops.length}
@@ -259,7 +261,8 @@ export default function StopDrawer({ stop, trip, allStops, onClose, onNavigate }
                 onClick={() => nextStop && onNavigate(nextStop)}
                 className="flex items-center gap-1.5 text-xs font-semibold text-plum-400 disabled:opacity-30 hover:text-blush-500 transition-colors disabled:cursor-not-allowed"
               >
-                {nextStop?.title ?? 'End'}
+                <span className="md:hidden">Next</span>
+                <span className="hidden max-w-[112px] truncate md:inline">{nextStop?.title ?? 'End'}</span>
                 <ChevronRight size={15} />
               </button>
             </div>
