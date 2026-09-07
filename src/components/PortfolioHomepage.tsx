@@ -1,27 +1,17 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll } from 'framer-motion';
 import Link from 'next/link';
 import { EventGallery, ProductShelf } from './PortfolioPlayground';
 import { SkyClouds } from './SkyClouds';
-import { useOpacaMovement } from './useOpacaMovement';
-import { APPROACHES, MAP_LABELS, worldDistance } from './opacaNavigation';
-import './opacaRoaming.css';
+import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
+import { portfolioLinkAction } from './portfolioAnalytics';
 import {
   ArrowRight,
-  Bot,
   CalendarDays,
-  Heart,
-  CircleHelp,
-  Leaf,
-  MessageCircle,
   ExternalLink,
   Mail,
-  MapPin,
-  Network,
-  Sparkles,
-  X,
 } from 'lucide-react';
 
 type CaseStudy = {
@@ -42,18 +32,6 @@ type CaseStudy = {
   visual: 'automation' | 'travel' | 'community';
 };
 
-type WorldStop = {
-  id: string;
-  title: string;
-  eyebrow: string;
-  blurb: string;
-  metric: string;
-  cta: { label: string; href: string };
-  x: number;
-  y: number;
-  image: string;
-  icon: typeof Bot;
-};
 
 
 const CONTACT_LINK = 'https://www.linkedin.com/in/courtney-ko-720b63103/';
@@ -216,338 +194,7 @@ const educationCredentials = [
 ];
 
 
-const worldStops: WorldStop[] = [
-  {
-    id: 'nvidia-lab',
-    title: 'NVIDIA Lab',
-    eyebrow: 'Enterprise Automation',
-    blurb: 'Workflow diagnosis, self-serve tooling, Python automation, and AI summaries for faster internal operations.',
-    metric: '2h -> 30m workflow processing',
-    cta: { label: 'Open case study', href: '#nvidia' },
-    x: 17,
-    y: 28,
-    image: '/nowplaying.jpeg',
-    icon: Bot,
-  },
-  {
-    id: 'ai-valley-hub',
-    title: 'AI Valley Hub',
-    eyebrow: 'Community Engine',
-    blurb: 'High-signal rooms for builders, founders, partners, technical workshops, and community-led growth.',
-    metric: '11K+ builders connected',
-    cta: { label: 'View events', href: 'https://aivalley.io/events' },
-    x: 47,
-    y: 30,
-    image: '/aivalley-lounge-event.jpg',
-    icon: Network,
-  },
-  {
-    id: 'pearle-port',
-    title: 'Pearle Port',
-    eyebrow: 'AI Travel Product',
-    blurb: 'A 0 to 1 group travel planner that turns messy inspiration into collaborative itineraries.',
-    metric: '3.9K+ itineraries generated',
-    cta: { label: 'See Pearle', href: '#pearle' },
-    x: 76,
-    y: 27,
-    image: '/pearle.jpeg',
-    icon: Sparkles,
-  },
-  {
-    id: 'basecamp',
-    title: 'Courtney Basecamp',
-    eyebrow: 'About',
-    blurb: 'UX, psychology, product strategy, AI tools, and a very real love of making complex things feel usable.',
-    metric: 'Warm human, rigorous operator',
-    cta: { label: 'Meet Courtney', href: '#about' },
-    x: 24,
-    y: 66,
-    image: '/profile.jpeg',
-    icon: MapPin,
-  },
-  {
-    id: 'travel-atlas',
-    title: 'Travel Atlas',
-    eyebrow: 'Worldview',
-    blurb: 'Travel research, cultural curiosity, and lived inspiration for building products people actually use.',
-    metric: '20 countries and counting',
-    cta: { label: 'View context', href: '#work' },
-    x: 55,
-    y: 68,
-    image: '/macchupicchu.jpeg',
-    icon: MapPin,
-  },
-  {
-    id: 'contact-terminal',
-    title: 'Contact Terminal',
-    eyebrow: 'Next Step',
-    blurb: 'For teams building AI products, automation systems, or technical communities with taste and momentum.',
-    metric: 'Open to product, AI, PMM',
-    cta: { label: 'Start a conversation', href: 'mailto:courtneythko@gmail.com' },
-    x: 82,
-    y: 63,
-    image: '/sf.jpeg',
-    icon: Mail,
-  },
-];
-
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
-};
-
-
-function PearlShellIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10 25.5C11.2 16 17.4 10 24 10s12.8 6 14 15.5" strokeWidth="3.4" />
-      <path d="M14 24.8c2.7-4.2 5.8-6.5 10-6.5s7.3 2.3 10 6.5" strokeWidth="2.8" />
-      <path d="M18.3 22.4l-4-5.4M24 21.2V14M29.7 22.4l4-5.4" strokeWidth="2.2" />
-      <path d="M11.5 29.2c3.2-1.7 6.3-1.3 8.3.8 2.2-2.1 6.2-2.1 8.4 0 2-2.1 5.1-2.5 8.3-.8-1.9 5.9-6.6 9.2-12.5 9.2s-10.6-3.3-12.5-9.2Z" strokeWidth="3.4" />
-      <circle cx="24" cy="28.1" r="5.3" fill="white" strokeWidth="3" />
-    </svg>
-  );
-}
-
-function WorldStopMarkerIcon({ id, className = '' }: { id: string; className?: string }) {
-  if (id === 'pearle-port') {
-    return <PearlShellIcon className={className} />;
-  }
-
-  if (id === 'nvidia-lab') {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="13" y="15" width="22" height="20" rx="5" strokeWidth="3.2" />
-        <path d="M18 15v-4M24 15V9M30 15v-4M18 35v4M24 35v4M30 35v4M13 21H9M13 29H9M35 21h4M35 29h4" strokeWidth="2.5" />
-        <path d="M18.5 26.5h5l2-5 4 10 1.8-5h3.2" strokeWidth="2.6" />
-      </svg>
-    );
-  }
-
-  if (id === 'ai-valley-hub') {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="24" cy="13" r="5.4" strokeWidth="3.2" />
-        <circle cx="13" cy="32" r="5.4" strokeWidth="3.2" />
-        <circle cx="35" cy="32" r="5.4" strokeWidth="3.2" />
-        <path d="M21.4 17.8l-5.7 9.5M26.6 17.8l5.7 9.5M18.8 32h10.4" strokeWidth="2.7" />
-      </svg>
-    );
-  }
-
-  if (id === 'basecamp') {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 36h32L24 11 8 36Z" strokeWidth="3.2" />
-        <path d="M24 11v25M24 36l7-11M24 36l-7-11" strokeWidth="2.6" />
-        <path d="M12 36h24" strokeWidth="3.2" />
-      </svg>
-    );
-  }
-
-  if (id === 'travel-atlas') {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="24" cy="24" r="16" strokeWidth="3.2" />
-        <path d="M24 8c5 4.5 7.5 9.8 7.5 16S29 35.5 24 40M24 8c-5 4.5-7.5 9.8-7.5 16S19 35.5 24 40M9 24h30M13 15.5h22M13 32.5h22" strokeWidth="2.2" />
-        <path d="M28.5 19.5l-3 8.7-6 2.3 3-8.7 6-2.3Z" fill="currentColor" strokeWidth="2" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="10" y="13" width="28" height="22" rx="4" strokeWidth="3.2" />
-      <path d="M15 20l8 6 10-6M15 31h18" strokeWidth="2.7" />
-      <path d="M35 9v7M31.5 12.5h7" strokeWidth="2.4" />
-    </svg>
-  );
-}
-
-function OpacaWorldHero() {
-  const landscapeRef = useRef<HTMLDivElement>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const [popupPosition, setPopupPosition] = useState({ left: 12, top: 12 });
-  const [selected, setSelected] = useState<string | null>(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [visited, setVisited] = useState<string[]>([]);
-  const [reaction, setReaction] = useState<'pet' | 'feed' | null>(null);
-  const reduceMotion = useReducedMotion();
-  const positions = MAP_LABELS;
-  const active = popupOpen ? worldStops.find((stop) => stop.id === selected) : undefined;
-  const movement = useOpacaMovement(landscapeRef, () => { setPopupOpen(false); setReaction(null); });
-  const { position, moving: traveling, facing } = movement;
-  const nearest = APPROACHES.reduce((best, point, i) => worldDistance(position, point) < worldDistance(position, APPROACHES[best]) ? i : best, 0);
-  const nearby = worldDistance(position, APPROACHES[nearest]) <= 12 ? worldStops[nearest] : undefined;
-
-  useEffect(() => {
-    if (!reaction) return;
-    const timer = window.setTimeout(() => setReaction(null), 1400);
-    return () => window.clearTimeout(timer);
-  }, [reaction]);
-
-  const greetOpaca = (kind: 'pet' | 'feed') => {
-    if (traveling || reaction) return;
-    setPopupOpen(false);
-    setReaction(kind);
-  };
-
-  const choosePlace = (id: string, trigger: HTMLElement) => {
-    movement.stop();
-    triggerRef.current = trigger;
-    setPopupOpen(true);
-    setReaction(null);
-    setSelected(id);
-    setVisited(previous => previous.includes(id) ? previous : [...previous, id]);
-  };
-
-  const closePopup = (restoreFocus = true) => {
-    setPopupOpen(false);
-    if (restoreFocus) (triggerRef.current?.isConnected ? triggerRef.current : landscapeRef.current)?.focus({ preventScroll: true });
-  };
-
-  const walkToPlace = (id: string, trigger: HTMLButtonElement) => {
-    const index = worldStops.findIndex(stop => stop.id === id);
-    landscapeRef.current?.focus({ preventScroll: true });
-    movement.moveTo(APPROACHES[index], () => choosePlace(id, trigger));
-  };
-
-  useLayoutEffect(() => {
-    if (!active) return;
-    const reposition = () => {
-      const map = landscapeRef.current?.getBoundingClientRect();
-      const popup = popupRef.current;
-      if (!map || !popup) return;
-      const point = positions[worldStops.findIndex((stop) => stop.id === active.id)];
-      const x = map.left + map.width * point.x / 100;
-      const y = map.top + map.height * point.y / 100;
-      const width = popup.offsetWidth;
-      const height = popup.offsetHeight;
-      const gap = Math.max(24, map.width * 0.12);
-      const left = x + width + gap + 12 < window.innerWidth ? x + gap : x - width - gap;
-      setPopupPosition({
-        left: Math.max(12, Math.min(left, window.innerWidth - width - 12)),
-        top: Math.max(12, Math.min(y - height / 2, window.innerHeight - height - 12)),
-      });
-    };
-    reposition();
-    const observer = new ResizeObserver(reposition);
-    if (popupRef.current) observer.observe(popupRef.current);
-    window.addEventListener('resize', reposition);
-    window.addEventListener('scroll', reposition, true);
-    popupRef.current?.focus({ preventScroll: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', reposition);
-      window.removeEventListener('scroll', reposition, true);
-    };
-  }, [active]);
-
-  useEffect(() => {
-    if (!active) return;
-    const dismiss = (event: PointerEvent) => {
-      if (!(event.target instanceof Element)) return;
-      if (popupRef.current?.contains(event.target) || event.target.closest('.world-place, .world-passport button')) return;
-      setPopupOpen(false);
-    };
-    const escape = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      setPopupOpen(false);
-      (triggerRef.current?.isConnected ? triggerRef.current : landscapeRef.current)?.focus({ preventScroll: true });
-    };
-    document.addEventListener('pointerdown', dismiss);
-    document.addEventListener('keydown', escape);
-    return () => {
-      document.removeEventListener('pointerdown', dismiss);
-      document.removeEventListener('keydown', escape);
-    };
-  }, [active]);
-
-  return (
-    <section id="world" className="opaca-world" aria-label="Courtney's interactive world" data-placement="world">
-      <div className="world-landscape world-roaming" ref={landscapeRef} tabIndex={0} role="group" aria-label="Move Opaca around the map" aria-describedby="world-controls-description"
-        onPointerDown={movement.onPointerDown} onPointerMove={movement.onPointerMove} onPointerUp={movement.onPointerUp} onPointerCancel={movement.onPointerCancel}
-        onBlur={movement.stop} onKeyDown={event => {
-          if (event.target === event.currentTarget && event.key === 'Enter' && nearby) {
-            event.preventDefault(); choosePlace(nearby.id, event.currentTarget);
-          } else movement.onKeyDown(event);
-        }}>
-        <img className="world-terrain" src="/opaca-world-pixel.png" alt="" width="1536" height="1024" loading="lazy" draggable={false} />
-        {worldStops.map((stop, i) => (
-          <button
-            key={stop.id}
-            type="button"
-            className="world-place"
-            data-place={i}
-            style={{ left: positions[i].x + '%', top: positions[i].y + '%' }}
-            onClick={(event) => walkToPlace(stop.id, event.currentTarget)}
-            aria-label={`Explore ${stop.title}`}
-            aria-pressed={active?.id === stop.id}
-            aria-haspopup="dialog"
-            aria-expanded={active?.id === stop.id}
-            aria-controls={active?.id === stop.id ? 'world-place-popup' : undefined}
-          >
-            <span className="destination-life" aria-hidden="true">
-              {i === 1 ? <><MessageCircle /><MessageCircle /></> : i === 2 ? <PearlShellIcon /> : <WorldStopMarkerIcon id={stop.id} />}
-            </span>
-            <span className="world-place-label"><span className="world-label-full">{stop.title}</span><span className="world-label-short" aria-hidden="true">{['NVIDIA', 'AI Valley', 'Pearle', 'Basecamp', 'Atlas', 'Contact'][i]}</span>{visited.includes(stop.id) && <span className="world-stamp" aria-label="Visited">✓</span>}</span>
-          </button>
-        ))}
-        {movement.target && <span className="world-walk-target" aria-hidden="true" style={{ left: movement.target.x + '%', top: movement.target.y + '%' }} />}
-        <button
-          type="button"
-          className="world-opaca"
-          aria-label="Pet Opaca"
-          title="Pet Opaca"
-          disabled={traveling || reaction !== null}
-          onClick={() => greetOpaca('pet')}
-          style={{ left: position.x + '%', top: position.y + '%' }}
-        >
-          {traveling && !reduceMotion && <span aria-hidden="true" className="world-run-trail" style={{ transform: `scaleX(${facing})` }}><i /><i /><i /></span>}
-          {reaction && <span className="opaca-reaction" data-kind={reaction} aria-hidden="true">
-            {reaction === 'pet' ? <><Heart fill="currentColor" /><Heart fill="currentColor" /></> : <Leaf fill="currentColor" />}
-          </span>}
-          {/* The source sprite faces left; the dust trail follows movement direction. */}
-          <div style={{ transform: `scaleX(${-facing})` }}><motion.img src="/opaca.png" alt="" width="1204" height="1306" draggable={false}
-            animate={reduceMotion ? { y: 0, rotate: 0 } : reaction === 'pet' ? { y: [0, -20, 0, -9, 0], rotate: [0, -5, 4, 0, 0] } : reaction === 'feed' ? { y: [0, 3, 0, 3, 0], rotate: [0, 5, 0, 5, 0] } : traveling ? { y: [0, -6, 0], rotate: [-3, 3, -3] } : { y: 0, rotate: 0 }}
-            transition={reaction ? { duration: 0.9 } : traveling ? { duration: 0.18, repeat: Infinity } : { duration: 0.15 }} /></div>
-        </button>
-      </div>
-      <div className="world-passport">
-        <div><span className="world-passport-title">Journey passport</span><span aria-live="polite">{visited.length === worldStops.length ? 'All six places discovered' : `${visited.length} / ${worldStops.length} places discovered`}</span></div>
-        <div className="opaca-actions">
-          <button type="button" aria-label="Give Opaca a pet" title="Pet Opaca" disabled={traveling || reaction !== null} onClick={() => greetOpaca('pet')}><Heart size={20} /></button>
-          <button type="button" aria-label="Feed Opaca a leaf" title="Feed Opaca" disabled={traveling || reaction !== null} onClick={() => greetOpaca('feed')}><Leaf size={20} /></button>
-        </div>
-        <details className="world-controls-help">
-          <summary aria-label="Movement controls" title="Movement controls"><CircleHelp size={20} /></summary>
-          <p>Click or tap open ground to walk. With the map focused, use arrow keys or WASD. Near a place, press Enter to explore. Tab reaches every destination directly.</p>
-        </details>
-      </div>
-      <p id="world-controls-description" className="sr-only">Use arrow keys or WASD while the map is focused, or click or tap open ground. Press Enter near a destination to explore. Tab reaches destination shortcuts. Escape closes details.</p>
-      <div className="world-explore-slot" aria-live="polite">
-        {nearby && !active && <button type="button" className="world-nearby" onClick={event => choosePlace(nearby.id, event.currentTarget)} aria-haspopup="dialog">Explore {nearby.title}<ArrowRight size={16} /></button>}
-      </div>
-      <div aria-live="polite" aria-atomic="true" className="sr-only">{reaction === 'pet' ? 'Opaca does a happy hop!' : reaction === 'feed' ? 'Opaca is enjoying his leaf.' : active ? `Exploring ${active.title}.` : ''}</div>
-      {active && (
-        <div className="world-detail" id="world-place-popup" ref={popupRef} role="dialog" aria-modal="false" aria-labelledby="world-popup-title" tabIndex={-1} style={popupPosition}>
-          <img src={active.image} alt="" width="100" height="100" />
-          <div className="world-detail-copy">
-            <p className="editorial-eyebrow">{active.eyebrow}</p>
-            <h3 id="world-popup-title">{active.title}</h3>
-            <p>{active.blurb}</p>
-            <a href={active.cta.href} className="editorial-link">{active.cta.label}<ArrowRight size={16} /></a>
-          </div>
-          <div className="world-detail-controls">
-            <button type="button" aria-label="Close destination" title="Close destination" onClick={() => closePopup()}><X size={18} /></button>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
+const fadeUp = { visible: { opacity: 1, y: 0 } };
 
 
 function SystemMockup({ study }: { study: CaseStudy }) {
@@ -671,7 +318,6 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
 
   return (
     <motion.article
-      id={study.id}
       initial={false}
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
@@ -806,15 +452,10 @@ export default function Home() {
   };
   useEffect(() => {
     const trackLink = (event: MouseEvent) => {
-      const link = event.target instanceof Element ? event.target.closest('a') : null;
+      const link = event.target instanceof Element ? event.target.closest('a, summary[data-case-study]') : null;
       if (!link) return;
-      const href = link.getAttribute('href') ?? '';
-      const action = href.includes('Courtney_Ko_Resume.pdf') ? 'resume_click'
-        : href.startsWith('mailto:') ? 'email_click'
-        : href.includes('linkedin.com') ? 'linkedin_click'
-        : (href.includes('/trips/ai-valley-events') || href === 'https://aivalley.io/events') ? 'events_click'
-        : ['#ai-valley', '#nvidia', '#pearle', '#case-studies'].includes(href) ? 'case_study_click'
-        : null;
+      const href = link.getAttribute('href') ?? `#${link.getAttribute('data-case-study') ?? ''}`;
+      const action = portfolioLinkAction(href);
       const analytics = window as Window & { gtag?: (command: string, action: string, data: Record<string, string>) => void };
       if (action && analytics.gtag) analytics.gtag('event', action, {
         placement: link.closest('[data-placement]')?.getAttribute('data-placement') ?? 'portfolio',
@@ -841,7 +482,10 @@ export default function Home() {
       </header>
 
       <main id="main" className="portfolio-main">
-        <section className="portfolio-intro" aria-labelledby="intro-title" data-placement="introduction">
+        <ContinuousJourney>
+        <span id="world" className="journey-alias" />
+        <JourneyStop id="basecamp" tile={0} title="Courtney's Basecamp" className="journey-basecamp" placement="introduction">
+        <div className="portfolio-intro" aria-labelledby="intro-title">
           <h1 id="intro-title">Courtney Ko</h1>
           <p className="intro-positioning">Building communities, partnerships,<br className="hidden sm:block" /> and product experiences for AI.</p>
           <p className="intro-description">At AI Valley, I lead technical programming, partnerships, and community operations for 11K+ builders. My experience spans enterprise automation at NVIDIA and founding AI products.</p>
@@ -855,59 +499,48 @@ export default function Home() {
               <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
             ))}
           </dl>
-        </section>
-
-        <div className="world-introduction">
-          <p className="editorial-eyebrow">A little more me</p>
-          <h2>Explore Courtney’s world</h2>
         </div>
-        <OpacaWorldHero />
+        </JourneyStop>
 
-        <section id="work" className="selected-work" aria-labelledby="work-title" data-placement="selected-work">
-          <h2 id="work-title">Selected work</h2>
-          <article className="featured-community">
-            <EventGallery />
-            <div className="community-summary">
-              <p className="editorial-eyebrow green">Community &amp; partnerships</p>
-              <h3>AI Valley</h3>
-              <p>Technical programming, partner experiences, and community operations for an AI builder ecosystem.</p>
-              <div className="project-links">
-                <a href="#ai-valley" className="editorial-link">Explore the work <ArrowRight size={18} /></a>
-                <a href="https://aivalley.io/events" className="editorial-link">View events <CalendarDays size={16} /></a>
-              </div>
-            </div>
-          </article>
-          <div className="secondary-work">
-            <article>
-              <p className="editorial-eyebrow green">Enterprise</p>
-              <h3>NVIDIA</h3>
-              <p>Enterprise automation and cross-functional execution. A self-serve workflow that went from two hours to 30 minutes.</p>
-              <a href="#nvidia" className="editorial-link">Explore the work <ArrowRight size={18} /></a>
-            </article>
-            <article>
-              <p className="editorial-eyebrow green">Product</p>
-              <h3>Pearle</h3>
-              <p>An AI travel product, from concept to private beta. 3.9K+ itineraries generated.</p>
-              <a href="#pearle" className="editorial-link">Explore the work <ArrowRight size={18} /></a>
-            </article>
-          </div>
-        </section>
+        <JourneyStop id="work" tile={1} title="AI Valley Hub" placement="selected-work">
+          <span id="case-studies" className="journey-alias" />
+          <p className="editorial-eyebrow">Community &amp; partnerships</p>
+          <h2>AI Valley</h2>
+          <p>Technical programming, partner experiences, and community operations for an AI builder ecosystem.</p>
+          <div className="journey-inline-metrics"><div><strong>11K+</strong><span>builders connected</span></div><div><strong>70+</strong><span>events hosted</span></div></div>
+          <div className="project-links"><a href="https://aivalley.io/events" className="editorial-link">View events <CalendarDays size={16} /></a></div>
+          <EventGallery />
+          <JourneyDisclosure id="ai-valley" title="AI Valley"><CaseStudySection study={orderedCaseStudies[0]} index={0} /></JourneyDisclosure>
+        </JourneyStop>
 
-        <section id="case-studies" className="experience-section" data-placement="experience" aria-labelledby="experience-title">
-          <p className="editorial-eyebrow">Experience</p>
-          <h2 id="experience-title">The work behind the results.</h2>
-          {orderedCaseStudies.map((study, index) => <CaseStudySection key={study.id} study={study} index={index} />)}
-        </section>
+        <JourneyStop id="nvidia-lab" tile={2} title="NVIDIA Lab" placement="experience">
+          <p className="editorial-eyebrow">Automation &amp; systems</p>
+          <h2>NVIDIA</h2>
+          <p>Enterprise automation and cross-functional execution. A self-serve workflow that went from two hours to 30 minutes.</p>
+          <div className="journey-inline-metrics"><div><strong>2h → 30m</strong><span>workflow processing time</span></div><div><strong>3+</strong><span>team members enabled to self-serve</span></div></div>
+          <img className="journey-photo nvidia-photo" src="/nowplaying.jpeg" alt="Courtney at NVIDIA headquarters" width="768" height="1024" loading="lazy" />
+          <JourneyDisclosure id="nvidia" title="NVIDIA"><CaseStudySection study={orderedCaseStudies[1]} index={1} /></JourneyDisclosure>
+        </JourneyStop>
 
-        <section className="paca-section" data-placement="products" aria-labelledby="products-title">
+        <JourneyStop id="pearle-port" tile={3} title="Pearle Port" placement="experience">
+          <p className="editorial-eyebrow">Founder &amp; AI product</p>
+          <h2>Pearle</h2>
+          <p>An AI travel product, from concept to private beta. LLM-powered itinerary generation and collaborative planning for groups.</p>
+          <div className="journey-inline-metrics"><div><strong>3.9K+</strong><span>itineraries generated</span></div><div><strong>10w</strong><span>MVP delivery timeline</span></div></div>
+          <img className="journey-photo pearle-photo" src="/pearle.jpeg" alt="Travel inspiration behind Pearle" width="1000" height="1000" loading="lazy" />
+          <JourneyDisclosure id="pearle" title="Pearle"><CaseStudySection study={orderedCaseStudies[2]} index={2} /></JourneyDisclosure>
+        </JourneyStop>
+
+        <JourneyStop id="paca-village" tile={4} title="Paca Village" className="journey-products" placement="products">
           <div className="section-title-row">
             <div><p className="editorial-eyebrow">Built by me</p><h2 id="products-title">Small ideas. Shipped products.</h2></div>
             <Link href="/trips/projects" className="editorial-link">All projects <ArrowRight size={16} /></Link>
           </div>
           <ProductShelf products={personalProducts} />
-        </section>
+          <noscript><div className="project-links">{personalProducts.map(product => <a key={product.title} href={product.href} className="editorial-link">Visit {product.title}</a>)}</div></noscript>
+        </JourneyStop>
 
-        <section id="about" className="about-section" data-placement="about">
+        <JourneyStop id="about" tile={5} title="Travel Atlas" className="journey-about" placement="about">
           <div>
             <p className="editorial-eyebrow">About</p>
             <h2>Curious about people.<br />Serious about building.</h2>
@@ -924,19 +557,19 @@ export default function Home() {
             </div>
             <a href={CONTACT_LINK} className="editorial-link" target="_blank" rel="noopener noreferrer">More on LinkedIn <ExternalLink size={15} /></a>
           </div>
-        </section>
-
-        <section id="toolkit" className="toolkit-section" aria-labelledby="toolkit-title">
+          <div className="travel-photos"><figure><img src="/macchupicchu.jpeg" alt="Courtney visiting Machu Picchu" width="400" height="400" loading="lazy" /><figcaption>Machu Picchu</figcaption></figure><figure><img src="/seoul.jpeg" alt="A memory from Seoul" width="400" height="400" loading="lazy" /><figcaption>Seoul</figcaption></figure></div>
+        <section id="toolkit" className="journey-toolkit" aria-labelledby="toolkit-title">
           <p className="editorial-eyebrow">How I work</p>
-          <h2 id="toolkit-title">People, products, and the systems between.</h2>
+          <h3 id="toolkit-title">People, products, and the systems between.</h3>
           <div className="toolkit-grid">
-            {toolkit.map((group) => <div key={group.title}><h3>{group.title}</h3><p>{group.items.join(' · ')}</p></div>)}
+            {toolkit.map((group) => <div key={group.title}><h4>{group.title}</h4><p>{group.items.join(' · ')}</p></div>)}
           </div>
         </section>
+        </JourneyStop>
 
-        <section id="contact" className="contact-section" data-placement="contact">
+        <JourneyStop id="contact" tile={6} title="Contact Post Office" className="journey-contact" placement="contact">
           <p className="editorial-eyebrow">Let’s talk</p>
-          <h2>Building an AI community,<br className="hidden sm:block" /> partnership, or product story?</h2>
+          <h2 id="contact-title">Building an AI community,<br className="hidden sm:block" /> partnership, or product story?</h2>
           <p>I’d love to hear what your team is working on.</p>
           <div className="intro-actions">
             <a className="editorial-button" href="mailto:courtneythko@gmail.com">Email Courtney <Mail size={16} /></a>
@@ -944,7 +577,8 @@ export default function Home() {
             <a className="editorial-link" href={CONTACT_LINK} target="_blank" rel="noopener noreferrer">LinkedIn <ExternalLink size={15} /></a>
             <a className="editorial-link" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>
           </div>
-        </section>
+        </JourneyStop>
+        </ContinuousJourney>
       </main>
       <footer className="portfolio-footer"><span>Courtney Ko</span><a href="#main">Back to top ↑</a></footer>
     </div>
