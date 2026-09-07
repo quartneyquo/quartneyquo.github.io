@@ -5,9 +5,16 @@ import './globals.css';
 const GA_ID = 'G-NCMQCSCFZP';
 
 export const metadata: Metadata = {
-  title: 'Courtney Ko | AI Product & Automation Builder',
+  metadataBase: new URL('https://quartneyquo.github.io'),
+  title: 'Courtney Ko | AI Community, Partnerships & Product',
   description:
-    'Product-minded builder across AI, automation, internal tools, and community-led growth. Case studies in NVIDIA automation, Pearle, and AI Valley.',
+    'Community and partnerships at AI Valley, connecting 11K+ builders through technical programming. Experience in NVIDIA automation and founding AI products.',
+  openGraph: {
+    title: 'Courtney Ko | AI Community, Partnerships & Product',
+    description: 'Building communities, partnerships, and product experiences for AI.',
+    images: [{ url: '/profile.jpeg', alt: 'Courtney Ko' }],
+    type: 'website',
+  },
   icons: { icon: '/favicon2.png' },
 };
 

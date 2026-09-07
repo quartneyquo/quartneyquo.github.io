@@ -30,7 +30,7 @@ const FLIGHTS: Flight[] = [
     status: 'Current',
     categories: ['AI', 'Community'],
     bullets: [
-      'Scaled a 0→1 developer community to 8,000+ engineers and founders by identifying user needs and designing high-signal technical programming (hackathons, workshops, events).',
+      'Scaled a 0→1 developer community to 11,000+ engineers and founders by identifying user needs and designing high-signal technical programming (hackathons, workshops, events).',
       'Defined and executed product strategy for community growth, improving activation, engagement, and retention through structured onboarding and event experiences.',
       'Led cross-functional execution across sponsors, partners, and internal teams to deliver multi-sided platform value (builders, sponsors, and organizers).',
       'Partnered with AI infrastructure companies to drive real-world API adoption through hands-on product experiences.',
