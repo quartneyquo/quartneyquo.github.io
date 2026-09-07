@@ -18,6 +18,7 @@ export function useOpacaMovement(map: RefObject<HTMLDivElement>, onMove: () => v
   const [target, setTarget] = useState<WorldPoint | null>(null);
   const keys = useRef(new Set<string>());
   const path = useRef<WorldPoint[]>([]);
+  const arrival = useRef<(() => void) | undefined>();
   const frame = useRef<number | null>(null);
   const lastTime = useRef(0);
   const gesture = useRef<{ id: number; x: number; y: number; scroll: number; cancelled: boolean } | null>(null);
@@ -27,6 +28,7 @@ export function useOpacaMovement(map: RefObject<HTMLDivElement>, onMove: () => v
   const stop = useCallback(() => {
     keys.current.clear();
     path.current = [];
+    arrival.current = undefined;
     if (frame.current !== null) cancelAnimationFrame(frame.current);
     frame.current = null;
     setMoving(false);
@@ -66,15 +68,23 @@ export function useOpacaMovement(map: RefObject<HTMLDivElement>, onMove: () => v
       }
       setMoving(changed);
       if (keys.current.size || path.current.length) frame.current = requestAnimationFrame(tick);
-      else { frame.current = null; setMoving(false); setTarget(null); }
+      else {
+        frame.current = null;
+        setMoving(false);
+        setTarget(null);
+        const complete = arrival.current;
+        arrival.current = undefined;
+        complete?.();
+      }
     };
     frame.current = requestAnimationFrame(tick);
   };
 
-  const moveTo = (destination: WorldPoint) => {
+  const moveTo = (destination: WorldPoint, onArrival?: () => void) => {
     stop();
     navigation.current ??= createNavigation();
     path.current = navigation.current.route(point.current, destination);
+    arrival.current = path.current.length ? onArrival : undefined;
     setTarget(path.current.at(-1) ?? null);
     onMoveRef.current();
     start();
@@ -100,6 +110,7 @@ export function useOpacaMovement(map: RefObject<HTMLDivElement>, onMove: () => v
     if (!DIRECTIONS[key]) return;
     event.preventDefault();
     path.current = [];
+    arrival.current = undefined;
     setTarget(null);
     // A quick key tap can begin and end between animation frames.
     if (!keys.current.size && !event.repeat) {
@@ -131,6 +142,6 @@ export function useOpacaMovement(map: RefObject<HTMLDivElement>, onMove: () => v
     map.current?.focus({ preventScroll: true });
     moveTo({ x: (event.clientX - bounds.left) / bounds.width * 100, y: (event.clientY - bounds.top) / bounds.height * 100 });
   };
-  return { position, moving, facing, target, stop, onKeyDown, onPointerDown, onPointerMove, onPointerUp,
+  return { position, moving, facing, target, stop, moveTo, onKeyDown, onPointerDown, onPointerMove, onPointerUp,
     onPointerCancel: () => { gesture.current = null; } };
 }

@@ -1,23 +1,27 @@
 import PF from 'pathfinding';
 
 export type WorldPoint = { x: number; y: number };
-export const SPAWN: WorldPoint = { x: 50, y: 55 };
+export const SPAWN: WorldPoint = { x: 50, y: 50 };
+export const MAP_LABELS: WorldPoint[] = [
+  { x: 26, y: 17 }, { x: 52, y: 13 }, { x: 77, y: 16 },
+  { x: 25, y: 53 }, { x: 50, y: 54 }, { x: 75, y: 54 },
+];
 export const APPROACHES: WorldPoint[] = [
-  { x: 25, y: 46 }, { x: 48, y: 49 }, { x: 75, y: 49 },
-  { x: 22, y: 79 }, { x: 48, y: 79 }, { x: 74, y: 77 },
+  { x: 29, y: 41 }, { x: 52, y: 43 }, { x: 75, y: 44 },
+  { x: 23, y: 79 }, { x: 48, y: 78 }, { x: 73, y: 78 },
 ];
 
 // Square world cells match the landscape's 3:2 aspect ratio; positions are percentages.
 const COLS = 151;
 const ROWS = 101;
 const obstacles = [
-  [14, 27, 27, 43], [41, 25, 58, 45], [68, 26, 83, 46],
-  [17, 58, 32, 76], [43, 58, 56, 76], [69, 59, 81, 74],
+  [18, 18, 33, 38], [41, 13, 62, 39], [69, 16, 86, 40],
+  [16, 53, 35, 76], [44, 55, 56, 75], [67, 55, 81, 75],
 ];
-const trees = [[33, 29, 5, 6], [92, 49, 5, 8], [15, 66, 4, 7]];
+const trees = [[90, 45, 4, 6], [15, 63, 4, 7], [41, 64, 3, 7], [56, 65, 3, 7]];
 const clearing = [
-  [23, 20], [88, 20], [93, 30], [93, 54], [89, 62], [86, 73],
-  [81, 80], [69, 88], [58, 92], [18, 91], [8, 78], [7, 36], [18, 31],
+  [23, 20], [88, 20], [92, 31], [91, 50], [86, 60], [85, 72],
+  [80, 80], [65, 87], [20, 87], [11, 80], [9, 62], [7, 35], [20, 29],
 ];
 
 function inClearing(p: WorldPoint) {

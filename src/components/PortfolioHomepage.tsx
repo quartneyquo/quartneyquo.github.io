@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { EventGallery, ProductShelf } from './PortfolioPlayground';
 import { SkyClouds } from './SkyClouds';
 import { useOpacaMovement } from './useOpacaMovement';
-import { APPROACHES, worldDistance } from './opacaNavigation';
+import { APPROACHES, MAP_LABELS, worldDistance } from './opacaNavigation';
 import './opacaRoaming.css';
 import {
   ArrowRight,
@@ -375,7 +375,7 @@ function OpacaWorldHero() {
   const [visited, setVisited] = useState<string[]>([]);
   const [reaction, setReaction] = useState<'pet' | 'feed' | null>(null);
   const reduceMotion = useReducedMotion();
-  const positions = [{ x: 21, y: 37 }, { x: 49, y: 37 }, { x: 76, y: 37 }, { x: 25, y: 69 }, { x: 50, y: 69 }, { x: 76, y: 69 }];
+  const positions = MAP_LABELS;
   const active = popupOpen ? worldStops.find((stop) => stop.id === selected) : undefined;
   const movement = useOpacaMovement(landscapeRef, () => { setPopupOpen(false); setReaction(null); });
   const { position, moving: traveling, facing } = movement;
@@ -406,6 +406,12 @@ function OpacaWorldHero() {
   const closePopup = (restoreFocus = true) => {
     setPopupOpen(false);
     if (restoreFocus) (triggerRef.current?.isConnected ? triggerRef.current : landscapeRef.current)?.focus({ preventScroll: true });
+  };
+
+  const walkToPlace = (id: string, trigger: HTMLButtonElement) => {
+    const index = worldStops.findIndex(stop => stop.id === id);
+    landscapeRef.current?.focus({ preventScroll: true });
+    movement.moveTo(APPROACHES[index], () => choosePlace(id, trigger));
   };
 
   useLayoutEffect(() => {
@@ -443,7 +449,7 @@ function OpacaWorldHero() {
     if (!active) return;
     const dismiss = (event: PointerEvent) => {
       if (!(event.target instanceof Element)) return;
-      if (popupRef.current?.contains(event.target) || event.target.closest('.world-place, .world-destinations button, .world-passport button')) return;
+      if (popupRef.current?.contains(event.target) || event.target.closest('.world-place, .world-passport button')) return;
       setPopupOpen(false);
     };
     const escape = (event: KeyboardEvent) => {
@@ -468,15 +474,15 @@ function OpacaWorldHero() {
             event.preventDefault(); choosePlace(nearby.id, event.currentTarget);
           } else movement.onKeyDown(event);
         }}>
-        <img className="world-terrain" src="/opaca-world-landscape.png" alt="" width="1536" height="1024" loading="lazy" draggable={false} />
+        <img className="world-terrain" src="/opaca-world-pixel.png" alt="" width="1536" height="1024" loading="lazy" draggable={false} />
         {worldStops.map((stop, i) => (
           <button
             key={stop.id}
             type="button"
             className="world-place"
             data-place={i}
-            style={{ left: positions[i].x + '%', top: (positions[i].y - 10) + '%' }}
-            onClick={(event) => choosePlace(stop.id, event.currentTarget)}
+            style={{ left: positions[i].x + '%', top: positions[i].y + '%' }}
+            onClick={(event) => walkToPlace(stop.id, event.currentTarget)}
             aria-label={`Explore ${stop.title}`}
             aria-pressed={active?.id === stop.id}
             aria-haspopup="dialog"
@@ -503,7 +509,8 @@ function OpacaWorldHero() {
           {reaction && <span className="opaca-reaction" data-kind={reaction} aria-hidden="true">
             {reaction === 'pet' ? <><Heart fill="currentColor" /><Heart fill="currentColor" /></> : <Leaf fill="currentColor" />}
           </span>}
-          <div style={{ transform: `scaleX(${facing})` }}><motion.img src="/opaca.png" alt="" width="1204" height="1306" draggable={false}
+          {/* The source sprite faces left; the dust trail follows movement direction. */}
+          <div style={{ transform: `scaleX(${-facing})` }}><motion.img src="/opaca.png" alt="" width="1204" height="1306" draggable={false}
             animate={reduceMotion ? { y: 0, rotate: 0 } : reaction === 'pet' ? { y: [0, -20, 0, -9, 0], rotate: [0, -5, 4, 0, 0] } : reaction === 'feed' ? { y: [0, 3, 0, 3, 0], rotate: [0, 5, 0, 5, 0] } : traveling ? { y: [0, -6, 0], rotate: [-3, 3, -3] } : { y: 0, rotate: 0 }}
             transition={reaction ? { duration: 0.9 } : traveling ? { duration: 0.18, repeat: Infinity } : { duration: 0.15 }} /></div>
         </button>
@@ -522,14 +529,6 @@ function OpacaWorldHero() {
       <p id="world-controls-description" className="sr-only">Use arrow keys or WASD while the map is focused, or click or tap open ground. Press Enter near a destination to explore. Tab reaches destination shortcuts. Escape closes details.</p>
       <div className="world-explore-slot" aria-live="polite">
         {nearby && !active && <button type="button" className="world-nearby" onClick={event => choosePlace(nearby.id, event.currentTarget)} aria-haspopup="dialog">Explore {nearby.title}<ArrowRight size={16} /></button>}
-      </div>
-      <div className="world-destinations" aria-label="Choose a destination">
-        {worldStops.map((stop, i) => (
-          <button key={stop.id} className="passport-stamp" data-collected={visited.includes(stop.id)} type="button" onClick={(event) => choosePlace(stop.id, event.currentTarget)} aria-pressed={selected === stop.id} aria-haspopup="dialog" aria-expanded={active?.id === stop.id} aria-controls={active?.id === stop.id ? 'world-place-popup' : undefined}>
-            <span className="passport-art" aria-hidden="true"><WorldStopMarkerIcon id={stop.id} />{visited.includes(stop.id) && <span className="passport-check">✓</span>}</span>
-            <span className="passport-label">{stop.title}</span>
-          </button>
-        ))}
       </div>
       <div aria-live="polite" aria-atomic="true" className="sr-only">{reaction === 'pet' ? 'Opaca does a happy hop!' : reaction === 'feed' ? 'Opaca is enjoying his leaf.' : active ? `Exploring ${active.title}.` : ''}</div>
       {active && (
