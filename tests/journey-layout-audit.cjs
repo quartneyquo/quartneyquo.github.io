@@ -1,7 +1,7 @@
 // Run with Playwright: await page.evaluate(require('./tests/journey-layout-audit.cjs')).
 module.exports = function auditJourneyLayout() {
   const root = document.querySelector('.continuous-journey').getBoundingClientRect();
-  const outlines = [...document.querySelectorAll('.journey-trail > g > path:first-child')];
+  const outlines = [...document.querySelectorAll('.journey-trail [data-trail-verge] > path')];
   const points = outlines.flatMap(path => (path.getAttribute('d').match(/[ML][\d.-]+,[\d.-]+/g) || []).map(pair => {
     const [x, y] = pair.slice(1).split(',').map(Number);
     return { x: x + root.left, y: y + root.top };
@@ -16,8 +16,9 @@ module.exports = function auditJourneyLayout() {
     }
     const style = getComputedStyle(link);
     if (style.position === 'absolute') failures.push(`${link.textContent}: link is outside document flow`);
-    const target = document.getElementById(link.hash.slice(1));
-    if (!target) failures.push(`${link.textContent}: missing destination`);
+    if (link.getAttribute('href').startsWith('#') && !document.getElementById(link.hash.slice(1))) {
+      failures.push(`${link.textContent}: missing destination`);
+    }
   }
   if (document.documentElement.scrollWidth > innerWidth) failures.push('Horizontal overflow');
   if (failures.length) throw new Error(failures.join('\n'));

@@ -12,8 +12,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Courtney Ko | AI Community, Partnerships & Product',
     description: 'Building communities, partnerships, and product experiences for AI.',
-    images: [{ url: '/profile.jpeg', alt: 'Courtney Ko' }],
+    images: [{ url: '/courtney-opaca-thumbnail.png', width: 1254, height: 1254, alt: 'Courtney Ko with Opaca, her pixel-art alpaca companion' }],
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Courtney Ko | AI Community, Partnerships & Product',
+    description: 'Building communities, partnerships, and product experiences for AI.',
+    images: [{ url: '/courtney-opaca-thumbnail.png', alt: 'Courtney Ko with Opaca, her pixel-art alpaca companion' }],
   },
   icons: { icon: '/favicon2.png' },
 };

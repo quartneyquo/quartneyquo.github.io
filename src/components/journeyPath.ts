@@ -66,6 +66,8 @@ export function closestStation(stations: TrailStation[], y: number) {
 }
 
 export function trailOutline(points: TrailPoint[], width: number, irregular = false) {
+  // Repeated arrivals have no tangent and would pinch the outline to its center.
+  points = points.filter((point, i) => i === 0 || Math.hypot(point.x-points[i-1].x,point.y-points[i-1].y) > 0.001);
   if (points.length < 2) return '';
   const samples: TrailPoint[] = [];
   for (let i=1; i<points.length; i++) {

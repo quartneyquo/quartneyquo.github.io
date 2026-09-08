@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll } from 'framer-motion';
 import Link from 'next/link';
 import { EventGallery, ProductShelf } from './PortfolioPlayground';
-import { SkyClouds } from './SkyClouds';
 import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
 import { portfolioLinkAction } from './portfolioAnalytics';
 import {
@@ -467,11 +466,10 @@ export default function Home() {
 
   return (
     <div ref={pageRef} className="portfolio-editorial min-h-screen bg-[#FBF8F8] text-plum-900">
-      <SkyClouds />
       <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <a href="#main" className="skip-link">Skip to content</a>
       <header className="portfolio-header" data-placement="header">
-        <Link href="/" className="wordmark">Courtney Ko<span aria-hidden="true">.</span></Link>
+        <Link href="/" className="wordmark" aria-label="Courtney Ko home">Courtney Ko</Link>
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
           <a href="#about" className="desktop-nav-link">About</a>
@@ -486,8 +484,7 @@ export default function Home() {
         <span id="world" className="journey-alias" />
         <JourneyStop id="basecamp" tile={0} title="Courtney's Basecamp" className="journey-basecamp" placement="introduction">
         <div className="portfolio-intro" aria-labelledby="intro-title">
-          <h1 id="intro-title">Courtney Ko</h1>
-          <p className="intro-positioning">Building communities, partnerships,<br className="hidden sm:block" /> and product experiences for AI.</p>
+          <h1 id="intro-title" className="intro-positioning">Building communities, partnerships, and product experiences for AI.</h1>
           <p className="intro-description">At AI Valley, I lead technical programming, partnerships, and community operations for 11K+ builders. My experience spans enterprise automation at NVIDIA and founding AI products.</p>
           <div className="intro-actions">
             <a className="editorial-button" href="#work">View Experience <ArrowRight size={16} /></a>
@@ -527,7 +524,7 @@ export default function Home() {
           <h2>Pearle</h2>
           <p>An AI travel product, from concept to private beta. LLM-powered itinerary generation and collaborative planning for groups.</p>
           <div className="journey-inline-metrics"><div><strong>3.9K+</strong><span>itineraries generated</span></div><div><strong>10w</strong><span>MVP delivery timeline</span></div></div>
-          <img className="journey-photo pearle-photo" src="/pearle.jpeg" alt="Travel inspiration behind Pearle" width="1000" height="1000" loading="lazy" />
+          <img className="journey-photo pearle-photo" src="/pearle-travel-assistant.png" alt="Pearle AI group travel assistant with destination suggestions, chat input, and trip-planning progress" width="800" height="584" loading="lazy" />
           <JourneyDisclosure id="pearle" title="Pearle"><CaseStudySection study={orderedCaseStudies[2]} index={2} /></JourneyDisclosure>
         </JourneyStop>
 
@@ -575,6 +572,7 @@ export default function Home() {
             <a className="editorial-button" href="mailto:courtneythko@gmail.com">Email Courtney <Mail size={16} /></a>
             <button className="editorial-link copy-email" type="button" onClick={copyEmail}><Mail size={16} /><span aria-live="polite">{copyStatus}</span></button>
             <a className="editorial-link" href={CONTACT_LINK} target="_blank" rel="noopener noreferrer">LinkedIn <ExternalLink size={15} /></a>
+            <a className="editorial-link" href="https://x.com/Courtneythko" target="_blank" rel="noopener noreferrer" aria-label="Courtney on X">X <ExternalLink size={15} /></a>
             <a className="editorial-link" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>
           </div>
         </JourneyStop>

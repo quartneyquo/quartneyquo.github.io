@@ -17,6 +17,12 @@ const stations = [
   { id: 'work', x: 250, y: 1230, exitY: 1580 },
   { id: 'nvidia-lab', x: 810, y: 2140, exitY: 2410 },
 ];
+test('duplicate arrival points do not pinch trail edges', () => {
+  const clean = [{x:0,y:0},{x:0,y:40},{x:40,y:80},{x:40,y:120}];
+  const repeated = clean.flatMap(point => [point, point, point]);
+  for (const irregular of [true,false]) assert.equal(trailOutline(repeated,34,irregular),trailOutline(clean,34,irregular));
+  assert.equal(trailOutline([{x:1,y:1},{x:1,y:1}],34),'');
+});
 test('stop celebrations cross downward thresholds only, including the final arrival', () => {
   assert.deepEqual(passedStops(stations,490,513),[]);
   assert.deepEqual(passedStops(stations,490,514).map(s=>s.id),['basecamp']);
