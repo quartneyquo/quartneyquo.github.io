@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'framer-motion';
 
-export function SkyClouds() {
+export function SkyClouds({ paused = false }: { paused?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const reduceMotion = useReducedMotion();
@@ -19,7 +19,7 @@ export function SkyClouds() {
   useEffect(() => {
     const layer = ref.current;
     const parent = layer?.parentElement;
-    if (!layer || !parent || !inView || !pageVisible || reduceMotion) return;
+    if (!layer || !parent || !inView || !pageVisible || reduceMotion || paused) return;
     const pointer = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 768px)');
     const reset = () => {
       layer.style.setProperty('--sky-x', '0px');
@@ -40,10 +40,10 @@ export function SkyClouds() {
       parent.removeEventListener('pointerleave', reset);
       reset();
     };
-  }, [inView, pageVisible, reduceMotion]);
+  }, [inView, pageVisible, reduceMotion, paused]);
 
   return (
-    <div ref={ref} className="sky-clouds" aria-hidden="true" data-running={inView && pageVisible && !reduceMotion}>
+    <div ref={ref} className="sky-clouds" aria-hidden="true" data-running={inView && pageVisible && !reduceMotion && !paused}>
       <div className="sky-parallax">
         <img className="sky-cloud sky-cloud--one" src="/sky-cloud-soft.png" alt="" width="1672" height="941" draggable={false} />
         <img className="sky-cloud sky-cloud--two" src="/sky-cloud-wisp.png" alt="" width="1792" height="896" draggable={false} />

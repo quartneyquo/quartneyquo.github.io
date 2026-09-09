@@ -3,9 +3,10 @@
 import { type CSSProperties, type ReactNode, createContext, useContext, useLayoutEffect, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Check, ChevronDown, Cpu, Globe, Heart, House, Leaf, Mail, Shell, Sprout, Users, X } from 'lucide-react';
-import { buildTrail, caseAnchor, closestStation, passedStops, pointOnTrail, scrollToTrailY, trailOutline, type TrailPoint, type TrailStation } from './journeyPath';
+import { ArrowRight, ChevronDown, Cpu, Globe, Heart, House, Leaf, Mail, Shell, Sprout, Users, X } from 'lucide-react';
+import { buildTrail, caseAnchor, closestStation, passedStops, pointOnTrail, trailOutline, type TrailPoint, type TrailStation } from './journeyPath';
 import './continuousJourney.css';
+import { WatercolorSprite } from './WatercolorSprite';
 
 const StopDialogContext = createContext<{ id: string; target: HTMLDivElement | null }>({ id: '', target: null });
 
@@ -27,22 +28,17 @@ function GrowingFlowers({ variant }: { variant: number }) {
       animate={reducedMotion ? 'bloomed' : undefined}
       style={reducedMotion ? { opacity: 1, scaleY: 1, clipPath: 'inset(0% 0% 0% 0%)' } : undefined}
       transition={{ duration: reducedMotion ? 0 : 1.1, ease: [0.22, 0.61, 0.36, 1] }}>
-      <img src="/journey-flowers.png" alt="" width="1536" height="1024" loading="lazy" draggable="false" />
+      <WatercolorSprite tile={8} className="watercolor-flowers" />
     </motion.div>
   </motion.div>;
 }
 
 export function JourneyScene({ tile, title }: { tile: number; title: string }) {
-  const [x,y,w,h,foot] = [
-    [24,64,430,373,45], [456,63,376,374,45], [834,70,414,367,48],
-    [20,443,419,365,40], [442,475,398,322,48], [835,443,380,362,43],
-    [29,828,378,334,44],
-  ][tile];
-  const style = { '--tile-x': `${x / (1254-w) * 100}%`, '--tile-y': `${y / (1254-h) * 100}%`,
-    '--atlas-size': `${1254/w*100}% ${1254/h*100}%`, '--art-ratio': `${w} / ${h}`, '--foot-x': `${foot}%` } as CSSProperties;
+  const style = { '--tile-x': `${tile % 3 * 50}%`, '--tile-y': `${Math.floor(tile / 3) * 50}%`,
+    '--atlas-size': '300% 300%', '--art-ratio': '1 / 1', '--foot-x': '50%' } as CSSProperties;
   const href = ['#about', '#ai-valley', '#nvidia', '#pearle', '#products-title', '#toolkit', 'mailto:courtneythko@gmail.com'][tile];
   return <div className="journey-scene" style={style}>
-    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`}><div className="journey-art" aria-hidden="true" /></a>
+    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`}><WatercolorSprite tile={tile} className="journey-art" /></a>
     <div className="journey-arrival-row">
       <span className="journey-landing" aria-hidden="true" />
       <GrowingFlowers variant={tile} />
@@ -95,7 +91,6 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
   const [moving, setMoving] = useState(false);
   const visitedRef = useRef(new Set<string>());
   const [celebrating, setCelebrating] = useState('');
-  const [welcome, setWelcome] = useState(true);
   const reactionTimer = useRef<ReturnType<typeof setTimeout>>();
   const [grazed, setGrazed] = useState<number[]>([]);
   const collectedGrass = useRef(new Set<number>());
@@ -150,18 +145,15 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     };
     const draw = (animate: boolean) => {
       if (entering || keyboardMode) return;
-      const startScroll = Math.max(0, container.getBoundingClientRect().top + window.scrollY + (stations[0]?.y ?? 0) - document.documentElement.clientHeight * 0.65);
-      const y = scrollToTrailY(window.scrollY - startScroll,
-        document.documentElement.scrollHeight - document.documentElement.clientHeight - startScroll,
-        stations[0]?.y ?? 0, stations[stations.length-1]?.y ?? 0);
+      // Keep the companion in the reader's viewport even when sections expand.
+      const y = Math.max(stations[0]?.y ?? 0, Math.min(stations[stations.length - 1]?.y ?? 0,
+        document.documentElement.clientHeight * 0.72 - container.getBoundingClientRect().top));
       const point = reduceMotion ? closestStation(stations, y) : pointOnTrail(points, y);
       if (!point) return;
-      if (y > (stations[0]?.y ?? 0) + 24) setWelcome(false);
       if (animate && previousY !== undefined) {
         const passed = passedStops(stations, previousY, y).filter(station => !visitedRef.current.has(station.id));
         if (passed.length) {
           passed.forEach(station => visitedRef.current.add(station.id));
-          setWelcome(false);
           setCelebrating(passed[passed.length - 1].id);
           clearTimeout(celebrationTimer);
           celebrationTimer = setTimeout(() => setCelebrating(''), 1900);
@@ -194,7 +186,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         const approachX = rail ? undefined :
           (scene.left + scene.width/2 > rect.left + rect.width/2 ? scene.left-35 : scene.right+35)-rect.left;
         const destination = {x:landing.left-rect.left,y:landing.top-rect.top};
-        const door = {x:art.left-rect.left + art.width * parseFloat(getComputedStyle(section.querySelector('.journey-scene')!).getPropertyValue('--foot-x'))/100, y:art.bottom-rect.top-40};
+        const door = {x:art.left-rect.left + art.width * parseFloat(getComputedStyle(section.querySelector('.journey-scene')!).getPropertyValue('--foot-x'))/100, y:art.top-rect.top + art.height * 0.82};
         branches.push(Array.from({length:17},(_,i)=> {
           const t=i/16, ease=t*t*(3-2*t);
           return {x:door.x+(destination.x-door.x)*ease,y:door.y+(destination.y-door.y)*t};
@@ -360,7 +352,6 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         held.clear();
         container.focus({ preventScroll: true });
       }
-      setWelcome(false);
       held.add(direction);
       if (!keyboardFrame) { lastTick = performance.now(); keyboardFrame = requestAnimationFrame(keyboardTick); }
     };
@@ -393,7 +384,6 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         const entryTime = 1000;
         const started = performance.now();
         entering = true;
-        setWelcome(false);
         setReaction('');
         setCelebrating('');
         clearTimeout(celebrationTimer);
@@ -517,21 +507,31 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
   const trails = [geometry.points, ...geometry.branches];
   const line = (points: TrailPoint[]) => points.map((point, i) => `${i ? 'L' : 'M'}${point.x},${point.y}`).join(' ');
   const stamp = destinationStamps[celebrating as keyof typeof destinationStamps];
-  const StampIcon = stamp?.icon;
 
   return <StopDialogContext.Provider value={{ id: activeStop, target: dialogTarget }}><div ref={root} className={`continuous-journey${geometry.width > 1 ? ' journey-compact' : ''}`} tabIndex={0} aria-label="Move Opaca" aria-describedby="opaca-keyboard-help">
     <span id="opaca-keyboard-help" className="sr-only">Use Up and Down or W and S to travel along the trail. Near a building, use Left and Right or A and D to enter and exit along its path. Escape releases movement. Tab reaches portfolio links.</span>
     <svg className="journey-trail" width={geometry.width} height={geometry.height} aria-hidden="true">
       <defs>
-        <pattern id="journey-sand" width="36" height="32" patternUnits="userSpaceOnUse"><rect width="36" height="32" fill="#eddaa2" /><path d="M4 7h5v2H4zM24 24h4v2h-4z" fill="#d9bb7c" opacity=".5" /></pattern>
-        <pattern id="journey-grass" width="62" height="54" patternUnits="userSpaceOnUse"><rect width="62" height="54" fill="#c0d88e" /><path d="M9 12h3v5h-3zM12 15h3v3h-3zM43 37h3v4h-3z" fill="#8db86b" opacity=".55" /><path d="M26 30h4v3h-4zM55 9h3v3h-3z" fill="#dfebaa" /></pattern>
+        <filter id="watercolor-paper" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".18" numOctaves="3" seed="12" result="grain" />
+          <feColorMatrix in="grain" type="saturate" values="0" />
+          <feComponentTransfer><feFuncA type="linear" slope=".18" /></feComponentTransfer>
+          <feBlend in="SourceGraphic" mode="multiply" />
+        </filter>
+        <pattern id="journey-sand" width="128" height="128" patternUnits="userSpaceOnUse"><rect width="128" height="128" fill="#efdfc5" filter="url(#watercolor-paper)" /></pattern>
+        <pattern id="journey-grass" width="128" height="128" patternUnits="userSpaceOnUse"><rect width="128" height="128" fill="#e0ebd5" filter="url(#watercolor-paper)" /></pattern>
+        <filter id="watercolor-bleed" x="-20%" y="-10%" width="140%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="5" result="edge" />
+          <feDisplacementMap in="SourceGraphic" in2="edge" scale="7" xChannelSelector="R" yChannelSelector="G" />
+          <feGaussianBlur stdDeviation=".65" />
+        </filter>
       </defs>
-      <g data-trail-verge="true">{trails.map((points,i)=><path key={i} d={trailOutline(points, mobile ? 34 : 64,true)} fill="url(#journey-grass)" />)}</g>
+      <g data-trail-verge="true" opacity=".48" filter="url(#watercolor-bleed)">{trails.map((points,i)=><path key={i} d={trailOutline(points, mobile ? 46 : 76,true)} fill="url(#journey-grass)" />)}</g>
       {/* Rounded caps overlap at shared endpoints, including Basecamp's first join. */}
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <g stroke="url(#journey-grass)" strokeWidth={mobile ? 30 : 60}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
-        <g stroke="#cbb586" strokeWidth={mobile ? 19 : 35}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
-        <g stroke="url(#journey-sand)" strokeWidth={mobile ? 16 : 30}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#watercolor-bleed)">
+        <g stroke="url(#journey-grass)" opacity=".4" strokeWidth={mobile ? 34 : 60}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
+        <g stroke="url(#journey-sand)" strokeWidth={mobile ? 22 : 36}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
+        <g stroke="#fffaf0" opacity=".18" strokeWidth={mobile ? 10 : 19}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
       </g>
     </svg>
     {children}
@@ -540,16 +540,12 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       const next = geometry.branches[index + 1];
       const point = pointOnTrail(geometry.points, start.y + (next[next.length - 1].y - start.y) * fraction);
       const id = index * 2 + offset;
-      return <img key={id} className="journey-grass-pickup" src="/journey-grass.png" alt="" aria-hidden="true" data-collected={grazed.includes(id)} style={{ left: point.x - 16, top: point.y - 20 }} width="38" height="32" />;
+      return <WatercolorSprite key={id} tile={8} className="journey-grass-pickup watercolor-flowers" collected={grazed.includes(id)} style={{ left: point.x - 16, top: point.y - 20 }} />;
     }))}
     <div ref={guide} className="journey-guide" aria-hidden="true" data-moving="false">
       <div className="journey-guide-shadow" />
-      <div className="journey-guide-facing"><img src="/opaca.png" width="1204" height="1306" alt="" draggable="false" /></div>
-      {StampIcon && <span key={celebrating} className="journey-arrival-stamp">
-        <StampIcon size={28} strokeWidth={1.8} />
-        <span className="journey-stamp-check"><Check size={13} strokeWidth={2.5} /></span>
-      </span>}
-      {(reaction || welcome) && <span className={`journey-reaction ${welcome && !reaction ? 'journey-welcome' : ''}`}>{reaction || "Hi, I'm Opaca. Let's go on an adventure!"}</span>}
+      <div className="journey-guide-facing"><WatercolorSprite tile={7} className="watercolor-opaca" /></div>
+      {reaction && <span className="journey-reaction">{reaction}</span>}
     </div>
     <div className="journey-companion" aria-label="Opaca interactions">
       <span>Opaca</span>

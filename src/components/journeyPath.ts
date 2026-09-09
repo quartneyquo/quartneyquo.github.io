@@ -79,10 +79,9 @@ export function trailOutline(points: TrailPoint[], width: number, irregular = fa
   const edge = (side: number) => samples.map((p,i) => {
     const a=samples[Math.max(0,i-1)], b=samples[Math.min(samples.length-1,i+1)];
     const length=Math.hypot(b.x-a.x,b.y-a.y)||1;
-    const w=width/2+(irregular ? [0,3,-2,4,0,-3,2][i%7] : 0);
-    const unit=irregular ? 4 : 2;
-    return { x:Math.round((p.x-(b.y-a.y)/length*w*side)/unit)*unit,
-      y:Math.round((p.y+(b.x-a.x)/length*w*side)/unit)*unit };
+    const w=width/2+(irregular ? Math.sin(i*.63)*2.5+Math.sin(i*.21)*3 : 0);
+    return { x:p.x-(b.y-a.y)/length*w*side,
+      y:p.y+(b.x-a.x)/length*w*side };
   });
   return [...edge(1),...edge(-1).reverse()].map((p,i)=>`${i?'L':'M'}${p.x},${p.y}`).join(' ')+' Z';
 }

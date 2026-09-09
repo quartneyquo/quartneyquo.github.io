@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { EventGallery, ProductShelf } from './PortfolioPlayground';
 import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
 import { portfolioLinkAction } from './portfolioAnalytics';
+import './watercolorJourney.css';
+import { WatercolorSprite } from './WatercolorSprite';
+import { HeroAtmosphere } from './HeroAtmosphere';
 import {
   ArrowRight,
   CalendarDays,
@@ -465,7 +468,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={pageRef} className="portfolio-editorial min-h-screen bg-[#FBF8F8] text-plum-900">
+    <div ref={pageRef} className="portfolio-editorial watercolor-portfolio min-h-screen text-plum-900">
       <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <a href="#main" className="skip-link">Skip to content</a>
       <header className="portfolio-header" data-placement="header">
@@ -483,9 +486,11 @@ export default function Home() {
         <ContinuousJourney>
         <span id="world" className="journey-alias" />
         <JourneyStop id="basecamp" tile={0} title="Courtney's Basecamp" className="journey-basecamp" placement="introduction">
+        <HeroAtmosphere />
         <div className="portfolio-intro" aria-labelledby="intro-title">
-          <h1 id="intro-title" className="intro-positioning">Building communities, partnerships, and product experiences for AI.</h1>
-          <p className="intro-description">At AI Valley, I lead technical programming, partnerships, and community operations for 11K+ builders. My experience spans enterprise automation at NVIDIA and founding AI products.</p>
+          <h1 id="intro-title" className="intro-name">Courtney Ko</h1>
+          <p className="intro-positioning">Building communities, partnerships, and product experiences for AI.</p>
+          <p className="intro-description">Community and partnerships at AI Valley. Previously NVIDIA.<br />Building useful AI products, with people at the heart.</p>
           <div className="intro-actions">
             <a className="editorial-button" href="#work">View Experience <ArrowRight size={16} /></a>
             <a className="editorial-button secondary" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>
@@ -497,6 +502,14 @@ export default function Home() {
             ))}
           </dl>
         </div>
+        <nav className="basecamp-destinations" aria-label="Explore destinations">
+          {[['work', 'AI Valley', 1], ['nvidia-lab', 'NVIDIA', 2], ['pearle-port', 'Pearle', 3]].map(([id, label, tile]) => (
+            <a key={id} href={`#${id}`}>
+              <WatercolorSprite tile={Number(tile)} className="watercolor-mini" />
+              <span>{label} <ArrowRight size={12} /></span>
+            </a>
+          ))}
+        </nav>
         </JourneyStop>
 
         <JourneyStop id="work" tile={1} title="AI Valley Hub" placement="selected-work">
@@ -541,7 +554,6 @@ export default function Home() {
           <div>
             <p className="editorial-eyebrow">About</p>
             <h2>Curious about people.<br />Serious about building.</h2>
-            <img className="about-portrait" src="/profile.jpeg" alt="Courtney Ko" width="320" height="360" loading="lazy" />
           </div>
           <div className="about-copy">
             <p>My background in psychology and UX shapes how I work: understand what people need, make the experience useful, and give them a reason to come back.</p>
@@ -554,7 +566,11 @@ export default function Home() {
             </div>
             <a href={CONTACT_LINK} className="editorial-link" target="_blank" rel="noopener noreferrer">More on LinkedIn <ExternalLink size={15} /></a>
           </div>
-          <div className="travel-photos"><figure><img src="/macchupicchu.jpeg" alt="Courtney visiting Machu Picchu" width="400" height="400" loading="lazy" /><figcaption>Machu Picchu</figcaption></figure><figure><img src="/seoul.jpeg" alt="A memory from Seoul" width="400" height="400" loading="lazy" /><figcaption>Seoul</figcaption></figure></div>
+          <div className="travel-photos about-memories">
+            <figure className="portrait-memory"><img className="about-portrait" src="/profile.jpeg" alt="Courtney Ko" width="1050" height="1350" loading="lazy" /><figcaption>Courtney Ko</figcaption></figure>
+            <figure><img src="/macchupicchu.jpeg" alt="Courtney visiting Machu Picchu" width="400" height="400" loading="lazy" /><figcaption>Machu Picchu</figcaption></figure>
+            <figure><img src="/seoul.jpeg" alt="A memory from Seoul" width="400" height="400" loading="lazy" /><figcaption>Seoul</figcaption></figure>
+          </div>
         <section id="toolkit" className="journey-toolkit" aria-labelledby="toolkit-title">
           <p className="editorial-eyebrow">How I work</p>
           <h3 id="toolkit-title">People, products, and the systems between.</h3>

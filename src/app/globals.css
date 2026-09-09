@@ -224,7 +224,7 @@
 .paca-grid img { width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 6px; margin-bottom: 20px; }
 .paca-grid p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-block: 12px; }
 .about-section { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; padding-block: 36px; border-top: 1px solid var(--rule); }
-.about-portrait { width: 200px; height: 224px; object-fit: cover; object-position: center 30%; margin-top: 28px; border-radius: 6px; }
+.about-portrait { display: block; width: min(360px, 100%); height: auto; object-fit: contain; margin-top: 28px; border-radius: 6px; }
 .about-copy > p { color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
 .education-list { border-block: 1px solid var(--rule); margin-block: 24px; padding-block: 16px; display: grid; gap: 14px; }
 .education-list strong, .education-list span { display: block; font-size: 14px; }
