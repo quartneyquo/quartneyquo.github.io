@@ -417,7 +417,6 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
 
 export default function Home() {
   const pageRef = useRef<HTMLDivElement>(null);
-  const [copyStatus, setCopyStatus] = useState('Copy email');
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
 
@@ -438,20 +437,6 @@ export default function Home() {
     };
   }, [reduceMotion]);
 
-  useEffect(() => {
-    if (copyStatus === 'Copy email') return;
-    const timer = window.setTimeout(() => setCopyStatus('Copy email'), 3000);
-    return () => window.clearTimeout(timer);
-  }, [copyStatus]);
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText('courtneythko@gmail.com');
-      setCopyStatus('Email copied');
-    } catch {
-      setCopyStatus('Use Email Courtney to get in touch');
-    }
-  };
   useEffect(() => {
     const trackLink = (event: MouseEvent) => {
       const link = event.target instanceof Element ? event.target.closest('a, summary[data-case-study]') : null;
@@ -488,8 +473,7 @@ export default function Home() {
         <JourneyStop id="basecamp" tile={0} title="Courtney's Basecamp" className="journey-basecamp" placement="introduction">
         <HeroAtmosphere />
         <div className="portfolio-intro" aria-labelledby="intro-title">
-          <h1 id="intro-title" className="intro-name">Courtney Ko</h1>
-          <p className="intro-positioning">Building communities, partnerships, and product experiences for AI.</p>
+          <h1 id="intro-title" className="intro-positioning">Building communities, partnerships, and product experiences for AI.</h1>
           <p className="intro-description">Community and partnerships at AI Valley. Previously NVIDIA.<br />Building useful AI products, with people at the heart.</p>
           <div className="intro-actions">
             <a className="editorial-button" href="#work">View Experience <ArrowRight size={16} /></a>
@@ -586,7 +570,6 @@ export default function Home() {
           <p>I’d love to hear what your team is working on.</p>
           <div className="intro-actions">
             <a className="editorial-button" href="mailto:courtneythko@gmail.com">Email Courtney <Mail size={16} /></a>
-            <button className="editorial-link copy-email" type="button" onClick={copyEmail}><Mail size={16} /><span aria-live="polite">{copyStatus}</span></button>
             <a className="editorial-link" href={CONTACT_LINK} target="_blank" rel="noopener noreferrer">LinkedIn <ExternalLink size={15} /></a>
             <a className="editorial-link" href="https://x.com/Courtneythko" target="_blank" rel="noopener noreferrer" aria-label="Courtney on X">X <ExternalLink size={15} /></a>
             <a className="editorial-link" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>

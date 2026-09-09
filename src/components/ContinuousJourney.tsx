@@ -105,6 +105,8 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     let measureFrame = 0;
     let previous: TrailPoint | undefined;
     let lastScroll = window.scrollY;
+    let viewportWidth = window.innerWidth;
+    let viewportHeight = window.innerHeight;
     let stopTimer: ReturnType<typeof setTimeout>;
     let disposed = false;
     let previousY: number | undefined;
@@ -147,7 +149,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       if (entering || keyboardMode) return;
       // Keep the companion in the reader's viewport even when sections expand.
       const y = Math.max(stations[0]?.y ?? 0, Math.min(stations[stations.length - 1]?.y ?? 0,
-        document.documentElement.clientHeight * 0.72 - container.getBoundingClientRect().top));
+        viewportHeight * 0.72 - container.getBoundingClientRect().top));
       const point = reduceMotion ? closestStation(stations, y) : pointOnTrail(points, y);
       if (!point) return;
       if (animate && previousY !== undefined) {
@@ -202,6 +204,15 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     const scheduleMeasure = () => {
       cancelAnimationFrame(measureFrame);
       measureFrame = requestAnimationFrame(measure);
+    };
+    const onResize = () => {
+      // Mobile browser chrome changes height while scrolling, not the trail layout.
+      if (window.innerWidth === viewportWidth) return;
+      viewportWidth = window.innerWidth;
+      viewportHeight = window.innerHeight;
+      cancelEntry();
+      releaseKeyboard();
+      scheduleMeasure();
     };
     const onScroll = () => {
       cancelAnimationFrame(frame);
@@ -447,14 +458,13 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     onHash();
     document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', scheduleMeasure);
+    window.addEventListener('resize', onResize);
     window.addEventListener('hashchange', onHash);
     document.addEventListener('click', onLink);
     window.addEventListener('blur', stop);
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('wheel', cancelEntry, { passive: true });
     window.addEventListener('touchstart', cancelEntry, { passive: true });
-    window.addEventListener('resize', cancelEntry);
     window.addEventListener('blur', cancelEntry);
     document.addEventListener('keydown', onEntryKey);
     document.addEventListener('keydown', onMoveKey, true);
@@ -463,7 +473,6 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     window.addEventListener('blur', clearKeys);
     window.addEventListener('wheel', releaseKeyboard, { passive: true });
     window.addEventListener('touchstart', releaseKeyboard, { passive: true });
-    window.addEventListener('resize', releaseKeyboard);
     document.addEventListener('visibilitychange', onKeyboardVisibility);
     return () => {
       disposed = true;
@@ -474,7 +483,6 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       window.removeEventListener('blur', clearKeys);
       window.removeEventListener('wheel', releaseKeyboard);
       window.removeEventListener('touchstart', releaseKeyboard);
-      window.removeEventListener('resize', releaseKeyboard);
       document.removeEventListener('visibilitychange', onKeyboardVisibility);
       observer.disconnect();
       cancelAnimationFrame(frame);
@@ -484,11 +492,10 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       cancelEntry();
       window.removeEventListener('wheel', cancelEntry);
       window.removeEventListener('touchstart', cancelEntry);
-      window.removeEventListener('resize', cancelEntry);
       window.removeEventListener('blur', cancelEntry);
       document.removeEventListener('keydown', onEntryKey);
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', scheduleMeasure);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('hashchange', onHash);
       document.removeEventListener('click', onLink);
       window.removeEventListener('blur', stop);
@@ -510,7 +517,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
 
   return <StopDialogContext.Provider value={{ id: activeStop, target: dialogTarget }}><div ref={root} className={`continuous-journey${geometry.width > 1 ? ' journey-compact' : ''}`} tabIndex={0} aria-label="Move Opaca" aria-describedby="opaca-keyboard-help">
     <span id="opaca-keyboard-help" className="sr-only">Use Up and Down or W and S to travel along the trail. Near a building, use Left and Right or A and D to enter and exit along its path. Escape releases movement. Tab reaches portfolio links.</span>
-    <svg className="journey-trail" width={geometry.width} height={geometry.height} aria-hidden="true">
+    <svg className="journey-trail" data-layout={mobile ? 'rail' : 'alternating'} width={geometry.width} height={geometry.height} aria-hidden="true">
       <defs>
         <filter id="watercolor-paper" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency=".18" numOctaves="3" seed="12" result="grain" />
@@ -526,11 +533,11 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
           <feGaussianBlur stdDeviation=".65" />
         </filter>
       </defs>
-      <g data-trail-verge="true" opacity=".48" filter="url(#watercolor-bleed)">{trails.map((points,i)=><path key={i} d={trailOutline(points, mobile ? 46 : 76,true)} fill="url(#journey-grass)" />)}</g>
+      <g data-trail-verge="true" opacity=".48" filter={mobile ? undefined : 'url(#watercolor-bleed)'}>{trails.map((points,i)=><path key={i} d={trailOutline(points, mobile ? 46 : 76,true)} fill={mobile ? '#e0ebd5' : 'url(#journey-grass)'} />)}</g>
       {/* Rounded caps overlap at shared endpoints, including Basecamp's first join. */}
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#watercolor-bleed)">
-        <g stroke="url(#journey-grass)" opacity=".4" strokeWidth={mobile ? 34 : 60}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
-        <g stroke="url(#journey-sand)" strokeWidth={mobile ? 22 : 36}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round" filter={mobile ? undefined : 'url(#watercolor-bleed)'}>
+        <g stroke={mobile ? '#e0ebd5' : 'url(#journey-grass)'} opacity=".4" strokeWidth={mobile ? 38 : 60}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
+        <g stroke={mobile ? '#e7d3b4' : 'url(#journey-sand)'} strokeWidth={mobile ? 26 : 36}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
         <g stroke="#fffaf0" opacity=".18" strokeWidth={mobile ? 10 : 19}>{trails.map((points,i)=><path key={i} d={line(points)} />)}</g>
       </g>
     </svg>
