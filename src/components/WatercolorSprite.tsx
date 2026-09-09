@@ -4,6 +4,29 @@ import { type CSSProperties, useEffect, useRef } from 'react';
 import { clearExteriorPaper } from './watercolorMatte';
 
 let artwork: Promise<HTMLCanvasElement> | undefined;
+
+function clearLeftEdgeBleed(context: CanvasRenderingContext2D, width: number, height: number) {
+  const image = context.getImageData(0, 0, width, height);
+  const visited = new Uint8Array(width * height);
+  const stack: number[] = [];
+  for (let y = 0; y < height; y++) {
+    const pixel = y * width;
+    if (image.data[pixel * 4 + 3] > 0) stack.push(pixel);
+  }
+  while (stack.length) {
+    const pixel = stack.pop()!;
+    if (visited[pixel] || image.data[pixel * 4 + 3] === 0) continue;
+    visited[pixel] = 1;
+    image.data[pixel * 4 + 3] = 0;
+    const x = pixel % width;
+    if (x > 0) stack.push(pixel - 1);
+    if (x < width - 1) stack.push(pixel + 1);
+    if (pixel >= width) stack.push(pixel - width);
+    if (pixel < width * (height - 1)) stack.push(pixel + width);
+  }
+  context.putImageData(image, 0, 0);
+}
+
 function loadArtwork() {
   if (!artwork) artwork = new Promise<HTMLCanvasElement>((resolve, reject) => {
     const image = new Image();
@@ -43,6 +66,13 @@ export function WatercolorSprite({ tile, className, style, collected }: {
         // Opaca's ears extend above the nominal grid cell; include that headroom.
         context.drawImage(source, cell * 1.2, cell * 1.96, cell * .72, cell * .96,
           cell * .14, cell * .04, cell * .72, cell * .96);
+      } else if (tile === 4) {
+        // Keep the village's full trees while removing the port artwork that crosses the cell edge.
+        const top = 38;
+        canvas.height = cell - 54;
+        context.drawImage(source, tile % 3 * cell, Math.floor(tile / 3) * cell + top,
+          cell, canvas.height, 0, 0, cell, canvas.height);
+        clearLeftEdgeBleed(context, canvas.width, canvas.height);
       } else {
         const top = tile >= 3 ? 12 : 0;
         context.drawImage(source, tile % 3 * cell, Math.floor(tile / 3) * cell + top,

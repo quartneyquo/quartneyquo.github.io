@@ -1,0 +1,32 @@
+Generated with the built-in image_gen tool from Courtney's supplied photo.
+
+Create a polished full-body chibi of Courtney with an oversized head,
+recognizable smiling face, dark brown eyes, long side-parted dark brown hair,
+dusty pink wrap midi dress with side knot, white sneakers with pink laces,
+and the fine-line arm tattoos shown in the reference. Soft watercolor shading.
+Two matching waving poses in one horizontal sprite sheet, same head and foot
+alignment. Preserve likeness and outfit. No scenery or text.
+
+Final background edit prompt:
+Change ONLY the checkerboard background to a completely solid pure white
+#FFFFFF background. Keep these exact two full-body chibi Courtney illustrations
+and two waving poses. Preserve all face, clothing, hair, tattoos and sneaker
+details. No checkerboard, no shadows, no labels. Two equal 768x1024 cells on a
+1536x1024 white canvas, align both identical heads and feet at same relative
+position in each cell for animation, center each character in its cell.
+White background is mandatory.
+
+The image tool did not provide alpha. CSS uses a separate luminance mask
+while keeping the character opaque. Artwork and mask frame offsets are
+synchronized; the generated poses are 704 pixels apart.
+
+Mask generated with the built-in image_gen tool from the original artwork:
+Create an exact pixel-aligned black and white CUTOUT MASK for the attached
+1536x1024 sprite sheet. Preserve the exact canvas, positions and contours of
+BOTH figures. Every pixel inside the women (hair, face, dress, arms, fingers,
+legs, white shoes) must be solid pure white. Every background pixel, including
+enclosed holes between limbs, hair and body and between legs, must be pure
+black. Eliminate pink motion lines. Precisely follow hair strands, fingertips,
+dress hem and sneaker contours with fine antialiasing at edges only. No
+internal details, shadows, gray shading, added outline or checkerboard.
+Trace the source contours exactly; do not create a new pose or illustration.

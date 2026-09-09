@@ -91,6 +91,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
   const [moving, setMoving] = useState(false);
   const visitedRef = useRef(new Set<string>());
   const [celebrating, setCelebrating] = useState('');
+  const [arrivalCameo, setArrivalCameo] = useState<{ id: string; nonce: number } | null>(null);
   const reactionTimer = useRef<ReturnType<typeof setTimeout>>();
   const [grazed, setGrazed] = useState<number[]>([]);
   const collectedGrass = useRef(new Set<number>());
@@ -145,6 +146,17 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       setMoving(false);
       clearTimeout(stopTimer);
     };
+    const showArrivalCameo = (id: string) => {
+      if (id !== stations[stations.length - 1]?.id) return;
+      character.style.opacity = '1';
+      character.style.removeProperty('--entry-scale');
+      setArrivalCameo(current => current?.id === id ? current : { id, nonce: Date.now() });
+    };
+    const updateEndCameo = (y: number) => {
+      const end = stations[stations.length - 1];
+      if (end && y >= end.y - 12) showArrivalCameo(end.id);
+      else setArrivalCameo(current => current ? null : current);
+    };
     const draw = (animate: boolean) => {
       if (entering || keyboardMode) return;
       // Keep the companion in the reader's viewport even when sections expand.
@@ -152,6 +164,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         viewportHeight * 0.72 - container.getBoundingClientRect().top));
       const point = reduceMotion ? closestStation(stations, y) : pointOnTrail(points, y);
       if (!point) return;
+      updateEndCameo(y);
       if (animate && previousY !== undefined) {
         const passed = passedStops(stations, previousY, y).filter(station => !visitedRef.current.has(station.id));
         if (passed.length) {
@@ -306,7 +319,9 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         character.dataset.inside = String(branchDistance >= total);
         if (branchDistance >= total && horizontal === toward) {
           held.delete('left'); held.delete('right');
-          setActiveStop(section.id);
+          showArrivalCameo(section.id);
+          clearTimeout(arrivalTimer);
+          if (branchIndex !== stations.length - 1) arrivalTimer = setTimeout(() => setActiveStop(section.id), 180);
         }
         if (branchDistance === 0 && horizontal === -toward) {
           branchIndex = -1;
@@ -318,6 +333,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         if (!approaching) { held.delete('left'); held.delete('right'); }
         keyboardY = Math.max(stations[0].y, Math.min(stations[stations.length - 1].y, keyboardY + vertical * step));
         point = pointOnTrail(points, keyboardY);
+        updateEndCameo(keyboardY);
         character.style.opacity = '';
         character.dataset.inside = 'false';
       }
@@ -385,7 +401,12 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         releaseKeyboard();
         cancelEntry();
         measure();
-        if (reduceMotion) { setActiveStop(section.id); return; }
+        setArrivalCameo(null);
+        if (reduceMotion) {
+          if (index === stations.length - 1) showArrivalCameo(section.id);
+          else setActiveStop(section.id);
+          return;
+        }
         const station = stations[index];
         const route = [...branchRoutes[index]].reverse();
         const art = section.querySelector('.journey-art')!.getBoundingClientRect();
@@ -424,7 +445,8 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
           if (progress < 1) entryFrame = requestAnimationFrame(tick);
           else {
             stop();
-            arrivalTimer = setTimeout(() => {
+            showArrivalCameo(section.id);
+            if (index !== stations.length - 1) arrivalTimer = setTimeout(() => {
               if (!entering || disposed) return;
               setActiveStop(section.id);
             }, 180);
@@ -554,6 +576,14 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       <div className="journey-guide-facing"><WatercolorSprite tile={7} className="watercolor-opaca" /></div>
       {reaction && <span className="journey-reaction">{reaction}</span>}
     </div>
+    {arrivalCameo && geometry.points.length > 0 && <div
+      key={`${arrivalCameo.id}-${arrivalCameo.nonce}`}
+      className="journey-goodbye"
+      style={{ '--end-x': `${geometry.points[geometry.points.length - 1].x + 32}px`, '--end-y': `${geometry.points[geometry.points.length - 1].y}px` } as CSSProperties}
+    >
+      <span className="journey-goodbye-bubble" role="status">Thanks for adventuring with me!</span>
+      <span className="journey-mini-courtney" aria-hidden="true"><span className="mini-courtney-sprite" /></span>
+    </div>}
     <div className="journey-companion" aria-label="Opaca interactions">
       <span>Opaca</span>
       <button type="button" title="Pet Opaca" aria-label="Pet Opaca" disabled={moving} onClick={() => react('A happy little pause.')}><Heart size={18} /></button>
