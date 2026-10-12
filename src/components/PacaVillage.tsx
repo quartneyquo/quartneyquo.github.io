@@ -6,14 +6,13 @@ import { motion, useScroll } from 'framer-motion';
 import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout } from 'lucide-react';
 import { ContinuousJourney, JourneyStop } from './ContinuousJourney';
 import { HeroAtmosphere } from './HeroAtmosphere';
-import { pacaProducts } from '@/data/pacaProducts';
+import { pacaProducts, type PacaProduct } from '@/data/pacaProducts';
 import './watercolorJourney.css';
 import './pacaVillage.css';
 
-// Each illustrated door sits at a different point within its square atlas tile.
-const houseDoors = [77, 62, 51, 68, 21];
-
-function HouseArt({ tile }: { tile: number }) {
+function HouseArt({ product }: { product: PacaProduct }) {
+  if (product.image) return <img className="journey-art paca-house-image" src={product.image} alt="" width="1024" height="1024" loading="lazy" />;
+  const { tile } = product;
   return <span className="journey-art paca-house-art" aria-hidden="true" style={{
     '--house-x': `${(tile % 3) * 50}%`, '--house-y': `${Math.floor(tile / 3) * 100}%`,
   } as CSSProperties} />;
@@ -37,7 +36,7 @@ export default function PacaVillage() {
           <p className="village-eyebrow"><Sprout size={15} /> Built by me, for everyday life</p>
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
-          <p className="village-invitation">Five little houses, each with something useful inside.<br />Take a walk with Opaca and see what’s growing.</p>
+          <p className="village-invitation">Six little houses, each with something useful inside.<br />Take a walk with Opaca and see what’s growing.</p>
           <a href="#pacaplate" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
         <nav className="village-map" aria-label="Jump to a village house">
@@ -57,8 +56,8 @@ export default function PacaVillage() {
           tile={product.tile}
           title={product.title}
           className="village-stop"
-          art={<HouseArt tile={product.tile} />}
-          doorPosition={houseDoors[product.tile]}
+          art={<HouseArt product={product} />}
+          doorPosition={product.doorPosition}
           destination={product.href}
           visitOnEnter
         >

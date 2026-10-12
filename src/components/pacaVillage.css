@@ -27,6 +27,7 @@
 .village-map-number { color:#71775f; font-size:10px; }
 
 .paca-village-page .journey-art.paca-house-art { display:block; width:100%; max-width:380px; aspect-ratio:1; background:url('/paca-houses.png') var(--house-x) var(--house-y) / 300% 200% no-repeat; pointer-events:none; }
+.paca-village-page .journey-art.paca-house-image { width:100%; max-width:380px; aspect-ratio:1; object-fit:contain; }
 .paca-village-page .village-stop { scroll-margin-top:36px; }
 .paca-village-page .village-stop:last-of-type { margin-bottom:40px; }
 .paca-village-page .journey-content > .village-category { margin-top:12px; color:#677452; font:italic 19px/1.5 Georgia, 'Times New Roman', serif; }

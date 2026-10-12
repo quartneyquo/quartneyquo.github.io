@@ -502,7 +502,7 @@ export default function Home() {
         <JourneyStop id="paca-village" tile={4} title="Paca Village" className="journey-products" placement="products">
           <p className="editorial-eyebrow">Built by me</p>
           <h2 id="products-title">Paca Village</h2>
-          <p>A little village for the things I build. Five houses for meal planning, everyday goals, money, career practice, and learning Chinese.</p>
+          <p>A little village for the things I build. Six houses for meal planning, recipes and cooking, everyday goals, money, career practice, and learning Chinese.</p>
           <div className="project-links">
             <Link href="/paca-village/" className="editorial-button">Enter Paca Village <ArrowRight size={16} /></Link>
           </div>

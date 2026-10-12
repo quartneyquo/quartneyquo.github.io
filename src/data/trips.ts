@@ -991,7 +991,7 @@ export const trips: Trip[] = [
     themeColor: '#B9A6FF',
     description: 'Case studies from Courtney\'s work designing and shipping real products across fintech, consumer, and AI.',
     stats: [
-      { label: 'Projects', value: '12' },
+      { label: 'Projects', value: '13' },
       { label: 'Roles', value: 'UX + PM' },
       { label: 'Users', value: '7,000%↑' },
       { label: 'Focus', value: 'Human-first' },
