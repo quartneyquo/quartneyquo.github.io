@@ -72,11 +72,13 @@ test('legacy case anchors select disclosures without hijacking other navigation'
   assert.equal(caseAnchor('#case-studies'),'ai-valley');
   for(const id of ['#world','#work','#about','#toolkit','#contact','#unknown']) assert.equal(caseAnchor(id),undefined);
 });
-test('homepage retains unique destination/disclosure anchors and external links', () => {
+test('homepage retains destination anchors and links into the Paca product village', () => {
   const home = fs.readFileSync(path.resolve(__dirname,'../src/components/PortfolioHomepage.tsx'),'utf8');
   for(const id of ['world','work','case-studies','ai-valley','nvidia','pearle','about','toolkit','contact'])
     assert.equal((home.match(new RegExp(`id="${id}"`,'g'))||[]).length,1,id);
-  for(const href of ['https://aivalley.io/events','/Courtney_Ko_Resume.pdf','https://paca-plate.vercel.app/','https://pacalife.app/','https://paca-money.vercel.app/']) assert.ok(home.includes(href),href);
+  for(const href of ['https://aivalley.io/events','/Courtney_Ko_Resume.pdf','/paca-village/']) assert.ok(home.includes(href),href);
+  const products = fs.readFileSync(path.resolve(__dirname,'../src/data/pacaProducts.ts'),'utf8');
+  for(const href of ['https://paca-plate.vercel.app/','https://pacalife.app/','https://paca-money.vercel.app/','https://pacajob.courtneythko.chatgpt.site/','https://learn.courtneyko.com/']) assert.ok(products.includes(href),href);
   assert.ok(!home.includes('<OpacaWorldHero'));
   assert.ok(!home.includes('world-destinations'));
 });

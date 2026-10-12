@@ -2,6 +2,7 @@
 
 import { type CSSProperties, type ReactNode, createContext, useContext, useLayoutEffect, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Cpu, Globe, Heart, House, Leaf, Mail, Shell, Sprout, Users, X } from 'lucide-react';
 import { buildTrail, caseAnchor, closestStation, passedStops, pointOnTrail, trailOutline, type TrailPoint, type TrailStation } from './journeyPath';
@@ -33,12 +34,12 @@ function GrowingFlowers({ variant }: { variant: number }) {
   </motion.div>;
 }
 
-export function JourneyScene({ tile, title }: { tile: number; title: string }) {
+export function JourneyScene({ tile, title, art, doorPosition = 50, destination }: { tile: number; title: string; art?: ReactNode; doorPosition?: number; destination?: string }) {
   const style = { '--tile-x': `${tile % 3 * 50}%`, '--tile-y': `${Math.floor(tile / 3) * 50}%`,
-    '--atlas-size': '300% 300%', '--art-ratio': '1 / 1', '--foot-x': '50%' } as CSSProperties;
-  const href = ['#about', '#ai-valley', '#nvidia', '#pearle', '#products-title', '#toolkit', 'mailto:courtneythko@gmail.com'][tile];
+    '--atlas-size': '300% 300%', '--art-ratio': '1 / 1', '--foot-x': `${doorPosition}%` } as CSSProperties;
+  const href = destination ?? ['#about', '#ai-valley', '#nvidia', '#pearle', '/paca-village/', '#toolkit', 'mailto:courtneythko@gmail.com'][tile];
   return <div className="journey-scene" style={style}>
-    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`}><WatercolorSprite tile={tile} className="journey-art" /></a>
+    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`}>{art ?? <WatercolorSprite tile={tile} className="journey-art" />}</a>
     <div className="journey-arrival-row">
       <span className="journey-landing" aria-hidden="true" />
       <GrowingFlowers variant={tile} />
@@ -47,16 +48,16 @@ export function JourneyScene({ tile, title }: { tile: number; title: string }) {
   </div>;
 }
 
-export function JourneyStop({ id, tile, title, children, className = '', placement }: {
-  id: string; tile: number; title: string; children: ReactNode; className?: string; placement?: string;
+export function JourneyStop({ id, tile, title, children, className = '', placement, art, doorPosition, destination, visitOnEnter = false }: {
+  id: string; tile: number; title: string; children: ReactNode; className?: string; placement?: string; art?: ReactNode; doorPosition?: number; destination?: string; visitOnEnter?: boolean;
 }) {
   const dialog = useContext(StopDialogContext);
   const content = useRef<HTMLDivElement>(null);
   const height = useRef(0);
   const active = dialog.id === id && dialog.target;
   useLayoutEffect(() => { if (!active && content.current) height.current = content.current.getBoundingClientRect().height; });
-  return <section id={id} className={`journey-stop ${className}`} data-journey-stop={id} data-placement={placement ?? id} aria-label={title}>
-    <JourneyScene tile={tile} title={title} />
+  return <section id={id} className={`journey-stop ${className}`} data-journey-stop={id} data-journey-href={visitOnEnter ? destination : undefined} data-placement={placement ?? id} aria-label={title}>
+    <JourneyScene tile={tile} title={title} art={art} doorPosition={doorPosition} destination={destination} />
     <div ref={content} className="journey-content" style={active ? { height: height.current } : undefined}>{active ? createPortal(<div className={className}><div className="journey-content">{children}</div></div>, active) : children}</div>
   </section>;
 }
@@ -69,6 +70,7 @@ export function JourneyDisclosure({ id, title, children }: { id: string; title: 
 }
 
 export function ContinuousJourney({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [activeStop, setActiveStop] = useState('');
   const [dialogTarget, setDialogTarget] = useState<HTMLDivElement | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -124,6 +126,14 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     let branchDistance = 0;
     let lastTick = 0;
     let openedByMovement: HTMLDetailsElement | null = null;
+    const sectionFor = (id: string) => Array.from(container.querySelectorAll<HTMLElement>('[data-journey-stop]')).find(section => section.id === id);
+    const isFarewellStop = (id: string) => id === stations[stations.length - 1]?.id && !sectionFor(id)?.dataset.journeyHref;
+    const enterStop = (id: string) => {
+      const destination = sectionFor(id)?.dataset.journeyHref;
+      if (destination) window.location.assign(destination);
+      else if (id === 'paca-village') router.push('/paca-village/');
+      else setActiveStop(id);
+    };
     const collectGrass = (point: TrailPoint) => {
       if (!previous || Math.abs(point.y - previous.y) > 250) return;
       stations.slice(0, -1).forEach((station, index) => {
@@ -147,7 +157,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       clearTimeout(stopTimer);
     };
     const showArrivalCameo = (id: string) => {
-      if (id !== stations[stations.length - 1]?.id) return;
+      if (!isFarewellStop(id)) return;
       character.style.opacity = '1';
       character.style.removeProperty('--entry-scale');
       setArrivalCameo(current => current?.id === id ? current : { id, nonce: Date.now() });
@@ -321,7 +331,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
           held.delete('left'); held.delete('right');
           showArrivalCameo(section.id);
           clearTimeout(arrivalTimer);
-          if (branchIndex !== stations.length - 1) arrivalTimer = setTimeout(() => setActiveStop(section.id), 180);
+          if (!isFarewellStop(section.id)) arrivalTimer = setTimeout(() => enterStop(section.id), 180);
         }
         if (branchDistance === 0 && horizontal === -toward) {
           branchIndex = -1;
@@ -403,8 +413,8 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
         measure();
         setArrivalCameo(null);
         if (reduceMotion) {
-          if (index === stations.length - 1) showArrivalCameo(section.id);
-          else setActiveStop(section.id);
+          if (isFarewellStop(section.id)) showArrivalCameo(section.id);
+          else enterStop(section.id);
           return;
         }
         const station = stations[index];
@@ -446,9 +456,9 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
           else {
             stop();
             showArrivalCameo(section.id);
-            if (index !== stations.length - 1) arrivalTimer = setTimeout(() => {
+            if (!isFarewellStop(section.id)) arrivalTimer = setTimeout(() => {
               if (!entering || disposed) return;
-              setActiveStop(section.id);
+              enterStop(section.id);
             }, 180);
           }
         };
@@ -523,7 +533,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       window.removeEventListener('blur', stop);
       document.removeEventListener('visibilitychange', onVisibility);
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, router]);
 
   useEffect(() => () => clearTimeout(reactionTimer.current), []);
   const react = (message: string) => {

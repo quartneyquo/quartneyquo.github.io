@@ -1,4 +1,5 @@
-import { Trip } from '@/types';
+import { Trip, Stop } from '@/types';
+import { pacaProducts } from './pacaProducts';
 
 export const trips: Trip[] = [
   {
@@ -990,7 +991,7 @@ export const trips: Trip[] = [
     themeColor: '#B9A6FF',
     description: 'Case studies from Courtney\'s work designing and shipping real products across fintech, consumer, and AI.',
     stats: [
-      { label: 'Projects', value: '9+' },
+      { label: 'Projects', value: '12' },
       { label: 'Roles', value: 'UX + PM' },
       { label: 'Users', value: '7,000%↑' },
       { label: 'Focus', value: 'Human-first' },
@@ -1000,6 +1001,21 @@ export const trips: Trip[] = [
         id: 'portfolio',
         title: 'Product Case Studies',
         stops: [
+          ...pacaProducts.slice(3).map((product): Stop => ({
+            id: product.id,
+            title: product.title,
+            tag: 'App',
+            timeLabel: '2026',
+            blurb: product.summary,
+            content: [
+              { type: 'text', title: 'The Product', text: product.summary },
+              { type: 'bullets', title: 'Inside the App', items: product.features },
+              { type: 'links', title: 'Explore', items: [
+                { label: `Visit ${product.title} →`, href: product.href },
+                { label: 'Explore Paca Village →', href: '/paca-village/' },
+              ] },
+            ],
+          })),
           {
             id: 'pearle',
             title: 'Pearle',

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll } from 'framer-motion';
 import Link from 'next/link';
-import { EventGallery, ProductShelf } from './PortfolioPlayground';
+import { EventGallery } from './PortfolioPlayground';
 import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
 import { portfolioLinkAction } from './portfolioAnalytics';
 import './watercolorJourney.css';
@@ -144,33 +144,6 @@ const orderedCaseStudies = [
   caseStudies.find((study) => study.id === 'ai-valley')!,
   caseStudies.find((study) => study.id === 'nvidia')!,
   caseStudies.find((study) => study.id === 'pearle')!,
-];
-
-const personalProducts = [
-  {
-    title: 'PacaPlate',
-    eyebrow: 'Live AI product',
-    summary:
-      'A playful AI meal-planning app with an alpaca companion, recipe suggestions, and grocery-list generation.',
-    image: '/pacaplate-logo.png',
-    href: 'https://paca-plate.vercel.app/',
-  },
-  {
-    title: 'PacaLife',
-    eyebrow: 'Live life design product',
-    summary:
-      'A cozy personal operating system for goals, habits, reflection, and everyday momentum.',
-    image: '/pacalife-logo.png',
-    href: 'https://pacalife.app/',
-  },
-  {
-    title: 'PacaMoney',
-    eyebrow: 'Live finance product',
-    summary:
-      'A friendly money companion for budgeting, tracking, and making personal finance feel less intimidating.',
-    image: '/pacamoney-logo.png',
-    href: 'https://paca-money.vercel.app/',
-  },
 ];
 
 const toolkit = [
@@ -460,6 +433,7 @@ export default function Home() {
         <Link href="/" className="wordmark" aria-label="Courtney Ko home">Courtney Ko</Link>
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
+          <Link href="/paca-village/">Paca Village</Link>
           <a href="#about" className="desktop-nav-link">About</a>
           <a href="https://aivalley.io/events">Events</a>
           <a href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer" className="desktop-nav-link">Resume</a>
@@ -526,12 +500,12 @@ export default function Home() {
         </JourneyStop>
 
         <JourneyStop id="paca-village" tile={4} title="Paca Village" className="journey-products" placement="products">
-          <div className="section-title-row">
-            <div><p className="editorial-eyebrow">Built by me</p><h2 id="products-title">Small ideas. Shipped products.</h2></div>
-            <Link href="/trips/projects" className="editorial-link">All projects <ArrowRight size={16} /></Link>
+          <p className="editorial-eyebrow">Built by me</p>
+          <h2 id="products-title">Paca Village</h2>
+          <p>A little village for the things I build. Five houses for meal planning, everyday goals, money, career practice, and learning Chinese.</p>
+          <div className="project-links">
+            <Link href="/paca-village/" className="editorial-button">Enter Paca Village <ArrowRight size={16} /></Link>
           </div>
-          <ProductShelf products={personalProducts} />
-          <noscript><div className="project-links">{personalProducts.map(product => <a key={product.title} href={product.href} className="editorial-link">Visit {product.title}</a>)}</div></noscript>
         </JourneyStop>
 
         <JourneyStop id="about" tile={5} title="Travel Atlas" className="journey-about" placement="about">

@@ -29,11 +29,11 @@ export function HeroAtmosphere() {
       <div className="hero-flowers hero-flowers--near"><WatercolorSprite tile={8} className="watercolor-flowers" /></div>
       <div className="hero-flowers hero-flowers--far"><WatercolorSprite tile={8} className="watercolor-flowers" /></div>
     </div>
-    {!reducedMotion && <button type="button" className="hero-motion-toggle"
+    <button type="button" className="hero-motion-toggle"
       aria-label={paused ? 'Play hero animation' : 'Pause hero animation'}
       title={paused ? 'Play hero animation' : 'Pause hero animation'}
       onClick={() => setPaused(value => !value)}>
       {paused ? <Play size={15} /> : <Pause size={15} />}
-    </button>}
+    </button>
   </>;
 }
