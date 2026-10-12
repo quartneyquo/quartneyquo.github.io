@@ -48,17 +48,18 @@ export function JourneyScene({ tile, title, art, doorPosition = 50, destination 
   </div>;
 }
 
-export function JourneyStop({ id, tile, title, children, className = '', placement, art, doorPosition, destination, visitOnEnter = false }: {
-  id: string; tile: number; title: string; children: ReactNode; className?: string; placement?: string; art?: ReactNode; doorPosition?: number; destination?: string; visitOnEnter?: boolean;
+export function JourneyStop({ id, tile, title, children, className = '', placement, art, doorPosition, destination, visitOnEnter = false, preview }: {
+  id: string; tile: number; title: string; children: ReactNode; className?: string; placement?: string; art?: ReactNode; doorPosition?: number; destination?: string; visitOnEnter?: boolean; preview?: ReactNode;
 }) {
   const dialog = useContext(StopDialogContext);
   const content = useRef<HTMLDivElement>(null);
   const height = useRef(0);
   const active = dialog.id === id && dialog.target;
   useLayoutEffect(() => { if (!active && content.current) height.current = content.current.getBoundingClientRect().height; });
-  return <section id={id} className={`journey-stop ${className}`} data-journey-stop={id} data-journey-href={visitOnEnter ? destination : undefined} data-placement={placement ?? id} aria-label={title}>
+  return <section id={id} className={`journey-stop ${className}`} data-journey-stop={id} data-journey-href={visitOnEnter ? destination : undefined} data-journey-preview={preview ? true : undefined} data-placement={placement ?? id} aria-label={title}>
     <JourneyScene tile={tile} title={title} art={art} doorPosition={doorPosition} destination={destination} />
-    <div ref={content} className="journey-content" style={active ? { height: height.current } : undefined}>{active ? createPortal(<div className={className}><div className="journey-content">{children}</div></div>, active) : children}</div>
+    <div ref={content} className="journey-content" style={active && !preview ? { height: height.current } : undefined}>{active && !preview ? createPortal(<div className={className}><div className="journey-content">{children}</div></div>, active) : children}</div>
+    {active && preview ? createPortal(preview, active) : null}
   </section>;
 }
 
@@ -80,10 +81,12 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     if (!activeStop || !dialogRef.current) return;
     const dialog = dialogRef.current;
     const overflow = document.body.style.overflow;
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     dialog.showModal();
+    dialog.scrollTop = 0;
     document.body.style.overflow = 'hidden';
     dialog.querySelectorAll('details').forEach(details => { details.open = true; });
-    return () => { dialog.close(); document.body.style.overflow = overflow; };
+    return () => { dialog.close(); document.body.style.overflow = overflow; trigger?.focus({ preventScroll: true }); };
   }, [activeStop]);
   const root = useRef<HTMLDivElement>(null);
   const guide = useRef<HTMLDivElement>(null);
@@ -127,7 +130,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     let lastTick = 0;
     let openedByMovement: HTMLDetailsElement | null = null;
     const sectionFor = (id: string) => Array.from(container.querySelectorAll<HTMLElement>('[data-journey-stop]')).find(section => section.id === id);
-    const isFarewellStop = (id: string) => id === stations[stations.length - 1]?.id && !sectionFor(id)?.dataset.journeyHref;
+    const isFarewellStop = (id: string) => id === stations[stations.length - 1]?.id && !sectionFor(id)?.dataset.journeyHref && !sectionFor(id)?.dataset.journeyPreview;
     const enterStop = (id: string) => {
       const destination = sectionFor(id)?.dataset.journeyHref;
       if (destination) window.location.assign(destination);
@@ -400,6 +403,17 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     };
     const onKeyboardVisibility = () => { if (document.hidden) clearKeys(); };
     const onLink = (event: MouseEvent) => {
+      const previewTrigger = event.target instanceof Element ? event.target.closest('[data-journey-preview-trigger]') : null;
+      if (previewTrigger && container.contains(previewTrigger) && !event.defaultPrevented) {
+        const section = previewTrigger.closest<HTMLElement>('[data-journey-stop]');
+        if (section?.dataset.journeyPreview) {
+          releaseKeyboard();
+          cancelEntry();
+          setArrivalCameo(null);
+          enterStop(section.id);
+          return;
+        }
+      }
       const link = event.target instanceof Element ? event.target.closest('a') : null;
       if (link) releaseKeyboard();
       if (link && container.contains(link) && link.matches('.journey-sign, .journey-building-link') && !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
@@ -546,6 +560,9 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
   const trails = [geometry.points, ...geometry.branches];
   const line = (points: TrailPoint[]) => points.map((point, i) => `${i ? 'L' : 'M'}${point.x},${point.y}`).join(' ');
   const stamp = destinationStamps[celebrating as keyof typeof destinationStamps];
+  const activeSection = Array.from(root.current?.querySelectorAll<HTMLElement>('[data-journey-stop]') ?? []).find(section => section.id === activeStop);
+  const isProjectPreview = Boolean(activeSection?.dataset.journeyPreview);
+  const dialogTitle = destinationStamps[activeStop as keyof typeof destinationStamps]?.label ?? activeSection?.getAttribute('aria-label');
 
   return <StopDialogContext.Provider value={{ id: activeStop, target: dialogTarget }}><div ref={root} className={`continuous-journey${geometry.width > 1 ? ' journey-compact' : ''}`} tabIndex={0} aria-label="Move Opaca" aria-describedby="opaca-keyboard-help">
     <span id="opaca-keyboard-help" className="sr-only">Use Up and Down or W and S to travel along the trail. Near a building, use Left and Right or A and D to enter and exit along its path. Escape releases movement. Tab reaches portfolio links.</span>
@@ -601,8 +618,8 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       <span className="sr-only" role="status">{reaction || (stamp ? `${stamp.label} reached. Passport stamped!` : '')}</span>
       <span className="sr-only">Hi, I'm Opaca. Let's go on an adventure!</span>
     </div>
-    <dialog ref={dialogRef} className="journey-stop-dialog" aria-label="Destination details" onCancel={event => { event.preventDefault(); closeStop(); }}>
-      <div className="journey-dialog-header"><span>{destinationStamps[activeStop as keyof typeof destinationStamps]?.label}</span><button type="button" onClick={closeStop} aria-label="Close destination" title="Close destination"><X size={22} /></button></div>
+    <dialog ref={dialogRef} className={`journey-stop-dialog${isProjectPreview ? ' journey-project-dialog' : ''}`} aria-label={isProjectPreview ? `${dialogTitle} preview` : 'Destination details'} onCancel={event => { event.preventDefault(); closeStop(); }}>
+      <div className="journey-dialog-header"><span>{isProjectPreview ? 'A peek inside' : dialogTitle}</span><button type="button" onClick={closeStop} aria-label="Close destination" title="Close destination"><X size={22} /></button></div>
       <div ref={setDialogTarget} className="journey-dialog-body" />
     </dialog>
   </div></StopDialogContext.Provider>;

@@ -3,7 +3,7 @@
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { motion, useScroll } from 'framer-motion';
-import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout, Check } from 'lucide-react';
 import { ContinuousJourney, JourneyStop } from './ContinuousJourney';
 import { HeroAtmosphere } from './HeroAtmosphere';
 import { pacaProducts, type PacaProduct } from '@/data/pacaProducts';
@@ -16,6 +16,23 @@ function HouseArt({ product }: { product: PacaProduct }) {
   return <span className="journey-art paca-house-art" aria-hidden="true" style={{
     '--house-x': `${(tile % 3) * 50}%`, '--house-y': `${Math.floor(tile / 3) * 100}%`,
   } as CSSProperties} />;
+}
+
+function ProjectPreview({ product }: { product: PacaProduct }) {
+  return <article className="village-preview">
+    <figure className="village-preview-figure">
+      <div className="village-preview-browser" aria-hidden="true"><span>● ● ●</span>{new URL(product.href).hostname}</div>
+      <img src={product.preview.src} alt={product.preview.alt} width="1280" height="800" />
+      <figcaption>{product.preview.caption}</figcaption>
+    </figure>
+    <div className="village-preview-copy">
+      <p className="village-preview-category">{product.category}</p>
+      <h2>{product.title}</h2>
+      <p className="village-preview-summary">{product.summary}</p>
+      <ul>{product.features.map(feature => <li key={feature}><Check size={15} aria-hidden="true" /><span>{feature}</span></li>)}</ul>
+      <a className="editorial-button village-preview-open" href={product.href} target="_blank" rel="noopener noreferrer">Open {product.title}<ExternalLink size={15} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </article>;
 }
 
 export default function PacaVillage() {
@@ -59,13 +76,13 @@ export default function PacaVillage() {
           art={<HouseArt product={product} />}
           doorPosition={product.doorPosition}
           destination={product.href}
-          visitOnEnter
+          preview={<ProjectPreview product={product} />}
         >
           <p className="editorial-eyebrow">0{index + 1} / {product.house}</p>
           <h2>{product.title}</h2>
           <p className="village-category">{product.category}</p>
           <p className="village-summary">{product.summary}</p>
-          <p className="project-links"><a className="editorial-link" href={product.href}>Visit {product.title} <ExternalLink size={14} /></a></p>
+          <p className="project-links"><button type="button" className="editorial-link village-preview-trigger" data-journey-preview-trigger aria-haspopup="dialog">Peek inside {product.title} <ArrowRight size={14} aria-hidden="true" /></button></p>
         </JourneyStop>)}
       </ContinuousJourney>
 
