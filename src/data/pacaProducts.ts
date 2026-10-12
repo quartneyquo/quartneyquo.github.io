@@ -38,7 +38,7 @@ export const pacaProducts: PacaProduct[] = [
     id: 'pacajob', title: 'PacaJob', house: 'The career studio', category: 'Resume & interviews', tile: 3, doorPosition: 68,
     preview: { src: '/project-previews/pacajob.jpg', animatedSrc: '/project-previews/pacajob.gif', alt: 'PacaJob demo showing resume matching inputs and interview practice setup.', caption: 'Resume matching → interview practice. Sample resume.' },
     summary: 'A career companion for matching your resume to a role, improving truthful wording, and practicing interviews with Panchita.',
-    href: 'https://pacajob.courtneythko.chatgpt.site/',
+    href: 'https://pacajob.courtneyko.com/',
     features: ['Compare your resume with a target job description.', 'Refine your wording while staying true to your experience.', 'Practice interviews with Panchita.'],
   },
   {
