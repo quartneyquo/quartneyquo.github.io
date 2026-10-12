@@ -82,7 +82,7 @@
 .village-preview { display:grid; grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); align-items:center; gap:30px; }
 .village-preview-figure { margin:0; min-width:0; }
 .village-preview-browser { display:flex; align-items:center; gap:18px; min-height:34px; padding:7px 12px; border:1px solid #dce0d4; border-bottom:0; border-radius:7px 7px 0 0; background:#eef0e8; color:#727964; font-size:10px; overflow-wrap:anywhere; }
-.village-preview-browser span { white-space:nowrap; letter-spacing:2px; color:#a7ae99; font-size:9px; }
+.village-preview-browser .village-preview-dots { white-space:nowrap; letter-spacing:2px; color:#a7ae99; font-size:9px; }
 .village-preview-figure img { display:block; width:100%; height:auto; aspect-ratio:8 / 5; object-fit:contain; border:1px solid #dce0d4; border-radius:0 0 7px 7px; background:#fff; }
 .village-preview-figure figcaption { margin-top:11px; color:#75776a; font-size:11px; line-height:1.6; }
 .village-preview-category { color:#697153; font-size:10px; text-transform:uppercase; letter-spacing:.1em; }
@@ -100,3 +100,8 @@
   .village-preview-copy h2 { font-size:34px; }
   .village-preview-open { width:100%; }
 }
+
+.village-preview-domain { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.village-preview-playback { flex:none; display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:30px; padding:4px 8px; border:1px solid #d0d6c4; border-radius:4px; background:#fcfaf6; color:#4e6142; font:inherit; font-size:10px; font-weight:600; line-height:1.2; cursor:pointer; }
+.village-preview-playback:hover { background:#e1e8d8; }
+.village-preview-playback:disabled { cursor:default; opacity:.55; }

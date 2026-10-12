@@ -1,9 +1,9 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { type CSSProperties, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, useScroll } from 'framer-motion';
-import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout, Check } from 'lucide-react';
+import { motion, useScroll, useReducedMotion } from 'framer-motion';
+import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout, Check, Pause, Play } from 'lucide-react';
 import { ContinuousJourney, JourneyStop } from './ContinuousJourney';
 import { HeroAtmosphere } from './HeroAtmosphere';
 import { pacaProducts, type PacaProduct } from '@/data/pacaProducts';
@@ -19,10 +19,44 @@ function HouseArt({ product }: { product: PacaProduct }) {
 }
 
 function ProjectPreview({ product }: { product: PacaProduct }) {
+  const reducedMotion = useReducedMotion();
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [frozenFrame, setFrozenFrame] = useState<string>();
+  const [animationFailed, setAnimationFailed] = useState(false);
+
+  useEffect(() => {
+    setPlaying(reducedMotion === false);
+    setFrozenFrame(undefined);
+  }, [reducedMotion]);
+
+  const togglePlayback = () => {
+    if (playing && imageRef.current?.complete && imageRef.current.naturalWidth) {
+      // Keep the current frame visible when pausing the GIF.
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = imageRef.current.naturalWidth;
+        canvas.height = imageRef.current.naturalHeight;
+        const context = canvas.getContext('2d');
+        if (context) {
+          context.drawImage(imageRef.current, 0, 0);
+          setFrozenFrame(canvas.toDataURL('image/jpeg', 0.9));
+        }
+      } catch { setFrozenFrame(undefined); }
+    }
+    setPlaying(current => !current);
+  };
+
   return <article className="village-preview">
     <figure className="village-preview-figure">
-      <div className="village-preview-browser" aria-hidden="true"><span>● ● ●</span>{new URL(product.href).hostname}</div>
-      <img src={product.preview.src} alt={product.preview.alt} width="1280" height="800" />
+      <div className="village-preview-browser">
+        <span className="village-preview-dots" aria-hidden="true">● ● ●</span>
+        <span className="village-preview-domain" aria-hidden="true">{new URL(product.href).hostname}</span>
+        <button type="button" className="village-preview-playback" onClick={togglePlayback} disabled={animationFailed} aria-label={`${playing ? 'Pause' : 'Play'} ${product.title} preview`}>
+          {playing ? <Pause size={12} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}{playing ? 'Pause' : 'Play'}
+        </button>
+      </div>
+      <img ref={imageRef} src={playing && !animationFailed ? product.preview.animatedSrc : frozenFrame ?? product.preview.src} alt={product.preview.alt} width="800" height="500" onError={() => { setAnimationFailed(true); setPlaying(false); setFrozenFrame(undefined); }} />
       <figcaption>{product.preview.caption}</figcaption>
     </figure>
     <div className="village-preview-copy">
