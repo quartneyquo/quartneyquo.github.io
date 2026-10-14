@@ -55,7 +55,7 @@ export default function PacaArcade() {
             <p>Come in, get comfortable, and pick a game.<br />Made by me, just for the fun of it.</p>
             <span className="arcade-free">No coins needed. Just a little curiosity.</span>
           </div>
-          <img className="arcade-building" src="/arcade/arcade-house.svg" alt="A little pastel arcade with a striped awning and two game cabinets." width="480" height="480" />
+          <img className="arcade-building" src="/arcade/arcade-house.png" alt="A watercolor arcade cottage with a mossy green roof, flowering vines, and two game cabinets in its glowing window." width="1254" height="1254" />
         </section>
         <section className="arcade-shelf" aria-labelledby="arcade-games-title">
           <div className="arcade-shelf-title"><h2 id="arcade-games-title">Pick your little adventure</h2><span>Everyone’s welcome</span></div>

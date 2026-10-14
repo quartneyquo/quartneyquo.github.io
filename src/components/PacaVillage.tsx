@@ -119,7 +119,7 @@ export default function PacaVillage() {
           <p className="village-summary">{product.summary}</p>
           <p className="project-links"><button type="button" className="editorial-link village-preview-trigger" data-journey-preview-trigger aria-haspopup="dialog">Peek inside {product.title} <ArrowRight size={14} aria-hidden="true" /></button></p>
         </JourneyStop>)}
-        <JourneyStop id="arcade" tile={5} title="Paca Arcade" className="village-stop" doorPosition={50} destination="/paca-village/arcade/" visitOnEnter art={<img className="journey-art paca-house-image" src="/arcade/arcade-house.svg" alt="" width="480" height="480" loading="lazy" />}>
+        <JourneyStop id="arcade" tile={5} title="Paca Arcade" className="village-stop" doorPosition={66} destination="/paca-village/arcade/" visitOnEnter art={<img className="journey-art paca-house-image" src="/arcade/arcade-house.png" alt="" width="1254" height="1254" loading="lazy" />}>
           <p className="editorial-eyebrow">07 / The village arcade</p>
           <h2>Paca Arcade</h2>
           <p className="village-category">A little time to play</p>
