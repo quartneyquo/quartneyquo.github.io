@@ -87,7 +87,7 @@ export default function PacaVillage() {
           <p className="village-eyebrow"><Sprout size={15} /> Built by me, for everyday life</p>
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
-          <p className="village-invitation">Six little houses, each with something useful inside.<br />Take a walk with Opaca and see what’s growing.</p>
+          <p className="village-invitation">Six little houses and an arcade for a little fun.<br />Take a walk with Opaca and see what’s growing.</p>
           <a href="#pacaplate" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
         <nav className="village-map" aria-label="Jump to a village house">
@@ -96,6 +96,7 @@ export default function PacaVillage() {
             {pacaProducts.map((product, index) => <li key={product.id}>
               <a href={`#${product.id}`}><span className="village-map-number">0{index + 1}</span>{product.title}<ArrowDown size={12} /></a>
             </li>)}
+            <li><a href="#arcade"><span className="village-map-number">07</span>Paca Arcade<ArrowDown size={12} /></a></li>
           </ol>
         </nav>
       </section>
@@ -118,6 +119,13 @@ export default function PacaVillage() {
           <p className="village-summary">{product.summary}</p>
           <p className="project-links"><button type="button" className="editorial-link village-preview-trigger" data-journey-preview-trigger aria-haspopup="dialog">Peek inside {product.title} <ArrowRight size={14} aria-hidden="true" /></button></p>
         </JourneyStop>)}
+        <JourneyStop id="arcade" tile={5} title="Paca Arcade" className="village-stop" doorPosition={50} destination="/paca-village/arcade/" visitOnEnter art={<img className="journey-art paca-house-image" src="/arcade/arcade-house.svg" alt="" width="480" height="480" loading="lazy" />}>
+          <p className="editorial-eyebrow">07 / The village arcade</p>
+          <h2>Paca Arcade</h2>
+          <p className="village-category">A little time to play</p>
+          <p className="village-summary">Step off the trail and into a cozy little game room. There’s always time for one more round.</p>
+          <p className="project-links"><Link className="editorial-link" href="/paca-village/arcade/">Let’s play <ArrowRight size={14} aria-hidden="true" /></Link></p>
+        </JourneyStop>
       </ContinuousJourney>
 
       <div className="village-homeward">

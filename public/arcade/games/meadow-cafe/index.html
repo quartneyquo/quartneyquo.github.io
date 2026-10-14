@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3e9">
+  <meta name="description" content="A little café, a lot of alpaca love. Guide Opaca through five cozy café days in a meadow full of fluffy friends.">
+  <title>Opaca’s Meadow Café</title>
+  <link rel="icon" href="assets/flower.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="assets/meadow.webp" as="image">
+  <link rel="preload" href="assets/opaca.webp" as="image">
+</head>
+<body>
+  <div class="sky-note"><span>✿</span> A LITTLE CAFÉ. A LOT OF ALPACA LOVE. <span>✿</span></div>
+  <div class="page-shell">
+    <header class="header">
+      <a class="brand" href="./" aria-label="Opaca’s Meadow Café home"><span class="brand-flower">✿</span><span><b>Opaca’s</b><small>MEADOW CAFÉ</small></span></a>
+      <div class="header-actions"><span class="save-note" id="save-note">Made for little moments</span><button id="help-button" class="icon-button" aria-label="How to play">? <span>How to play</span></button><button id="sound-button" class="icon-button" aria-label="Turn sound on" aria-pressed="false"><span id="sound-icon">♪</span><span id="sound-label">Sound off</span></button></div>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div><div class="eyebrow"><span class="mini-line"></span> WELCOME TO YOUR LITTLE CORNER OF THE MEADOW</div><h1 id="page-title">A little rush,<br class="mobile-break"> <em>a lot of fluff.</em></h1><p>Seat sweet alpacas. Serve something lovely. Make their day.</p></div>
+        <button class="primary-button" id="start-button">Open the café <span>→</span></button>
+      </section>
+      <nav class="days-nav" aria-label="Café days" id="days-nav"></nav>
+      <div class="game-layout">
+        <section class="cafe-card" aria-label="Café play area">
+          <div class="hud"><div class="day-info"><span class="sun-icon">☀</span><div><span class="eyebrow" id="day-label">DAY 01</span><b id="day-name">A fresh start</b></div></div><div class="hud-stats"><div class="earnings-stat"><span class="stat-label">TODAY’S COINS</span><b><span class="coin-dot">✦</span> <span id="earnings">0</span><small> / <span id="goal">130</span></small></b><span class="goal-track"><i id="goal-fill"></i></span></div><div class="time-stat"><span class="stat-label">CLOSING IN</span><b id="clock">2:00</b></div><button id="pause-button" class="pause-button" aria-label="Pause game" disabled>Ⅱ</button></div></div>
+          <div class="coach" id="coach"><span class="coach-flower">✿</span><p id="coach-text">The tables are set. The tea is warm. Your meadow café is waiting.</p><button id="skip-tutorial" hidden>Skip guide</button></div>
+          <div class="scene" id="scene">
+            <div class="kitchen-sign"><span>✦</span> MADE WITH A LITTLE LOVE</div>
+            <div class="kitchen-orders" id="kitchen-orders" aria-label="Kitchen orders"></div>
+            <div class="kitchen-empty" id="kitchen-empty">THE KITCHEN <span>Orders appear here</span></div>
+            <div class="welcome-sign" id="welcome-sign"><span>✿</span> A seat for every sweet soul</div>
+            <div id="tables"></div>
+            <div class="gate-marker"><span>↗</span> THIS WAY, FRIENDS</div>
+            <div class="opaca" id="opaca" aria-label="Opaca, your alpaca café host"><div class="opaca-sprite" id="opaca-sprite"></div><span class="opaca-name">OPACA</span><span class="opaca-tray" id="opaca-tray"></span></div>
+            <div class="scene-notice" id="scene-notice" hidden></div>
+            <div id="float-layer" aria-hidden="true"></div>
+            <div class="pause-overlay" id="pause-overlay" hidden><span>☕</span><h2>A little tea break.</h2><p>Your café will wait for you.</p><button id="resume-button" class="primary-button">Back to the meadow →</button></div>
+          </div>
+          <div class="task-bar"><div class="task-title"><span>↝</span><div><b>Opaca’s next steps</b><small>Tap a task to cancel · 6 at a time</small></div></div><div id="task-queue" class="task-queue" aria-label="Queued tasks"><span class="empty-tasks">A little plan goes a long way.</span></div></div>
+        </section>
+        <aside class="sidebar">
+          <section class="gate-card"><div class="section-heading"><h2>At the gate</h2><span id="waiting-count" class="count-badge">0 / 4</span></div><p class="aside-description">A warm welcome starts here.</p><div class="waiting-guests" id="waiting-guests"></div><div class="gate-footer"><span class="status-dot"></span><span id="gate-status">Ready when you are</span></div></section>
+          <section class="tray-card"><div class="section-heading"><h2>Your little tray</h2><span class="tray-count" id="tray-count">0 / 2</span></div><div class="tray-slots" id="tray-slots"></div><p>Pick up at the kitchen.<br>Deliver to the matching table.</p></section>
+          <section class="day-card"><div class="eyebrow">A GOOD DAY IS MADE OF</div><div><span>♡</span><p><b id="served-count">0 happy guests</b><small id="combo-text">Small acts of café kindness</small></p></div><div class="tip-line"><span>Little thank-you tips</span><b id="tips-count">0 ✦</b></div></section>
+        </aside>
+      </div>
+      <footer class="footer"><span>✿ Slow mornings. Fast little hooves.</span><span>Made for Opaca & friends <span class="footer-heart">♡</span></span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="help-dialog" class="paper-dialog"><button class="dialog-close" data-close aria-label="Close instructions">×</button><div class="eyebrow">A LITTLE CAFÉ KNOW-HOW</div><h2>Fluffy friends,<br><em>happy tables.</em></h2><ol class="instructions"><li><b>Welcome & seat</b><span>Tap an alpaca at the gate, then an empty table.</span></li><li><b>Take their order</b><span>Tap a seated guest. The kitchen starts cooking.</span></li><li><b>Pick up & serve</b><span>Tap a ready dish at the kitchen, then its matching table.</span></li><li><b>Collect & clear</b><span>When the coins appear, tap the table to collect and clean.</span></li></ol><p class="help-note">Opaca follows your queue. Keep an eye on patience hearts, carry up to two dishes, and chain happy guests for extra tips. Space pauses the game.</p><button class="primary-button" data-close>Lovely, let’s play →</button></dialog>
+  <dialog id="result-dialog" class="paper-dialog result-dialog"><div class="result-art"><div class="opaca-sprite result-sprite" id="result-sprite"></div><span>✿</span></div><div class="eyebrow" id="result-eyebrow">THE MEADOW SAYS THANK YOU</div><h2 id="result-title">A lovely little day.</h2><div class="result-stars" id="result-stars"></div><p id="result-description"></p><div class="result-stats" id="result-stats"></div><div class="shop" id="shop"><div class="section-heading"><h3>Make tomorrow a little sweeter</h3><span id="wallet"></span></div><div class="upgrade-list" id="upgrade-list"></div></div><button class="primary-button" id="next-button">Tomorrow awaits →</button><button class="text-button" id="replay-button">Replay this day</button><button class="text-button" id="back-button">Back to the café</button></dialog>
+  <dialog id="reset-dialog" class="paper-dialog"><div class="eyebrow">A NEW CHAPTER</div><h2>Start fresh?</h2><p>This resets your five café days, stars, coins, and upgrades on this device.</p><button id="confirm-reset" class="primary-button">Start a new café →</button><button class="text-button" data-close>Keep my meadow</button></dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
