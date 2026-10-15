@@ -25,7 +25,7 @@ const games = [
     description: 'Help Doctor Hog catch falling bugs before they reach the code. A little rescue mission for a very busy doctor.',
     detail: 'Bug rescue · A / D or arrow keys · Drag on touch screens',
     image: 'https://doctor-hog-bug-rescue.courtneythko.chatgpt.site/doctor-hog.png',
-    href: 'https://doctor-hog-bug-rescue.courtneythko.chatgpt.site/',
+    href: 'https://doctorhog.courtneyko.com/',
   },
 ];
 type ArcadeGame = typeof games[number];
