@@ -44,3 +44,7 @@
 .arcade-game-art--snoopy-solitaire > img { object-fit:contain; padding:14px; }
 
 .arcade-player-toolbar { position:sticky; top:0; z-index:2; padding-block:12px; background:#faf8f1; border-bottom:1px solid var(--arcade-rule); }
+
+.arcade-game-art--doctor-hog { background:radial-gradient(ellipse at 50% 65%,#e0d5e966,transparent 65%),#f1eee4; }
+.arcade-game-art--doctor-hog > img { object-fit:contain; padding:20px; }
+@media(min-width:1050px) { .arcade-games { grid-template-columns:repeat(3,minmax(0,1fr)); } }

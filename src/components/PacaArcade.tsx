@@ -20,6 +20,13 @@ const games = [
     image: '/arcade/games/meadow-cafe/assets/meadow.webp',
     href: '/arcade/games/meadow-cafe/index.html',
   },
+  {
+    id: 'doctor-hog', title: 'Doctor Hog — Bug Rescue', label: 'The doctor is in',
+    description: 'Help Doctor Hog catch falling bugs before they reach the code. A little rescue mission for a very busy doctor.',
+    detail: 'Bug rescue · A / D or arrow keys · Drag on touch screens',
+    image: 'https://doctor-hog-bug-rescue.courtneythko.chatgpt.site/doctor-hog.png',
+    href: 'https://doctor-hog-bug-rescue.courtneythko.chatgpt.site/',
+  },
 ];
 type ArcadeGame = typeof games[number];
 
