@@ -1,0 +1,31 @@
+.page { background: #fff; color: #40213d; min-height: 100vh; }
+.header { max-width: 1160px; margin: auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.wordmark { font: 28px Georgia, serif; }
+.header nav { display: flex; gap: 28px; font-size: 13px; }
+.main { max-width: 1060px; margin: auto; padding: 0 32px 60px; }
+.hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: center; padding: 65px 0 40px; }
+.eyebrow { color: #8a5e73; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+.hero h1 { font: 50px/1.14 Georgia, serif; margin: 0 0 24px; }
+.intro { color: #655966; line-height: 1.85; font-size: 16px; }
+.role { color: #655966; font-size: 12px; margin-top: 20px; }
+.house { text-align: center; font-size: 12px; }
+.house canvas { width: 100%; height: auto; }
+.house span { display: inline-block; padding: 8px 12px; border-bottom: 1px solid #e3dfe2; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #e3dfe2; border-bottom: 1px solid #e3dfe2; padding: 24px 0; gap: 26px; }
+.metrics div { display: flex; flex-direction: column-reverse; gap: 8px; }
+.metrics dd { font: 38px Georgia, serif; margin: 0; }
+.metrics dt { font-size: 12px; color: #655966; }
+.photo { margin: 40px 0 60px; }
+.photo img { width: 100%; height: auto; max-height: 480px; object-fit: cover; border-radius: 12px; }
+.photo figcaption { font-size: 12px; color: #655966; margin-top: 10px; }
+.section { display: grid; grid-template-columns: 1fr 2fr; gap: 42px; border-top: 1px solid #e3dfe2; padding: 34px 0; }
+.section h2, .footer h2 { font: 32px/1.2 Georgia, serif; margin: 0; }
+.section h3 { font: 22px Georgia, serif; margin: 0 0 12px; }
+.section p, .section li { color: #655966; font-size: 15px; line-height: 1.85; margin: 0 0 22px; }
+.section ol { padding-left: 20px; }
+.section strong { color: #40213d; }
+.link { display: inline-block; font-size: 13px; border-bottom: 1px solid #b9aab6; padding-bottom: 4px; }
+.footer { padding: 55px 0 0; border-top: 1px solid #e3dfe2; }
+.footer p { color: #655966; margin: 18px 0 25px; }
+.button { display: inline-block; background: #40213d; color: #fff; padding: 14px 20px; border-radius: 3px; font-size: 13px; margin-right: 24px; margin-bottom: 20px; }
+@media(max-width: 650px) { .header { padding: 20px; flex-wrap: wrap; } .header nav { gap: 20px; flex-wrap: wrap; } .main { padding: 0 20px 35px; } .hero { grid-template-columns: 1fr; padding-top: 35px; gap: 10px; } .hero h1 { font-size: 38px; } .house { max-width: 230px; margin: auto; } .metrics { gap: 15px; } .metrics dd { font-size: 30px; } .metrics dt { font-size: 11px; } .section { grid-template-columns: 1fr; gap: 20px; } }

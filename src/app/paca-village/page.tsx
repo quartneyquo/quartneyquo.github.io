@@ -3,7 +3,7 @@ import PacaVillage from '@/components/PacaVillage';
 
 export const metadata: Metadata = {
   title: 'Paca Village | Courtney Ko',
-  description: 'Six little houses and a cozy arcade. Explore Courtney’s apps, then stop by Paca Arcade for a game.',
+  description: 'Seven little houses, including a cozy arcade. Explore Courtney’s apps, then stop by Paca Arcade for a game.',
   alternates: { canonical: 'https://courtneyko.com/paca-village/' },
   openGraph: {
     title: 'Paca Village | Courtney Ko',

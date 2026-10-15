@@ -126,13 +126,13 @@ const caseStudies: CaseStudy[] = [
       'San Francisco all-women AI hackathon with 500+ registrations.',
     ],
     metrics: [
-      { value: '11K+', label: 'engineers and founders connected' },
+      { value: '15K+', label: 'engineers and founders connected' },
       { value: '500+', label: 'hackathon registrations' },
       { value: '70+', label: 'events hosted' },
     ],
     tools: ['Community-led growth', 'Event strategy', 'Partnerships', 'DevRel', 'Operations', 'AI APIs'],
     outcome:
-      'Connected 11K+ engineers and founders through an ecosystem of technical events, partner experiences, and community programming.',
+      'Connected 15K+ engineers and founders through an ecosystem of technical events, partner experiences, and community programming.',
     image: '/witpic.jpeg',
     accent: 'from-[#774050] to-[#C8AAAF]',
     roleFit: 'PMM · Community Growth',
@@ -434,10 +434,7 @@ export default function Home() {
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
           <Link href="/paca-village/">Paca Village</Link>
-          <a href="#about" className="desktop-nav-link">About</a>
-          <a href="https://aivalley.io/events">Events</a>
-          <a href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer" className="desktop-nav-link">Resume</a>
-          <a href="mailto:courtneythko@gmail.com" className="header-email">Email <ArrowRight size={14} /></a>
+          <a href="mailto:courtneythko@gmail.com" className="header-email">Let’s work together <ArrowRight size={14} /></a>
         </nav>
       </header>
 
@@ -448,14 +445,14 @@ export default function Home() {
         <HeroAtmosphere />
         <div className="portfolio-intro" aria-labelledby="intro-title">
           <h1 id="intro-title" className="intro-positioning">Building communities, partnerships, and product experiences for AI.</h1>
-          <p className="intro-description">Community and partnerships at AI Valley. Previously NVIDIA.<br />Building useful AI products, with people at the heart.</p>
+          <p className="intro-description">Community and partnerships at AI Valley. Previously NVIDIA.<br />Building useful AI products, with people at the heart.<br /><span style={{ fontSize: 12 }}>Open to AI partnerships &amp; community roles.</span></p>
           <div className="intro-actions">
             <a className="editorial-button" href="#work">View Experience <ArrowRight size={16} /></a>
             <a className="editorial-button secondary" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>
             <a className="editorial-link" href="mailto:courtneythko@gmail.com">Email Courtney</a>
           </div>
           <dl className="proof-strip">
-            {[['11K+', 'builders connected'], ['70+', 'events hosted'], ['500+', 'hackathon registrations']].map(([value, label]) => (
+            {[['15K+', 'builders connected'], ['70+', 'events hosted'], ['500+', 'hackathon registrations']].map(([value, label]) => (
               <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
             ))}
           </dl>
@@ -474,8 +471,8 @@ export default function Home() {
           <span id="case-studies" className="journey-alias" />
           <p className="editorial-eyebrow">Community &amp; partnerships</p>
           <h2>AI Valley</h2>
-          <p>Technical programming, partner experiences, and community operations for an AI builder ecosystem.</p>
-          <div className="journey-inline-metrics"><div><strong>11K+</strong><span>builders connected</span></div><div><strong>70+</strong><span>events hosted</span></div></div>
+          <p>I bring AI partners and builders together through hackathons, workshops, and founder events — owning partner coordination, programming, and the operations behind each gathering.</p>
+          <div className="journey-inline-metrics"><div><strong>15K+</strong><span>builders connected</span></div><div><strong>70+</strong><span>events hosted</span></div></div>
           <div className="project-links"><a href="https://aivalley.io/events" className="editorial-link">View events <CalendarDays size={16} /></a></div>
           <EventGallery />
           <JourneyDisclosure id="ai-valley" title="AI Valley"><CaseStudySection study={orderedCaseStudies[0]} index={0} /></JourneyDisclosure>
@@ -502,7 +499,7 @@ export default function Home() {
         <JourneyStop id="paca-village" tile={4} title="Paca Village" className="journey-products" placement="products">
           <p className="editorial-eyebrow">Built by me</p>
           <h2 id="products-title">Paca Village</h2>
-          <p>A little village for the things I build. Six houses for meal planning, recipes and cooking, everyday goals, money, career practice, and learning Chinese.</p>
+          <p>A little village for the things I build. Seven houses for meal planning, recipes and cooking, everyday goals, money, career practice, learning Chinese, and arcade games.</p>
           <div className="project-links">
             <Link href="/paca-village/" className="editorial-button">Enter Paca Village <ArrowRight size={16} /></Link>
           </div>

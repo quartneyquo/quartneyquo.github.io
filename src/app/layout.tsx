@@ -5,20 +5,20 @@ import './globals.css';
 const GA_ID = 'G-NCMQCSCFZP';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://quartneyquo.github.io'),
-  title: 'Courtney Ko | AI Community, Partnerships & Product',
+  metadataBase: new URL('https://courtneyko.com'),
+  title: 'Courtney Ko | AI Partnerships & Community',
   description:
-    'Community and partnerships at AI Valley, connecting 11K+ builders through technical programming. Experience in NVIDIA automation and founding AI products.',
+    'Community and partnerships at AI Valley, connecting 15K+ builders through technical programming. Experience in NVIDIA automation and founding AI products.',
   openGraph: {
-    title: 'Courtney Ko | AI Community, Partnerships & Product',
-    description: 'Building communities, partnerships, and product experiences for AI.',
+    title: 'Courtney Ko | AI Partnerships & Community',
+    description: 'AI partnerships and community programs at AI Valley. Courtney Ko connects builders through technical workshops, hackathons, and founder events.',
     images: [{ url: '/courtney-opaca-thumbnail.png', width: 1254, height: 1254, alt: 'Courtney Ko with Opaca, her pixel-art alpaca companion' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Courtney Ko | AI Community, Partnerships & Product',
-    description: 'Building communities, partnerships, and product experiences for AI.',
+    title: 'Courtney Ko | AI Partnerships & Community',
+    description: 'AI partnerships and community programs at AI Valley. Courtney Ko connects builders through technical workshops, hackathons, and founder events.',
     images: [{ url: '/courtney-opaca-thumbnail.png', alt: 'Courtney Ko with Opaca, her pixel-art alpaca companion' }],
   },
   icons: { icon: '/favicon2.png' },

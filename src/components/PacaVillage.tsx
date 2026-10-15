@@ -87,7 +87,7 @@ export default function PacaVillage() {
           <p className="village-eyebrow"><Sprout size={15} /> Built by me, for everyday life</p>
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
-          <p className="village-invitation">Six little houses and an arcade for a little fun.<br />Take a walk with Opaca and see what’s growing.</p>
+          <p className="village-invitation">Seven little houses, including an arcade for a little fun.<br />Take a walk with Opaca and see what’s growing.</p>
           <a href="#pacaplate" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
         <nav className="village-map" aria-label="Jump to a village house">
