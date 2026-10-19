@@ -1,0 +1,55 @@
+.page { min-height:100svh; background:#faf8f3; color:#342e35; padding:0 40px; }
+.page a:focus-visible { outline:3px solid #795a72; outline-offset:5px; border-radius:5px; }
+.header, .footer { max-width:1120px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.header { padding:22px 0; border-bottom:1px solid #deded3; }
+.header a { min-height:44px; display:inline-flex; align-items:center; gap:8px; font-size:12px; }
+.header .wordmark { font:22px Georgia, 'Times New Roman', serif; }
+.main { max-width:1000px; margin:auto; padding:64px 0 72px; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:80px; }
+.intro { position:relative; isolation:isolate; padding:18px 0 130px; }
+.portrait { width:104px; height:104px; object-fit:cover; object-position:center 25%; border-radius:50%; border:5px solid #fffefa; box-shadow:0 0 0 1px #d7d3c8; margin-bottom:30px; }
+.eyebrow { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:#626e51; font-weight:600; }
+.intro h1 { font:clamp(40px,4.5vw,58px)/1.08 Georgia, 'Times New Roman', serif; letter-spacing:-.045em; margin:15px 0 22px; }
+.bio { font-size:15px; line-height:1.8; color:#625d62; }
+.note { margin-top:20px; font:italic 23px/1.5 Georgia, 'Times New Roman', serif; color:#687453; }
+.landscape { position:absolute; z-index:-1; left:-45px; right:-45px; bottom:-20px; height:240px; background:url('/watercolor-landscape.webp') center bottom / cover no-repeat; mask-image:linear-gradient(to bottom, transparent, #000 45%, #000 75%, transparent); opacity:.65; }
+.sectionHeading { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; color:#626e51; }
+.sectionHeading h2 { font-size:10px; text-transform:uppercase; letter-spacing:.14em; font-weight:600; }
+.socials { list-style:none; padding:0; margin:0; border-top:1px solid #d9d9ce; }
+.socials li { border-bottom:1px solid #d9d9ce; }
+.socials a { display:flex; gap:18px; align-items:center; padding:20px 12px; transition:background .18s; }
+.socials a:hover { background:#efeee6; }
+.icon { display:grid; place-items:center; width:38px; height:38px; color:#5e6d50; flex-shrink:0; }
+.linkText { display:flex; flex-direction:column; gap:4px; }
+.linkText strong { font-size:17px; font-weight:500; }
+.linkText > span { font-size:12px; color:#706a70; }
+.arrow { margin-left:auto; color:#777e69; transition:transform .18s; }
+.socials a:hover .arrow { transform:translate(2px,-2px); }
+.email { display:flex; gap:18px; align-items:center; padding:18px 22px; margin-top:24px; border-radius:6px; background:#505e42; color:#fffdf5; transition:background .18s; }
+.email:hover { background:#3e4c31; }
+.email > span { font-size:15px; font-weight:500; }
+.email > span > span { display:block; font-size:11px; margin-top:4px; font-weight:400; }
+.email > svg:last-child { margin-left:auto; }
+.explore { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 20px; margin-top:20px; }
+.explore a { display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:12px; }
+.explore a:hover, .header a:hover, .footer a:hover { text-decoration:underline; text-underline-offset:5px; }
+.footer { border-top:1px solid #deded3; padding:18px 0; font-size:11px; color:#706a70; }
+.footer a { display:inline-flex; align-items:center; min-height:44px; }
+.skip { position:absolute; top:-100px; left:20px; background:#fff; padding:14px; z-index:10; }
+.skip:focus { top:10px; }
+.srOnly { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media(max-width:760px) {
+  .page { padding:0 24px; }
+  .header { padding:12px 0; }
+  .header .wordmark { font-size:19px; }
+  .header a { font-size:11px; }
+  .main { max-width:460px; grid-template-columns:1fr; gap:28px; padding:32px 0 36px; }
+  .intro { text-align:center; padding:0 0 16px; }
+  .portrait { width:88px; height:88px; margin:0 auto 23px; }
+  .intro h1 { font-size:43px; margin:12px 0 16px; }
+  .bio { font-size:14px; }
+  .note { margin-top:12px; font-size:21px; }
+  .landscape { left:-24px; right:-24px; bottom:-15px; height:180px; opacity:.25; }
+  .socials a { padding:17px 8px; }
+  .email { padding:18px; }
+}
+@media(prefers-reduced-motion:reduce) { .page *, .page *::before, .page *::after { transition:none; } }

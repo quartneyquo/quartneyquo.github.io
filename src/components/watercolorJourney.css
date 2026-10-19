@@ -237,7 +237,7 @@
   .watercolor-portfolio .portfolio-header { flex-wrap: nowrap; padding-block: 14px; gap: 10px; }
   .watercolor-portfolio .wordmark { font-size: 24px; }
   .watercolor-portfolio .portfolio-header nav { flex-basis: auto; gap: 14px; font-size: 12px; }
-  .watercolor-portfolio .portfolio-header nav > a:nth-child(3) { display: none; }
+  .watercolor-portfolio .portfolio-header nav > .header-email { display: none; }
   .watercolor-portfolio .intro-name { font-size: 52px; }
   .watercolor-portfolio .journey-basecamp { height: auto; padding-bottom: 310px; margin-bottom: 40px; }
   .watercolor-portfolio .journey-basecamp::before { top: -75px; bottom: 85px; background-size: auto 100%; background-position: 54% bottom; }
