@@ -6,11 +6,10 @@
 .header .wordmark { font:22px Georgia, 'Times New Roman', serif; }
 .main { max-width:1000px; margin:auto; padding:64px 0 72px; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:80px; }
 .intro { position:relative; isolation:isolate; padding:18px 0 130px; }
-.portraitGroup { display:flex; align-items:center; gap:24px; margin-bottom:30px; }
-.portrait { width:104px; height:104px; object-fit:cover; object-position:center 25%; border-radius:50%; border:5px solid #fffefa; box-shadow:0 0 0 1px #d7d3c8; }
-.panchita { margin:0; text-align:center; }
-.panchita canvas { display:block; width:116px; height:116px; }
-.panchita figcaption { margin-top:4px; color:#626e51; font:italic 12px/1.5 Georgia, 'Times New Roman', serif; }
+.portrait { width:104px; height:104px; object-fit:cover; object-position:center 25%; border-radius:50%; border:5px solid #fffefa; box-shadow:0 0 0 1px #d7d3c8; margin-bottom:30px; }
+.opaca { position:absolute; right:4px; bottom:0; margin:0; text-align:center; }
+.opaca canvas { display:block; width:116px; height:116px; }
+.opaca figcaption { margin-top:4px; color:#626e51; font:italic 12px/1.5 Georgia, 'Times New Roman', serif; }
 .eyebrow { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:#626e51; font-weight:600; }
 .intro h1 { font:clamp(40px,4.5vw,58px)/1.08 Georgia, 'Times New Roman', serif; letter-spacing:-.045em; margin:15px 0 22px; }
 .bio { font-size:15px; line-height:1.8; color:#625d62; }
@@ -47,10 +46,9 @@
   .header .wordmark { font-size:19px; }
   .header a { font-size:11px; }
   .main { max-width:460px; grid-template-columns:1fr; gap:28px; padding:32px 0 36px; }
-  .intro { text-align:center; padding:0 0 16px; }
-  .portraitGroup { justify-content:center; gap:18px; margin-bottom:23px; }
-  .portrait { width:88px; height:88px; }
-  .panchita canvas { width:100px; height:100px; margin:auto; }
+  .intro { text-align:center; padding:0 0 136px; }
+  .portrait { width:88px; height:88px; margin:0 auto 23px; }
+  .opaca canvas { width:100px; height:100px; margin:auto; }
   .intro h1 { font-size:43px; margin:12px 0 16px; }
   .bio { font-size:14px; }
   .note { margin-top:12px; font-size:21px; }

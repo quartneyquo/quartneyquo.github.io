@@ -36,18 +36,16 @@ export default function LinksPage() {
       </header>
       <main id="links" className={styles.main}>
         <section className={styles.intro} aria-labelledby="links-title">
-          <div className={styles.portraitGroup}>
-            <img className={styles.portrait} src="/profile.jpeg" alt="Courtney Ko" width="1050" height="1350" />
-            <figure className={styles.panchita}>
-              <span role="img" aria-label="Panchita, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
-              <figcaption>Panchita says hi ♡</figcaption>
-            </figure>
-          </div>
+          <img className={styles.portrait} src="/profile.jpeg" alt="Courtney Ko" width="1050" height="1350" />
           <p className={styles.eyebrow}>A little corner of the internet</p>
           <h1 id="links-title">Hi, I’m Courtney.</h1>
           <p className={styles.bio}>Building communities, partnerships,<br />and product experiences for AI.</p>
           <p className={styles.note}>Let’s stay connected.</p>
           <div className={styles.landscape} aria-hidden="true" />
+          <figure className={styles.opaca}>
+            <span role="img" aria-label="Opaca, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
+            <figcaption>Opaca says hi ♡</figcaption>
+          </figure>
         </section>
         <section className={styles.destinations} aria-labelledby="social-title">
           <div className={styles.sectionHeading}><h2 id="social-title">Find me around the internet</h2><span aria-hidden="true">↗</span></div>
