@@ -42,10 +42,16 @@ export default function LinksPage() {
           <p className={styles.bio}>Building communities, partnerships,<br />and product experiences for AI.</p>
           <p className={styles.note}>Let’s stay connected.</p>
           <div className={styles.landscape} aria-hidden="true" />
-          <figure className={styles.opaca}>
-            <span role="img" aria-label="Opaca, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
-            <figcaption>Opaca says hi ♡</figcaption>
-          </figure>
+          <div className={styles.companions}>
+            <figure className={styles.companion}>
+              <span role="img" aria-label="Opaca, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
+              <figcaption>Opaca</figcaption>
+            </figure>
+            <figure className={styles.companion}>
+              <img src="/panchita-watercolor.webp" alt="Panchita, a fluffy cream alpaca with a pink bow, painted in watercolor" width="116" height="116" />
+              <figcaption>Panchita ♡</figcaption>
+            </figure>
+          </div>
         </section>
         <section className={styles.destinations} aria-labelledby="social-title">
           <div className={styles.sectionHeading}><h2 id="social-title">Find me around the internet</h2><span aria-hidden="true">↗</span></div>
