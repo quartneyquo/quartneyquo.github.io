@@ -45,11 +45,9 @@ export default function LinksPage() {
           <div className={styles.companions}>
             <figure className={styles.companion}>
               <span role="img" aria-label="Opaca, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
-              <figcaption>Opaca</figcaption>
             </figure>
             <figure className={styles.companion}>
               <img src="/panchita-watercolor.webp" alt="Panchita, a fluffy cream alpaca with a pink bow, painted in watercolor" width="116" height="116" />
-              <figcaption>Panchita ♡</figcaption>
             </figure>
           </div>
         </section>
