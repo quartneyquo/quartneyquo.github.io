@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, Github, Instagram, Linkedin, Mail } from 'lucide-react';
+import { WatercolorSprite } from '@/components/WatercolorSprite';
 import styles from './page.module.css';
 
 const title = 'Courtney Ko | Links';
@@ -35,7 +36,13 @@ export default function LinksPage() {
       </header>
       <main id="links" className={styles.main}>
         <section className={styles.intro} aria-labelledby="links-title">
-          <img className={styles.portrait} src="/profile.jpeg" alt="Courtney Ko" width="1050" height="1350" />
+          <div className={styles.portraitGroup}>
+            <img className={styles.portrait} src="/profile.jpeg" alt="Courtney Ko" width="1050" height="1350" />
+            <figure className={styles.panchita}>
+              <span role="img" aria-label="Panchita, a fluffy alpaca wearing a green bandana"><WatercolorSprite tile={7} /></span>
+              <figcaption>Panchita says hi ♡</figcaption>
+            </figure>
+          </div>
           <p className={styles.eyebrow}>A little corner of the internet</p>
           <h1 id="links-title">Hi, I’m Courtney.</h1>
           <p className={styles.bio}>Building communities, partnerships,<br />and product experiences for AI.</p>
