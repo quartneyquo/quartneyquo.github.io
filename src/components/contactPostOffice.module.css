@@ -1,0 +1,24 @@
+.postOffice { max-width:640px; margin-inline:auto; }
+.intro { text-align:center; padding:4px 12px 24px; }
+.stamp { display:grid; place-items:center; width:60px; height:60px; margin:0 auto 16px; border:1px dashed #a78090; border-radius:12px; background:#f3e9ee; color:#6b405c; transform:rotate(-5deg); }
+.eyebrow { color:#896779; font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; }
+.intro h2 { margin:10px 0; color:#40213d; font:400 clamp(28px, 5vw, 38px)/1.2 Georgia, 'Times New Roman', serif; }
+.intro > p:last-child { color:#776572; font-size:14px; line-height:1.7; }
+.email { display:flex; align-items:center; gap:14px; padding:18px 20px; border-radius:10px; background:#40213d; color:#fff; }
+.email > span { flex:1; min-width:0; }
+.email strong, .email span span { display:block; }
+.email strong { font-size:15px; font-weight:600; }
+.email span span { margin-top:3px; font-size:13px; color:#eadde7; overflow-wrap:anywhere; }
+.email > svg, .links a > svg { flex-shrink:0; }
+.email:hover { background:#56334f; }
+.links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; list-style:none; padding:0; margin:14px 0 0; }
+.links li:last-child { grid-column:1 / -1; }
+.links a { display:flex; align-items:center; gap:12px; min-height:82px; padding:15px; border:1px solid #e2d3dc; border-radius:10px; background:#fffdfc; color:#40213d; }
+.links a:hover { background:#f5edf2; border-color:#b99baa; }
+.icon { display:grid; place-items:center; flex-shrink:0; color:#77546b; }
+.linkText { flex:1; min-width:0; }
+.linkText strong, .linkText span { display:block; }
+.linkText strong { font-size:14px; font-weight:600; }
+.linkText span { margin-top:4px; font-size:12px; color:#776572; overflow-wrap:anywhere; }
+.note { margin:20px 0 4px; text-align:center; font:italic 14px/1.6 Georgia, 'Times New Roman', serif; color:#896779; }
+@media (max-width:480px) { .links { grid-template-columns:1fr; } .links a { min-height:68px; } .intro { padding-inline:0; } .email { padding:16px; gap:10px; } }

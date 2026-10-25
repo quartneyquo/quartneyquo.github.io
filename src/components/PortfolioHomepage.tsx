@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { EventGallery } from './PortfolioPlayground';
 import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
 import AirportStop from './AirportStop';
+import ContactPostOffice from './ContactPostOffice';
 import { portfolioLinkAction } from './portfolioAnalytics';
 import './watercolorJourney.css';
 import { WatercolorSprite } from './WatercolorSprite';
@@ -538,7 +539,7 @@ export default function Home() {
         </section>
         </JourneyStop>
 
-        <JourneyStop id="contact" tile={6} title="Contact Post Office" className="journey-contact" placement="contact">
+        <JourneyStop id="contact" tile={6} title="Contact Post Office" className="journey-contact" placement="contact" destination="/links/" preview={<ContactPostOffice />}>
           <p className="editorial-eyebrow">Let’s talk</p>
           <h2 id="contact-title">Building an AI community,<br className="hidden sm:block" /> partnership, or product story?</h2>
           <p>I’d love to hear what your team is working on.</p>

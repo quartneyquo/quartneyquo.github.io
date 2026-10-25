@@ -19,7 +19,7 @@ const destinationStamps = {
   'paca-village': { icon: Sprout, label: 'Paca Village' },
   airport: { icon: Plane, label: 'Panchita Airport' },
   about: { icon: Globe, label: 'Travel Atlas' },
-  contact: { icon: Mail, label: 'Contact' },
+  contact: { icon: Mail, label: 'Contact Post Office' },
 };
 
 function GrowingFlowers({ variant }: { variant: number }) {
@@ -35,16 +35,16 @@ function GrowingFlowers({ variant }: { variant: number }) {
   </motion.div>;
 }
 
-export function JourneyScene({ tile, title, art, doorPosition = 50, destination }: { tile: number; title: string; art?: ReactNode; doorPosition?: number; destination?: string }) {
+export function JourneyScene({ tile, title, art, doorPosition = 50, destination, hasPreview = false }: { tile: number; title: string; art?: ReactNode; doorPosition?: number; destination?: string; hasPreview?: boolean }) {
   const style = { '--tile-x': `${tile % 3 * 50}%`, '--tile-y': `${Math.floor(tile / 3) * 50}%`,
     '--atlas-size': '300% 300%', '--art-ratio': '1 / 1', '--foot-x': `${doorPosition}%` } as CSSProperties;
   const href = destination ?? ['#about', '#ai-valley', '#nvidia', '#pearle', '/paca-village/', '#toolkit', 'mailto:courtneythko@gmail.com'][tile];
   return <div className="journey-scene" style={style}>
-    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`}>{art ?? <WatercolorSprite tile={tile} className="journey-art" />}</a>
+    <a className="journey-building-link" href={href} aria-label={`Enter ${title}`} aria-haspopup={hasPreview ? 'dialog' : undefined}>{art ?? <WatercolorSprite tile={tile} className="journey-art" />}</a>
     <div className="journey-arrival-row">
       <span className="journey-landing" aria-hidden="true" />
       <GrowingFlowers variant={tile} />
-      <a className="journey-sign" href={href} aria-label={tile === 6 ? 'Contact Post Office: email Courtney' : undefined}>{title}<ArrowRight size={12} /></a>
+      <a className="journey-sign" href={href} aria-haspopup={hasPreview ? 'dialog' : undefined}>{title}<ArrowRight size={12} /></a>
     </div>
   </div>;
 }
@@ -58,7 +58,7 @@ export function JourneyStop({ id, tile, title, children, className = '', placeme
   const active = dialog.id === id && dialog.target;
   useLayoutEffect(() => { if (!active && content.current) height.current = content.current.getBoundingClientRect().height; });
   return <section id={id} className={`journey-stop ${className}`} data-journey-stop={id} data-journey-href={visitOnEnter ? destination : undefined} data-journey-preview={preview ? true : undefined} data-placement={placement ?? id} aria-label={title}>
-    <JourneyScene tile={tile} title={title} art={art} doorPosition={doorPosition} destination={destination} />
+    <JourneyScene tile={tile} title={title} art={art} doorPosition={doorPosition} destination={destination} hasPreview={Boolean(preview)} />
     <div ref={content} className="journey-content" style={active && !preview ? { height: height.current } : undefined}>{active && !preview ? createPortal(<div className={className}><div className="journey-content">{children}</div></div>, active) : children}</div>
     {active && preview ? createPortal(preview, active) : null}
   </section>;
@@ -562,7 +562,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
   const line = (points: TrailPoint[]) => points.map((point, i) => `${i ? 'L' : 'M'}${point.x},${point.y}`).join(' ');
   const stamp = destinationStamps[celebrating as keyof typeof destinationStamps];
   const activeSection = Array.from(root.current?.querySelectorAll<HTMLElement>('[data-journey-stop]') ?? []).find(section => section.id === activeStop);
-  const isProjectPreview = Boolean(activeSection?.dataset.journeyPreview);
+  const isProjectPreview = activeStop !== 'contact' && Boolean(activeSection?.dataset.journeyPreview);
   const dialogTitle = destinationStamps[activeStop as keyof typeof destinationStamps]?.label ?? activeSection?.getAttribute('aria-label');
 
   return <StopDialogContext.Provider value={{ id: activeStop, target: dialogTarget }}><div ref={root} className={`continuous-journey${geometry.width > 1 ? ' journey-compact' : ''}`} tabIndex={0} aria-label="Move Opaca" aria-describedby="opaca-keyboard-help">
@@ -619,7 +619,7 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
       <span className="sr-only" role="status">{reaction || (stamp ? `${stamp.label} reached. Passport stamped!` : '')}</span>
       <span className="sr-only">Hi, I'm Opaca. Let's go on an adventure!</span>
     </div>
-    <dialog ref={dialogRef} className={`journey-stop-dialog${isProjectPreview ? ' journey-project-dialog' : ''}`} aria-label={isProjectPreview ? `${dialogTitle} preview` : 'Destination details'} onCancel={event => { event.preventDefault(); closeStop(); }}>
+    <dialog ref={dialogRef} className={`journey-stop-dialog${isProjectPreview ? ' journey-project-dialog' : ''}`} aria-label={isProjectPreview ? `${dialogTitle} preview` : dialogTitle ?? 'Destination details'} onCancel={event => { event.preventDefault(); closeStop(); }}>
       <div className="journey-dialog-header"><span>{isProjectPreview ? 'A peek inside' : dialogTitle}</span><button type="button" onClick={closeStop} aria-label="Close destination" title="Close destination"><X size={22} /></button></div>
       <div ref={setDialogTarget} className="journey-dialog-body" />
     </dialog>
