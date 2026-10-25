@@ -435,7 +435,6 @@ export default function Home() {
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
           <Link href="/paca-village/">Paca Village</Link>
-          <Link href="/links/">Links</Link>
           <a href="mailto:courtneythko@gmail.com" className="header-email">Let’s work together <ArrowRight size={14} /></a>
         </nav>
       </header>
@@ -546,9 +545,6 @@ export default function Home() {
           <div className="intro-actions">
             <a className="editorial-button" href="mailto:courtneythko@gmail.com">Email Courtney <Mail size={16} /></a>
             <a className="editorial-link" href={CONTACT_LINK} target="_blank" rel="noopener noreferrer">LinkedIn <ExternalLink size={15} /></a>
-            <a className="editorial-link" href="https://x.com/Courtneythko" target="_blank" rel="noopener noreferrer" aria-label="Courtney on X">X <ExternalLink size={15} /></a>
-            <Link className="editorial-link" href="/links/">All my links <ArrowRight size={15} /></Link>
-            <a className="editorial-link" href="/Courtney_Ko_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume <ExternalLink size={15} /></a>
           </div>
         </JourneyStop>
         </ContinuousJourney>
