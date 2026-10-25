@@ -4,7 +4,7 @@ import { type CSSProperties, type ReactNode, createContext, useContext, useLayou
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Cpu, Globe, Heart, House, Leaf, Mail, Shell, Sprout, Users, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, Cpu, Globe, Heart, House, Leaf, Mail, Plane, Shell, Sprout, Users, X } from 'lucide-react';
 import { buildTrail, caseAnchor, closestStation, passedStops, pointOnTrail, trailOutline, type TrailPoint, type TrailStation } from './journeyPath';
 import './continuousJourney.css';
 import { WatercolorSprite } from './WatercolorSprite';
@@ -17,6 +17,7 @@ const destinationStamps = {
   'nvidia-lab': { icon: Cpu, label: 'NVIDIA Lab' },
   'pearle-port': { icon: Shell, label: 'Pearle Port' },
   'paca-village': { icon: Sprout, label: 'Paca Village' },
+  airport: { icon: Plane, label: 'Panchita Airport' },
   about: { icon: Globe, label: 'Travel Atlas' },
   contact: { icon: Mail, label: 'Contact' },
 };

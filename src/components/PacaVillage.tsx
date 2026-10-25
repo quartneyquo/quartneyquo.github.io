@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, useScroll, useReducedMotion } from 'framer-motion';
 import { ArrowDown, ArrowLeft, ArrowRight, ExternalLink, Sprout, Check, Pause, Play } from 'lucide-react';
 import { ContinuousJourney, JourneyStop } from './ContinuousJourney';
+import AirportStop from './AirportStop';
 import { HeroAtmosphere } from './HeroAtmosphere';
 import { pacaProducts, type PacaProduct } from '@/data/pacaProducts';
 import './watercolorJourney.css';
@@ -87,16 +88,17 @@ export default function PacaVillage() {
           <p className="village-eyebrow"><Sprout size={15} /> Built by me, for everyday life</p>
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
-          <p className="village-invitation">Seven little houses, including an arcade for a little fun.<br />Take a walk with Opaca and see what’s growing.</p>
+          <p className="village-invitation">Eight little stops, from cozy houses to an arcade and airport.<br />Take a walk with Opaca and see where you’ll go.</p>
           <a href="#pacaplate" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
-        <nav className="village-map" aria-label="Jump to a village house">
+        <nav className="village-map" aria-label="Jump to a village stop">
           <span className="village-map-label">Around the village</span>
           <ol>
             {pacaProducts.map((product, index) => <li key={product.id}>
               <a href={`#${product.id}`}><span className="village-map-number">0{index + 1}</span>{product.title}<ArrowDown size={12} /></a>
             </li>)}
             <li><a href="#arcade"><span className="village-map-number">07</span>Paca Arcade<ArrowDown size={12} /></a></li>
+            <li><a href="#airport"><span className="village-map-number">08</span>Panchita Airport<ArrowDown size={12} /></a></li>
           </ol>
         </nav>
       </section>
@@ -126,6 +128,7 @@ export default function PacaVillage() {
           <p className="village-summary">Step off the trail and into a cozy little game room. There’s always time for one more round.</p>
           <p className="project-links"><Link className="editorial-link" href="/paca-village/arcade/">Let’s play <ArrowRight size={14} aria-hidden="true" /></Link></p>
         </JourneyStop>
+        <AirportStop village />
       </ContinuousJourney>
 
       <div className="village-homeward">

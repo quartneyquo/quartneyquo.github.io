@@ -30,6 +30,16 @@ Landscape prompt:
 
 > Create a production background illustration for a website, not a mockup. Very wide landscape 3:2 aspect. Airy pale handpainted watercolor on pure white paper, contemporary storybook travel journal style, elegant and light with delicate pencil details and translucent washes. Upper 45% mostly near-white pale sky blue with 3 small soft white clouds; upper left especially empty and light for dark headline to be overlaid later. Lower 55% a quiet beautiful landscape of soft sage-green rolling meadow hills, pale blue distant hills at right, a slender blue river meandering from right distance to lower left, small simple wooden footbridge near far lower left, a few slim green trees, restrained tiny blush flowers at edges. A very subtle suggestion of San Francisco red bridge far left on distant horizon. Plenty of open meadow space in middle and right foreground for independently positioned website building illustrations. Absolutely NO buildings, NO paths or trails (the trail will be drawn by code), NO animals, NO people, NO text, NO logos, NO UI, NO paper border, NO hard edges or frames. Do not add giant flowers or foreground objects. Soft green meadow washes fade gently into pure WHITE #ffffff at bottom edge and left and right lower edges, natural watercolor pigment feathering. Top edge near-white icy blue. A genuinely exquisite professionally painted commissioned watercolor panorama. Fresh natural light, pale blue green pink palette, not beige, not dense, not saturated pixel art, not anime, no gradients or abstract blobs.
 
+## Panchita Airport
+
+- Asset: `public/panchita-airport.png`, created with the built-in image-generation tool.
+- Shared by the main portfolio trail and Paca Village. The building, sign, call to action, and keyboard entrance open `https://travel.courtneyko.com/`.
+- Generated with a transparent background; opaque building details are preserved.
+
+Final prompt:
+
+> Use case: illustration-story. Asset type: production website building sprite. Create one charming tiny airport for a hand-painted watercolor storybook village. A cream stone terminal with a pale sky-blue curved roof, small glass control tower, a welcoming wooden front entrance centered at 50% of canvas width, and a small parked vintage propeller plane beside it. Soft sage shrubs and a few tiny blush wildflowers at its base, a short stone approach ending below the front door. Match delicate watercolor travel-journal artwork: translucent washes, fine light pencil outlines, paper texture within the painted subjects, softly feathered edges, pale sky blue, sage, cream and blush palette. Three-quarter front view, entire airport and airplane fully visible, square composition, occupies about 85% of square with generous padding. The entrance should sit near the bottom center of the building. No text, signage lettering, logos, people, animals, UI, borders, sprite sheet, large landscape or sky. True transparent background, preserve opaque cream walls and interior details; no white rectangle or checkerboard.
+
 ## Path and Motion
 
 `ContinuousJourney.tsx` measures live section and doorway coordinates. The visible

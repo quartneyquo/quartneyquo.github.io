@@ -5,6 +5,7 @@ import { motion, useReducedMotion, useScroll } from 'framer-motion';
 import Link from 'next/link';
 import { EventGallery } from './PortfolioPlayground';
 import { ContinuousJourney, JourneyStop, JourneyDisclosure } from './ContinuousJourney';
+import AirportStop from './AirportStop';
 import { portfolioLinkAction } from './portfolioAnalytics';
 import './watercolorJourney.css';
 import { WatercolorSprite } from './WatercolorSprite';
@@ -500,11 +501,13 @@ export default function Home() {
         <JourneyStop id="paca-village" tile={4} title="Paca Village" className="journey-products" placement="products">
           <p className="editorial-eyebrow">Built by me</p>
           <h2 id="products-title">Paca Village</h2>
-          <p>A little village for the things I build. Seven houses for meal planning, recipes and cooking, everyday goals, money, career practice, learning Chinese, and arcade games.</p>
+          <p>A little village for the things I build. Cozy houses for everyday life, an arcade for a little fun, and an airport for adventures with Panchita.</p>
           <div className="project-links">
             <Link href="/paca-village/" className="editorial-button">Enter Paca Village <ArrowRight size={16} /></Link>
           </div>
         </JourneyStop>
+
+        <AirportStop />
 
         <JourneyStop id="about" tile={5} title="Travel Atlas" className="journey-about" placement="about">
           <div>
