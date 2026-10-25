@@ -436,7 +436,7 @@ export default function Home() {
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
           <Link href="/paca-village/">Paca Village</Link>
-          <a href="mailto:courtneythko@gmail.com" className="header-email">Let’s work together <ArrowRight size={14} /></a>
+          <a href="#contact" className="header-email" data-journey-preview-trigger="contact" aria-haspopup="dialog">Let’s work together <ArrowRight size={14} /></a>
         </nav>
       </header>
 

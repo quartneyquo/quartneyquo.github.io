@@ -405,9 +405,11 @@ export function ContinuousJourney({ children }: { children: ReactNode }) {
     const onKeyboardVisibility = () => { if (document.hidden) clearKeys(); };
     const onLink = (event: MouseEvent) => {
       const previewTrigger = event.target instanceof Element ? event.target.closest('[data-journey-preview-trigger]') : null;
-      if (previewTrigger && container.contains(previewTrigger) && !event.defaultPrevented) {
-        const section = previewTrigger.closest<HTMLElement>('[data-journey-stop]');
-        if (section?.dataset.journeyPreview) {
+      if (previewTrigger && !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+        const targetId = previewTrigger.getAttribute('data-journey-preview-trigger');
+        const section = targetId ? sectionFor(targetId) : previewTrigger.closest<HTMLElement>('[data-journey-stop]');
+        if (section?.dataset.journeyPreview && container.contains(section)) {
+          event.preventDefault();
           releaseKeyboard();
           cancelEntry();
           setArrivalCameo(null);
