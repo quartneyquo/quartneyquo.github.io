@@ -391,6 +391,7 @@ function CaseStudySection({ study, index }: { study: CaseStudy; index: number })
 }
 
 export default function Home() {
+  const [logosPaused, setLogosPaused] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
@@ -468,6 +469,36 @@ export default function Home() {
           ))}
         </nav>
         </JourneyStop>
+
+        <div className="company-collaborations" role="region" aria-labelledby="companies-title">
+          <h2 id="companies-title">Companies I’ve worked with</h2>
+          <p>Through AI Valley events and community programs.</p>
+          <div className="company-logo-window">
+            <div className="company-logo-track" data-paused={logosPaused}>
+              {[0, 1].map(copy => (
+                <ul key={copy} aria-hidden={copy === 1 ? true : undefined}>
+                  {[
+              ['GMI Cloud', 'gmi', 'https://www.aivalley.io/events/fix-my-agent-an-ai-agent-clinic'],
+              ['Workato', 'workato', 'https://www.aivalley.io/events/move-it-forward-workato-ai-valley'],
+              ['Tavily', 'tavily', 'https://www.aivalley.io/events/the-ai-commerce-gallery-hackathon-walt-disney-family-museum'],
+              ['Arcade.dev', 'arcade', 'https://www.aivalley.io/events/ai-valley-x-pet-zen-dog-a-thon'],
+              ['Convex', 'convex', 'https://www.convex.dev/'],
+              ['Emergent', 'emergent', 'https://www.aivalley.io/events/ai-valley-x-pet-zen-dog-a-thon'],
+                  ].map(([company, logo, eventUrl]) => (
+                    <li key={company}>
+                      <a href={eventUrl} target="_blank" rel="noopener noreferrer" tabIndex={copy === 1 ? -1 : undefined}>
+                        <img src={`/companies/${logo}.svg`} alt={company} width="96" height="28" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
+          </div>
+          <button className="company-motion-toggle" type="button" aria-pressed={logosPaused} onClick={() => setLogosPaused(paused => !paused)}>
+            {logosPaused ? 'Play logos' : 'Pause logos'}
+          </button>
+        </div>
 
         <JourneyStop id="work" tile={1} title="AI Valley Hub" placement="selected-work">
           <span id="case-studies" className="journey-alias" />
