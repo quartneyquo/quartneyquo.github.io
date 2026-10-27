@@ -27,6 +27,14 @@ const games = [
     image: 'https://doctor-hog-bug-rescue.courtneythko.chatgpt.site/doctor-hog.png',
     href: 'https://doctorhog.courtneyko.com/',
   },
+  {
+    id: 'pacagame', title: 'Pacagame — Meadow Match', label: 'A whole lot of fluff',
+    description: 'Match fluffy alpacas and sparkling gems with the whole meadow herd cheering you on. Pick a companion, make a little magic, and settle in for one more level.',
+    detail: 'Match-3 · Click or swipe · Opens in a new tab',
+    image: '/arcade/pacagame-alpacas.png',
+    href: 'https://pacagame-meadow-match.courtneythko.chatgpt.site/',
+    launchInNewTab: true,
+  },
 ];
 type ArcadeGame = typeof games[number];
 
@@ -68,7 +76,7 @@ export default function PacaArcade() {
           <div className="arcade-shelf-title"><h2 id="arcade-games-title">Pick your little adventure</h2><span>Everyone’s welcome</span></div>
           <div className="arcade-games">{games.map((game, index) => <article className="arcade-game" key={game.id}>
             <div className={`arcade-game-art arcade-game-art--${game.id}`}><img src={game.image} alt="" width="800" height="500" /><span className="arcade-game-number">0{index + 1}</span>{game.id === 'meadow-cafe' && <div className="arcade-opaca" aria-hidden="true" />}</div>
-            <div className="arcade-game-copy"><p className="arcade-eyebrow">{game.label}</p><h3>{game.title}</h3><p>{game.description}</p><span className="arcade-game-detail">{game.detail}</span><button id={`play-${game.id}`} className="arcade-play" onClick={() => { setLoaded(false); setActiveGame(game); }}><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></button></div>
+            <div className="arcade-game-copy"><p className="arcade-eyebrow">{game.label}</p><h3>{game.title}</h3><p>{game.description}</p><span className="arcade-game-detail">{game.detail}</span>{'launchInNewTab' in game && game.launchInNewTab ? <a id={`play-${game.id}`} className="arcade-play" href={game.href} target="_blank" rel="noopener noreferrer"><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></a> : <button id={`play-${game.id}`} className="arcade-play" onClick={() => { setLoaded(false); setActiveGame(game); }}><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></button>}</div>
           </article>)}</div>
         </section>
         <p className="arcade-footer-note">One more round, then back to the meadow. ♡</p>
