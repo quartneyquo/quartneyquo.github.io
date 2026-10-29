@@ -45,11 +45,28 @@ const games = [
   },
 ];
 type ArcadeGame = typeof games[number];
+const mahjongFallback = 'https://alpaca-mahjong-meadow-c8k.courtneythko.chatgpt.site/';
+const mahjongDomain = 'https://mahjong.courtneyko.com/';
 
 export default function PacaArcade() {
   const [activeGame, setActiveGame] = useState<ArcadeGame | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [mahjongHref, setMahjongHref] = useState(mahjongFallback);
   const playerHeading = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    // Keep Play usable while a visitor's DNS resolver still caches the new domain as missing.
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 4000);
+    fetch(`${mahjongDomain}assets/alpaca-mark.svg`, {
+      mode: 'no-cors', cache: 'no-store', credentials: 'omit', signal: controller.signal,
+    }).then(() => {
+      if (!controller.signal.aborted) setMahjongHref(mahjongDomain);
+    }).catch(() => {
+      // The original public game address remains available if DNS or the request fails.
+    }).finally(() => window.clearTimeout(timeout));
+    return () => { controller.abort(); window.clearTimeout(timeout); };
+  }, []);
 
   useEffect(() => {
     if (activeGame) {
@@ -84,7 +101,7 @@ export default function PacaArcade() {
           <div className="arcade-shelf-title"><h2 id="arcade-games-title">Pick your little adventure</h2><span>Everyone’s welcome</span></div>
           <div className="arcade-games">{games.map((game, index) => <article className="arcade-game" key={game.id}>
             <div className={`arcade-game-art arcade-game-art--${game.id}`}><img src={game.image} alt="" width="800" height="500" /><span className="arcade-game-number">0{index + 1}</span>{game.id === 'meadow-cafe' && <div className="arcade-opaca" aria-hidden="true" />}</div>
-            <div className="arcade-game-copy"><p className="arcade-eyebrow">{game.label}</p><h3>{game.title}</h3><p>{game.description}</p><span className="arcade-game-detail">{game.detail}</span>{'launchInNewTab' in game && game.launchInNewTab ? <a id={`play-${game.id}`} className="arcade-play" href={game.href} target="_blank" rel="noopener noreferrer"><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></a> : <button id={`play-${game.id}`} className="arcade-play" onClick={() => { setLoaded(false); setActiveGame(game); }}><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></button>}</div>
+            <div className="arcade-game-copy"><p className="arcade-eyebrow">{game.label}</p><h3>{game.title}</h3><p>{game.description}</p><span className="arcade-game-detail">{game.detail}</span>{'launchInNewTab' in game && game.launchInNewTab ? <a id={`play-${game.id}`} className="arcade-play" href={game.id === 'alpaca-mahjong' ? mahjongHref : game.href} target="_blank" rel="noopener noreferrer"><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></a> : <button id={`play-${game.id}`} className="arcade-play" onClick={() => { setLoaded(false); setActiveGame(game); }}><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></button>}</div>
           </article>)}</div>
         </section>
         <p className="arcade-footer-note">One more round, then back to the meadow. ♡</p>
