@@ -7,6 +7,14 @@ import './pacaArcade.css';
 
 const games = [
   {
+    id: 'alpaca-mahjong', title: 'Alpaca Mahjong', label: 'A seat at the meadow table',
+    description: 'Gather with the fluffy herd for Hong Kong mahjong. Call pung and kong in Cantonese, sip your tea, and let the alpacas cheer you on.',
+    detail: 'Hong Kong mahjong · Easy, Medium & Hard · Teahouse music',
+    image: '/arcade/alpaca-mahjong.webp',
+    href: 'https://mahjong.courtneyko.com/',
+    launchInNewTab: true,
+  },
+  {
     id: 'snoopy-solitaire', title: 'Snoopy’s Cozy Solitaire', label: 'A little autumn magic',
     description: 'A few cards, a little company, and a whole lot of fall. Settle in with Snoopy and Woodstock for a cozy game of Klondike.',
     detail: 'Solitaire · Draw 1 or 3 · Hints & undo',

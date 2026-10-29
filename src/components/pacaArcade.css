@@ -48,4 +48,6 @@
 .arcade-game-art--doctor-hog { background:radial-gradient(ellipse at 50% 65%,#e0d5e966,transparent 65%),#f1eee4; }
 .arcade-game-art--doctor-hog > img { object-fit:contain; padding:20px; }
 .arcade-game-art--pacagame > img { object-position:center 68%; }
+.arcade-game-art--alpaca-mahjong { background:radial-gradient(ellipse at 50% 70%,#c9d8bb88,transparent 68%),#eaf0e3; }
+.arcade-game-art--alpaca-mahjong > img { object-fit:contain; padding:18px; }
 @media(min-width:1050px) { .arcade-games { grid-template-columns:repeat(3,minmax(0,1fr)); } }
