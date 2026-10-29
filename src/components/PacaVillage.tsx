@@ -11,6 +11,12 @@ import { pacaProducts, type PacaProduct } from '@/data/pacaProducts';
 import './watercolorJourney.css';
 import './pacaVillage.css';
 
+const villageStops = [
+  ...pacaProducts.filter(product => product.id === 'pacachef'),
+  'arcade' as const,
+  ...pacaProducts.filter(product => product.id !== 'pacachef'),
+];
+
 function HouseArt({ product }: { product: PacaProduct }) {
   if (product.image) return <img className="journey-art paca-house-image" src={product.image} alt="" width="1024" height="1024" loading="lazy" />;
   const { tile } = product;
@@ -75,7 +81,7 @@ export default function PacaVillage() {
 
   return <div className="portfolio-editorial watercolor-portfolio paca-village-page">
     <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
-    <a className="village-skip" href="#pacaplate">Skip to the houses</a>
+    <a className="village-skip" href="#pacachef">Skip to the village stops</a>
     <header className="village-header">
       <Link href="/#paca-village" className="village-back"><ArrowLeft size={16} /> Courtney’s portfolio</Link>
       <Link href="/trips/projects">All projects <ArrowRight size={15} /></Link>
@@ -89,22 +95,27 @@ export default function PacaVillage() {
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
           <p className="village-invitation">Eight little stops, from cozy houses to an arcade and airport.<br />Take a walk with Opaca and see where you’ll go.</p>
-          <a href="#pacaplate" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
+          <a href="#pacachef" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
         <nav className="village-map" aria-label="Jump to a village stop">
           <span className="village-map-label">Around the village</span>
           <ol>
-            {pacaProducts.map((product, index) => <li key={product.id}>
-              <a href={`#${product.id}`}><span className="village-map-number">0{index + 1}</span>{product.title}<ArrowDown size={12} /></a>
+            {villageStops.map((product, index) => <li key={product === 'arcade' ? product : product.id}>
+              <a href={`#${product === 'arcade' ? product : product.id}`}><span className="village-map-number">0{index + 1}</span>{product === 'arcade' ? 'Paca Arcade' : product.title}<ArrowDown size={12} /></a>
             </li>)}
-            <li><a href="#arcade"><span className="village-map-number">07</span>Paca Arcade<ArrowDown size={12} /></a></li>
             <li><a href="#airport"><span className="village-map-number">08</span>Panchita Airport<ArrowDown size={12} /></a></li>
           </ol>
         </nav>
       </section>
 
       <ContinuousJourney>
-        {pacaProducts.map((product, index) => <JourneyStop
+        {villageStops.map((product, index) => product === 'arcade' ? <JourneyStop key="arcade" id="arcade" tile={5} title="Paca Arcade" className="village-stop" doorPosition={66} destination="/paca-village/arcade/" visitOnEnter art={<img className="journey-art paca-house-image" src="/arcade/arcade-house.png" alt="" width="1254" height="1254" loading="lazy" />}>
+          <p className="editorial-eyebrow">0{index + 1} / The village arcade</p>
+          <h2>Paca Arcade</h2>
+          <p className="village-category">A little time to play</p>
+          <p className="village-summary">Step off the trail and into a cozy little game room. There’s always time for one more round.</p>
+          <p className="project-links"><Link className="editorial-link" href="/paca-village/arcade/">Let’s play <ArrowRight size={14} aria-hidden="true" /></Link></p>
+        </JourneyStop> : <JourneyStop
           key={product.id}
           id={product.id}
           tile={product.tile}
@@ -121,13 +132,6 @@ export default function PacaVillage() {
           <p className="village-summary">{product.summary}</p>
           <p className="project-links"><button type="button" className="editorial-link village-preview-trigger" data-journey-preview-trigger aria-haspopup="dialog">Peek inside {product.title} <ArrowRight size={14} aria-hidden="true" /></button></p>
         </JourneyStop>)}
-        <JourneyStop id="arcade" tile={5} title="Paca Arcade" className="village-stop" doorPosition={66} destination="/paca-village/arcade/" visitOnEnter art={<img className="journey-art paca-house-image" src="/arcade/arcade-house.png" alt="" width="1254" height="1254" loading="lazy" />}>
-          <p className="editorial-eyebrow">07 / The village arcade</p>
-          <h2>Paca Arcade</h2>
-          <p className="village-category">A little time to play</p>
-          <p className="village-summary">Step off the trail and into a cozy little game room. There’s always time for one more round.</p>
-          <p className="project-links"><Link className="editorial-link" href="/paca-village/arcade/">Let’s play <ArrowRight size={14} aria-hidden="true" /></Link></p>
-        </JourneyStop>
         <AirportStop village />
       </ContinuousJourney>
 
