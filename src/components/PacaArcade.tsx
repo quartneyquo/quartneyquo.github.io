@@ -47,7 +47,7 @@ const games = [
     id: 'alpaca-letter-club', title: 'Alpaca Letter Club', label: 'One bunch. So many words.',
     description: 'Find as many words as you can in three minutes, then explore every possible answer. Three watercolor alpacas graze nearby as you play.',
     detail: 'Word hunt · 3-minute rounds · All words revealed',
-    image: '/arcade/alpaca-letter-club.png',
+    image: '/arcade/alpaca-letter-club.png?v=storybook',
     href: 'https://alpaca-letter-club.courtneythko.chatgpt.site/',
     launchInNewTab: true,
   },
