@@ -43,6 +43,14 @@ const games = [
     href: 'https://pacagame-meadow-match.courtneythko.chatgpt.site/',
     launchInNewTab: true,
   },
+  {
+    id: 'alpaca-letter-club', title: 'Alpaca Letter Club', label: 'One bunch. So many words.',
+    description: 'Find as many words as you can from one bunch of letters. Take your time, collect little discoveries, and let three fluffy alpacas graze nearby.',
+    detail: 'Word hunt · No timer · Opens in a new tab',
+    image: '/arcade/alpaca-letter-club.png',
+    href: 'https://alpaca-letter-club.courtneythko.chatgpt.site/',
+    launchInNewTab: true,
+  },
 ];
 type ArcadeGame = typeof games[number];
 const mahjongFallback = 'https://alpaca-mahjong-meadow-c8k.courtneythko.chatgpt.site/';
@@ -100,7 +108,7 @@ export default function PacaArcade() {
         <section className="arcade-shelf" aria-labelledby="arcade-games-title">
           <div className="arcade-shelf-title"><h2 id="arcade-games-title">Pick your little adventure</h2><span>Everyone’s welcome</span></div>
           <div className="arcade-games">{games.map((game, index) => <article className="arcade-game" key={game.id}>
-            <div className={`arcade-game-art arcade-game-art--${game.id}`}><img src={game.image} alt={game.id === 'alpaca-mahjong' ? 'Four fluffy alpaca friends playing mahjong and sharing tea around a green table in a hand-drawn watercolor scene.' : ''} width="800" height="500" /><span className="arcade-game-number">0{index + 1}</span>{game.id === 'meadow-cafe' && <div className="arcade-opaca" aria-hidden="true" />}</div>
+            <div className={`arcade-game-art arcade-game-art--${game.id}`}><img src={game.image} alt={game.id === 'alpaca-mahjong' ? 'Four fluffy alpaca friends playing mahjong and sharing tea around a green table in a hand-drawn watercolor scene.' : ''} width="800" height="500" /><span className="arcade-game-number">0{index + 1}</span>{game.id === 'meadow-cafe' && <div className="arcade-opaca" aria-hidden="true" />}{game.id === 'alpaca-letter-club' && <div className="arcade-letter-preview" aria-hidden="true">{'WORDS'.split('').map(letter => <span key={letter}>{letter}</span>)}</div>}</div>
             <div className="arcade-game-copy"><p className="arcade-eyebrow">{game.label}</p><h3>{game.title}</h3><p>{game.description}</p><span className="arcade-game-detail">{game.detail}</span>{'launchInNewTab' in game && game.launchInNewTab ? <a id={`play-${game.id}`} className="arcade-play" href={game.id === 'alpaca-mahjong' ? mahjongHref : game.href} target="_blank" rel="noopener noreferrer"><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></a> : <button id={`play-${game.id}`} className="arcade-play" onClick={() => { setLoaded(false); setActiveGame(game); }}><Play size={16} aria-hidden="true" /> Play {game.title}<ArrowUpRight size={16} aria-hidden="true" /></button>}</div>
           </article>)}</div>
         </section>

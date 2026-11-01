@@ -51,3 +51,9 @@
 .arcade-game-art--alpaca-mahjong { background:#faf8f1; }
 .arcade-game-art--alpaca-mahjong > img { display:block; object-fit:contain; padding:0; }
 @media(min-width:1050px) { .arcade-games { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+
+.arcade-game-art--alpaca-letter-club { background:#f5f2e7 url('/arcade/letter-club-watercolor.png') center / cover; }
+.arcade-game-art--alpaca-letter-club > img { object-fit:contain; object-position:center bottom; padding:65px 15px 13px; }
+.arcade-letter-preview { position:absolute; top:20%; left:0; right:0; display:flex; justify-content:center; gap:8px; }
+.arcade-letter-preview span { display:grid; place-items:center; width:36px; height:43px; border:1px solid #d7c88f88; border-radius:9px 7px 10px 6px; background:#f5e8b8d9; color:#7c7855; box-shadow:0 3px 0 #d6c68f66; font:24px Georgia,serif; transform:rotate(-4deg); }
+.arcade-letter-preview span:nth-child(even) { transform:translateY(-5px) rotate(4deg); }
