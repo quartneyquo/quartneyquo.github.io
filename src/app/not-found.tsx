@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import AlpacaRunner from '@/components/AlpacaRunner';
 import styles from '@/components/notFound.module.css';
 
@@ -12,8 +13,18 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Link href="/" className={styles.wordmark}>courtney ko<span aria-hidden="true">✳</span></Link>
+      <a href="#main" className="skip-link">Skip to content</a>
+      <div className={styles.headerBand}>
+        <header className={`portfolio-header ${styles.header}`} data-placement="header">
+          <Link href="/" className={`wordmark ${styles.wordmark}`} aria-label="Courtney Ko home">Courtney Ko</Link>
+          <nav aria-label="Main navigation">
+            <Link href="/#work">Work</Link>
+            <Link href="/paca-village/">Paca Village</Link>
+            <Link href="/#contact" className={`header-email ${styles.contactLink}`}>Let’s work together <ArrowRight size={14} aria-hidden="true" /></Link>
+          </nav>
+        </header>
+      </div>
+      <main id="main" className={styles.main}>
         <AlpacaRunner />
         <div className={styles.intro}>
           <h1>This page wandered off.</h1>
