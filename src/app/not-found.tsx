@@ -13,6 +13,7 @@ export default function NotFound() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+        <Link href="/" className={styles.wordmark}>courtney ko<span aria-hidden="true">✳</span></Link>
         <AlpacaRunner />
         <div className={styles.intro}>
           <h1>This page wandered off.</h1>
@@ -23,7 +24,7 @@ export default function NotFound() {
           <Link className={styles.homeLink} href="/">Back to home</Link>
           <Link className={styles.arcadeLink} href="/paca-village/arcade/">More games</Link>
         </nav>
-        <footer className={styles.footer}><Link href="/">courtney ko</Link><span>·</span><span>a little lost, still in good company.</span></footer>
+        <footer className={styles.footer}>a little lost, still in good company.</footer>
       </main>
     </div>
   );

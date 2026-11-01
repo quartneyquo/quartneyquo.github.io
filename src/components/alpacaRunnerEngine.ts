@@ -58,57 +58,57 @@ export function drawRun(ctx: CanvasRenderingContext2D, run: Run, width: number, 
     ctx.fillRect(Math.round(x), Math.round(y), w, h);
   };
   ctx.clearRect(0, 0, width, GAME_HEIGHT);
-  rect(0, 0, width, GAME_HEIGHT, '#ffffff');
+  rect(0, 0, width, GAME_HEIGHT, '#fffdfb');
 
   // Sparse clouds and a single ground line echo the browser's classic runner.
   const drift = reducedMotion ? 0 : run.distance * 0.08;
   const cloud = (x: number, y: number) => {
-    rect(x + 12, y, 18, 1, '#dadce0');
-    rect(x + 8, y + 1, 1, 6, '#dadce0');
-    rect(x + 30, y + 1, 1, 6, '#dadce0');
-    rect(x, y + 7, 9, 1, '#dadce0');
-    rect(x + 30, y + 7, 12, 1, '#dadce0');
-    rect(x, y + 8, 1, 5, '#dadce0');
-    rect(x + 42, y + 8, 1, 5, '#dadce0');
-    rect(x, y + 13, 43, 1, '#dadce0');
+    rect(x + 12, y, 18, 1, '#e5dce2');
+    rect(x + 8, y + 1, 1, 6, '#e5dce2');
+    rect(x + 30, y + 1, 1, 6, '#e5dce2');
+    rect(x, y + 7, 9, 1, '#e5dce2');
+    rect(x + 30, y + 7, 12, 1, '#e5dce2');
+    rect(x, y + 8, 1, 5, '#e5dce2');
+    rect(x + 42, y + 8, 1, 5, '#e5dce2');
+    rect(x, y + 13, 43, 1, '#e5dce2');
   };
   cloud(((width * 0.45 - drift) % (width + 60) + width + 60) % (width + 60) - 30, 30);
   cloud(((width * 0.88 - drift * 0.7) % (width + 60) + width + 60) % (width + 60) - 30, 68);
-  rect(0, GROUND, width, 1, '#9aa0a6');
+  rect(0, GROUND, width, 1, '#c4b2bd');
   const groundShift = reducedMotion ? 0 : run.distance;
   for (let i = 0; i < Math.ceil(width / 65) + 2; i++) {
     const x = i * 65 - groundShift % 65;
-    rect(x + 14, GROUND + 7 + (i % 2) * 4, 5, 1, '#9aa0a6');
-    rect(x + 39, GROUND + 5, 2, 1, '#9aa0a6');
+    rect(x + 14, GROUND + 7 + (i % 2) * 4, 5, 1, '#c4b2bd');
+    rect(x + 39, GROUND + 5, 2, 1, '#c4b2bd');
   }
 
   for (const obstacle of run.obstacles) {
     const x = Math.round(obstacle.x);
     if (obstacle.kind === 'mushroom') {
-      rect(x + 9, GROUND - 21, 12, 21, '#5f6368');
-      rect(x + 12, GROUND - 21, 6, 18, '#ffffff');
-      rect(x + 6, GROUND - 33, 18, 6, '#5f6368');
-      rect(x + 3, GROUND - 27, 24, 6, '#5f6368');
-      rect(x, GROUND - 21, 30, 6, '#5f6368');
-      rect(x + 9, GROUND - 30, 3, 6, '#ffffff');
-      rect(x + 21, GROUND - 24, 3, 3, '#ffffff');
-      rect(x + 3, GROUND - 21, 3, 3, '#ffffff');
+      rect(x + 9, GROUND - 21, 12, 21, '#9b8591');
+      rect(x + 12, GROUND - 21, 6, 18, '#fffdfb');
+      rect(x + 6, GROUND - 33, 18, 6, '#9b8591');
+      rect(x + 3, GROUND - 27, 24, 6, '#9b8591');
+      rect(x, GROUND - 21, 30, 6, '#9b8591');
+      rect(x + 9, GROUND - 30, 3, 6, '#fffdfb');
+      rect(x + 21, GROUND - 24, 3, 3, '#fffdfb');
+      rect(x + 3, GROUND - 21, 3, 3, '#fffdfb');
     } else {
-      rect(x + 3, GROUND - 24, 33, 24, '#5f6368');
-      rect(x, GROUND - 18, 39, 15, '#5f6368');
-      rect(x + 27, GROUND - 18, 9, 15, '#ffffff');
-      rect(x + 30, GROUND - 12, 3, 6, '#5f6368');
-      rect(x + 6, GROUND - 18, 15, 3, '#9aa0a6');
-      rect(x + 9, GROUND - 9, 12, 3, '#3c4043');
-      rect(x + 6, GROUND - 27, 9, 3, '#5f6368');
+      rect(x + 3, GROUND - 24, 33, 24, '#9b8591');
+      rect(x, GROUND - 18, 39, 15, '#9b8591');
+      rect(x + 27, GROUND - 18, 9, 15, '#fffdfb');
+      rect(x + 30, GROUND - 12, 3, 6, '#9b8591');
+      rect(x + 6, GROUND - 18, 15, 3, '#c4b2bd');
+      rect(x + 9, GROUND - 9, 12, 3, '#655066');
+      rect(x + 6, GROUND - 27, 9, 3, '#9b8591');
     }
   }
 
-  // Opaca: hand-drawn on a two-pixel grid, with a pink scarf and rosy cheek.
+  // Opaca: pink wool on a two-pixel grid, with a plum scarf and rosy cheek.
   const step = run.status === 'running' && run.y === 0 ? Math.floor(run.elapsed * 10) % 2 : 0;
   const py = GROUND - 48 + Math.round(run.y);
   const pixel = (x: number, y: number, w: number, h: number, color: string) => rect(PLAYER_X + x * 2, py + y * 2, w * 2, h * 2, color);
-  const wool = '#ffffff', outline = '#5f6368', shade = '#dadce0', pink = '#c58fa3';
+  const wool = '#f2bfd2', outline = '#ad6f8c', shade = '#d997b3', pink = '#926070';
   pixel(1, 12, 4, 4, outline);
   pixel(1, 12, 3, 2, wool);
   pixel(4, 18, 3, 6 - step, outline);
@@ -131,9 +131,9 @@ export function drawRun(ctx: CanvasRenderingContext2D, run: Run, width: number, 
   pixel(15, 5, 6, 4, wool);
   pixel(20, 7, 3, 3, outline);
   pixel(20, 7, 3, 2, shade);
-  pixel(19, 5, 1, 1, '#3c4043');
+  pixel(19, 5, 1, 1, '#655066');
   pixel(20, 8, 1, 1, pink);
   pixel(14, 10, 6, 2, pink);
   pixel(13, 11, 2, 4, pink);
-  pixel(13, 15, 1, 1, '#5f6368');
+  pixel(13, 15, 1, 1, '#774050');
 }
