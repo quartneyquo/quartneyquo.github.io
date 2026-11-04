@@ -3,7 +3,7 @@ import PacaVillage from '@/components/PacaVillage';
 
 export const metadata: Metadata = {
   title: 'Paca Village | Courtney Ko',
-  description: 'Eight little stops for Courtney’s apps, a cozy arcade, and Panchita Airport. Take off to explore Panchita’s Little Passport.',
+  description: 'Nine little stops for Courtney’s apps, a cozy arcade, Panchita Airport, and Paca’s Holiday Village. Follow the trail to something lovely.',
   alternates: { canonical: 'https://courtneyko.com/paca-village/' },
   openGraph: {
     title: 'Paca Village | Courtney Ko',

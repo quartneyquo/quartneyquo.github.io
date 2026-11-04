@@ -94,7 +94,7 @@ export default function PacaVillage() {
           <p className="village-eyebrow"><Sprout size={15} /> Built by me, for everyday life</p>
           <h1 id="village-title">Paca Village</h1>
           <p className="village-tagline">Small ideas. Shipped products.</p>
-          <p className="village-invitation">Eight little stops, from cozy houses to an arcade and airport.<br />Take a walk with Opaca and see where you’ll go.</p>
+          <p className="village-invitation">Nine little stops, from cozy houses to an arcade, airport, and holiday village.<br />Take a walk with Opaca and see where you’ll go.</p>
           <a href="#pacachef" className="editorial-button village-explore">Explore the village <ArrowDown size={16} /></a>
         </div>
         <nav className="village-map" aria-label="Jump to a village stop">
@@ -104,6 +104,7 @@ export default function PacaVillage() {
               <a href={`#${product === 'arcade' ? product : product.id}`}><span className="village-map-number">0{index + 1}</span>{product === 'arcade' ? 'Paca Arcade' : product.title}<ArrowDown size={12} /></a>
             </li>)}
             <li><a href="#airport"><span className="village-map-number">08</span>Panchita Airport<ArrowDown size={12} /></a></li>
+            <li><a href="#holiday-village"><span className="village-map-number">09</span>Paca’s Holiday Village<ArrowDown size={12} /></a></li>
           </ol>
         </nav>
       </section>
@@ -133,6 +134,22 @@ export default function PacaVillage() {
           <p className="project-links"><button type="button" className="editorial-link village-preview-trigger" data-journey-preview-trigger aria-haspopup="dialog">Peek inside {product.title} <ArrowRight size={14} aria-hidden="true" /></button></p>
         </JourneyStop>)}
         <AirportStop village />
+        <JourneyStop
+          id="holiday-village"
+          tile={4}
+          title="Paca’s Holiday Village"
+          className="village-stop"
+          doorPosition={56}
+          destination="/paca-village/holiday/"
+          visitOnEnter
+          art={<img className="journey-art paca-house-image" src="/holiday/gingerbread-house.png" alt="" width="1254" height="1254" loading="lazy" />}
+        >
+          <p className="editorial-eyebrow">09 / The gingerbread cottage</p>
+          <h2>Paca’s Holiday Village</h2>
+          <p className="village-category">A little magic for every season</p>
+          <p className="village-summary">Follow the warm windows to a cozy corner of the village. There’s a garden of little thank-yous waiting inside.</p>
+          <p className="project-links"><Link className="editorial-link" href="/paca-village/holiday/">Enter the holiday village <ArrowRight size={14} aria-hidden="true" /></Link></p>
+        </JourneyStop>
       </ContinuousJourney>
 
       <div className="village-homeward">

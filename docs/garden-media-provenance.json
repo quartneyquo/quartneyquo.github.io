@@ -1,0 +1,220 @@
+{
+  "status": "Animations delivered, top navigation removed, and the optional music player restored with the new 17.21-second MiniMax instrumental-mode clip. Earlier vocal tracks and the piano remix remain rejected.",
+  "approved_total_usd": "1.17",
+  "provider": "GMI Cloud",
+  "assets": [
+    {
+      "name": "Autumn leaf drift",
+      "model_id": "pixverse-v6-t2v",
+      "prompt": "An eight-second loop-friendly 2D watercolor animation overlay: a sparse scattering of small hand-painted autumn maple and oak leaves drifting downward in a gentle diagonal breeze, each leaf slowly rocking and rotating. Dusty terracotta, apricot, honey gold and muted sage; delicate paper grain within the leaves, soft pastel edges, elegant children's storybook illustration. Isolated on a perfectly uniform pure white #FFFFFF background, empty negative space across most of the frame. Leaves enter gradually from above and leave below; steady unchanging density throughout, designed for a calm repeating ambient loop. Locked camera, flat front-facing composition, no zoom, no cuts, no shadows on the background, no trees, no landscape, no people, no text, no watermark. Movement is slow, tender and peaceful. Silent video.",
+      "parameters": {
+        "duration": 8,
+        "aspect_ratio": "16:9",
+        "quality": "720p",
+        "generate_audio_switch": false,
+        "generate_multi_clip_switch": false,
+        "seed": 48217
+      },
+      "quote": {
+        "currency": "micro_usd",
+        "model_id": "pixverse-v6-t2v",
+        "note": "This model is priced per second, and this price covers the duration these parameters ask for.",
+        "price_micro_usd": 360000,
+        "price_usd": "0.36",
+        "unit": "second"
+      },
+      "result": {
+        "media": [
+          {
+            "mime_type": "video/mp4",
+            "type": "video",
+            "url": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-videogen/generated/6f67b97e-0025-4832-880b-ede908f02c84.mp4"
+          }
+        ],
+        "model_id": "pixverse-v6-t2v",
+        "poster": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-videogen/generated/thumbnail_image_6f67b97e-0025-4832-880b-ede908f02c84.jpg",
+        "request_id": "6f67b97e-0025-4832-880b-ede908f02c84",
+        "status": "success"
+      }
+    },
+    {
+      "name": "Gratitude leaf twirl",
+      "model_id": "pixverse-v6-t2v",
+      "prompt": "An eight-second loop-friendly 2D hand-painted watercolor animation overlay for a cozy gratitude garden: a small loose cluster of five autumn leaves, maple and oak leaves in peach, muted terracotta, warm honey yellow and sage, gently spiraling upward in a soft circular breeze, turning and fluttering slowly as if a little thank-you lifts them. Airy, sparse composition, broad white empty space. Continuous graceful motion with a quiet beginning and ending, suitable as a tiny celebratory flourish. Children's storybook watercolor with delicate veins and pigment texture inside the leaves, muted pastel colors. Perfectly uniform pure white #FFFFFF background, locked front-facing camera, no zoom, no cuts, no cast shadows, no tree or scenery, no people, no words, no logos, no watermark. Silent video, peaceful and gentle.",
+      "parameters": {
+        "duration": 8,
+        "aspect_ratio": "1:1",
+        "quality": "720p",
+        "generate_audio_switch": false,
+        "generate_multi_clip_switch": false,
+        "seed": 48218
+      },
+      "quote": {
+        "currency": "micro_usd",
+        "model_id": "pixverse-v6-t2v",
+        "note": "This model is priced per second, and this price covers the duration these parameters ask for.",
+        "price_micro_usd": 360000,
+        "price_usd": "0.36",
+        "unit": "second"
+      },
+      "result": {
+        "media": [
+          {
+            "mime_type": "video/mp4",
+            "type": "video",
+            "url": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-videogen/generated/143b600f-6c5d-496e-b082-b396199af455.mp4"
+          }
+        ],
+        "model_id": "pixverse-v6-t2v",
+        "poster": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-videogen/generated/thumbnail_image_143b600f-6c5d-496e-b082-b396199af455.jpg",
+        "request_id": "143b600f-6c5d-496e-b082-b396199af455",
+        "status": "success"
+      }
+    },
+    {
+      "name": "Little Thanks \u2014 autumn lo-fi",
+      "model_id": "minimax-music-3.0",
+      "prompt": "STRICTLY INSTRUMENTAL autumn lo-fi jazz background music for Paca's Gratitude Garden, a peaceful watercolor storybook garden with alpacas and falling leaves. Absolutely no vocals, no singing, no humming, no choir, no spoken words, no vocal samples or vocal chops. Around 72 BPM, warm felt piano and mellow Rhodes playing a simple tender melody over cozy major-seventh and ninth jazz chords, soft upright bass, sparse brushed snare and soft dusty kick, very gentle acoustic guitar touches, subtle vinyl warmth. Calm, grateful, wistfully happy, like a wool scarf and warm tea on a golden fall afternoon. Soft dynamics, unhurried rhythm, spacious arrangement, no dramatic drops, no loud cymbals, no abrupt transitions. Aim for approximately two minutes with a short soft intro, a gently varied instrumental middle and a natural warm ending, suitable for quiet repeat listening while writing gratitude. Original composition.",
+      "parameters": {
+        "lyrics": "[Instrumental Intro]\n[Instrumental]\n[Instrumental Variation]\n[Instrumental]\n[Instrumental Outro]",
+        "lyrics_optimizer": false,
+        "sample_rate": "44100",
+        "bitrate": "256000",
+        "format": "mp3"
+      },
+      "quote": {
+        "currency": "micro_usd",
+        "model_id": "minimax-music-3.0",
+        "price_micro_usd": 150000,
+        "price_usd": "0.15",
+        "unit": "song (up to 5 minutes)"
+      },
+      "result": {
+        "media": [
+          {
+            "mime_type": "audio/mpeg",
+            "type": "audio",
+            "url": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-audiogen/generated/9b6ddd99-37bb-42ed-8f06-80651fdad7a5.mp3"
+          }
+        ],
+        "model_id": "minimax-music-3.0",
+        "request_id": "9b6ddd99-37bb-42ed-8f06-80651fdad7a5",
+        "status": "success"
+      },
+      "review": {
+        "status": "rejected",
+        "reason": "User confirmed audible vocals despite instrumental prompt. Removed from public assets and player.",
+        "original_file": "output/holiday/rejected-little-thanks-with-vocals.mp3"
+      },
+      "repair": {
+        "method": "Local Demucs 4.0.1 htdemucs_ft two-stem vocal separation",
+        "extra_generation_cost_usd": "0.00",
+        "preview": "output/holiday/little-thanks-vocal-separated-preview.mp3",
+        "status": "User reported missing lead melody; not used in the player.",
+        "automatic_check": "faster-whisper base.en no longer transcribes the main repeated lyrics. Low-confidence speech-like output remains, so this is not evidence of zero vocals."
+      },
+      "melody_edit": {
+        "file": "output/holiday/rejected-piano-edit.mp3",
+        "method": "pYIN pitch extraction from separated vocal, rendered as synthesized electric-piano notes and mixed only with no_vocals backing",
+        "source_vocal_waveform_mixed": false,
+        "intro": "Theme introduced at 1.2 seconds and repeated with room for the main phrase",
+        "script": "output/holiday/add_piano_melody.py",
+        "notes": "output/holiday/piano-melody-render.json",
+        "additional_GMI_charge_usd": "0.00",
+        "review": "Rejected by user as messy. Removed from public assets and disconnected from player."
+      }
+    },
+    {
+      "name": "Autumn lo-fi \u2014 GMI instrumental remake",
+      "model_id": "minimax-music-3.0",
+      "prompt": "Instrumental-only autumn lo-fi jazz, cozy and peaceful, 72 BPM. A clear, memorable felt-piano melody begins in the first few seconds and carries the whole composition, with a simple repeating four-bar theme and gentle melodic variations. Minimal cohesive arrangement: warm piano melody and soft jazz chords, mellow upright bass, quiet dusty brushed drums. Soft major-seventh harmonies, warm analog texture, unhurried and comforting like warm tea on a golden autumn afternoon. Balanced natural mix, piano clearly audible above the accompaniment, restrained reverb, gentle dynamics, no busy fills or competing lead instruments. Approximately two minutes with a short introduction and a soft musical ending. Purely instrumental; no human voice, no singing, no humming, no speech, no choir, no vocal samples. No lyrics.",
+      "parameters": {
+        "lyrics": "[Inst]",
+        "lyrics_optimizer": false,
+        "sample_rate": "44100",
+        "bitrate": "256000",
+        "format": "mp3"
+      },
+      "quote": {
+        "currency": "micro_usd",
+        "model_id": "minimax-music-3.0",
+        "price_micro_usd": 150000,
+        "price_usd": "0.15",
+        "unit": "song (up to 5 minutes)"
+      },
+      "result": {
+        "model_id": "minimax-music-3.0",
+        "request_id": "fbb507bf-aee7-4496-81d7-3ae6f4e407fc",
+        "status": "success",
+        "media": [
+          {
+            "type": "audio",
+            "mime_type": "audio/mpeg",
+            "url": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-audiogen/generated/fbb507bf-aee7-4496-81d7-3ae6f4e407fc.mp3"
+          }
+        ]
+      },
+      "authorized": true,
+      "review": {
+        "status": "rejected",
+        "file": "output/holiday/autumn-lofi-gmi-v2.mp3",
+        "method": "Raw GMI output, no local remix or added melody",
+        "duration_seconds": 58.410875,
+        "speech_check": "output/holiday/autumn-lofi-gmi-v2.speech-check.json",
+        "reason": "User confirmed audible vocals. The explicit no-vocals requirement was not met. Do not restore this track to the player or offer it again as an instrumental.",
+        "diagnostic_separation": "output/holiday/remake-screening/htdemucs_ft/autumn-lofi-gmi-v2/",
+        "public_player": false
+      }
+    },
+    {
+      "name": "Autumn lo-fi \u2014 explicit instrumental mode",
+      "job": {
+        "model_id": "minimax-music-3.0",
+        "prompt": "Cozy autumn lo-fi jazz instrumental, 72 BPM, warm and peaceful. A clear, memorable felt-piano melody leads from the opening and stays in the foreground throughout. A simple four-bar melodic theme with tasteful variations, warm major-seventh piano chords, soft upright bass, quiet brushed drums, a gently swung groove and subtle analog warmth. Uncluttered arrangement with space between phrases, natural dynamics, restrained reverb and a balanced mix. Golden autumn leaves, a knitted scarf, warm tea and a tranquil storybook garden. Approximately two minutes with a gentle musical ending. Only piano, bass and percussion. No singing, humming, speech, choir, vocal samples, vocal chops or human voice of any kind.",
+        "parameters": {
+          "is_instrumental": true,
+          "lyrics_optimizer": false,
+          "sample_rate": "44100",
+          "bitrate": "256000",
+          "format": "mp3",
+          "lyrics": "[Inst]"
+        }
+      },
+      "quote": {
+        "currency": "micro_usd",
+        "model_id": "minimax-music-3.0",
+        "price_micro_usd": 150000,
+        "price_usd": "0.15",
+        "unit": "song (up to 5 minutes)"
+      },
+      "submitted": true,
+      "native_parameter_reference": "https://platform.minimax.io/docs/api-reference/music-generation",
+      "note": "MiniMax documents is_instrumental=true. GMI's model card omits this native field, but the tool declares model parameters are passed through unchanged. GMI's quote rejected omitted lyrics and succeeded with its required [Inst] tag retained alongside is_instrumental=true. A quote is not output verification. Do not remove the instrumental flag or retry a charged job without authorization.",
+      "authorized_cost_usd": "0.15",
+      "result": {
+        "model_id": "minimax-music-3.0",
+        "request_id": "cc22a80a-c874-46f2-b9ba-b1d78f1076e1",
+        "status": "success",
+        "media": [
+          {
+            "type": "audio",
+            "mime_type": "audio/mpeg",
+            "url": "https://storage.googleapis.com/gmi-video-assests-prod/user-assets/5666c72f-2a7c-472d-9b9a-b008556e0205/c704f440-0823-40d9-85aa-cb82bd8b4148/gmi-audiogen/generated/cc22a80a-c874-46f2-b9ba-b1d78f1076e1.mp3"
+          }
+        ]
+      },
+      "file": "output/holiday/autumn-lofi-instrumental-mode.mp3",
+      "duration_seconds": 17.21,
+      "review": {
+        "status": "installed-after-automatic-screening",
+        "speech_check": "output/holiday/autumn-lofi-instrumental-mode.speech-check.json",
+        "event_check": "output/holiday/autumn-lofi-instrumental-mode.events-check.json",
+        "method": "MiniMax native is_instrumental=true requested; raw generated audio used with no synthesized melody or separation.",
+        "findings": "Whisper returned a low-confidence Hahaha at the opening. AudioSet AST found music dominant and no strong singing/humming/laughter signal across overlapping windows. Focused opening checks likewise did not identify a strong vocal signal. The same classifier detected strong humming in the user-rejected previous remake.",
+        "limitations": "These are automatic checks, not an auditory review or proof that all vocals are absent. The model returned only 17.21 seconds despite the approximate two-minute prompt.",
+        "playback": "Opt-in, loop enabled, default 25% volume. Browser play/pause and source URL verified; no player error. Production build passed."
+      },
+      "public_file": "public/holiday/autumn-lofi-instrumental.mp3"
+    }
+  ]
+}
