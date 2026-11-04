@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Copy, Download, Heart, Mail, Pencil, Share2, Sprout } from "lucide-react";
 import { leafStyles, type LeafColor } from "@/data/gratitudeGarden";
-import { decodeGratitudeCard, encodeGratitudeCard, gratitudeCardEmail, gratitudeCardImageShare, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH, validateGratitudeCard, type GratitudeCard } from "@/lib/gratitudeCard";
+import { decodeGratitudeCard, encodeGratitudeCard, gratitudeCardImageShare, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH, validateGratitudeCard, type GratitudeCard } from "@/lib/gratitudeCard";
+import { createGratitudeEmailFile } from "@/lib/gratitudeEmailFile";
 import { gardenRequest } from "@/lib/gratitudeApi";
 import { canSharePostcard, createPostcardFile, downloadPostcard, savePostcardFile } from "@/lib/gratitudePostcard";
 import Leaf from "./Leaf";
@@ -31,7 +32,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   const [invalidLink, setInvalidLink] = useState(false);
   const [prepared, setPrepared] = useState<GratitudeCard | null>(null);
   const [recipient, setRecipient] = useState("");
-  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; preview: string; shareable: boolean; copyable: boolean } | null>(null);
+  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; email: File; preview: string; shareable: boolean } | null>(null);
   const [postcardError, setPostcardError] = useState("");
   const [postcardAttempt, setPostcardAttempt] = useState(0);
   const [emailSharing, setEmailSharing] = useState(false);
@@ -40,7 +41,6 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   const [color, setColor] = useState<LeafColor>("maple");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [copyingImage, setCopyingImage] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [preparing, setPreparing] = useState(false);
   const [growthError, setGrowthError] = useState("");
@@ -72,12 +72,13 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
     let active = true;
     let preview = "";
     // Render before the click so sharing keeps the browser's user activation.
-    void createPostcardFile(prepared, prepared.recipient).then(file => {
+    void createPostcardFile(prepared, prepared.recipient).then(async file => {
+      const email = await createGratitudeEmailFile(prepared, file);
       if (!active) return;
       preview = URL.createObjectURL(file);
-      setPostcard({ card: prepared, file, preview, shareable: canSharePostcard(file, navigator), copyable: typeof ClipboardItem !== "undefined" && typeof navigator.clipboard?.write === "function" });
+      setPostcard({ card: prepared, file, email, preview, shareable: canSharePostcard(file, navigator) });
     }).catch(() => {
-      if (active) setPostcardError("The postcard image couldn’t be prepared. Please try again.");
+      if (active) setPostcardError("The email attachment couldn’t be prepared. Please try again.");
     });
     return () => { active = false; if (preview) URL.revokeObjectURL(preview); };
   }, [prepared, postcardAttempt]);
@@ -143,19 +144,18 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
       setNotice("Finish addressing and sending your postcard in the app you chose.");
     } catch (e) {
       if (e instanceof Error && e.name === "AbortError") setNotice("Sharing closed. Your postcard is ready whenever you are.");
-      else setNotice("The image couldn’t open in sharing. Download the PNG below and attach it in your email app.");
+      else setNotice("Sharing couldn’t open. Download the email file instead; it already contains the postcard attachment and link.");
     } finally { setEmailSharing(false); }
   }
 
-  async function copyPostcardImage() {
-    if (!readyPostcard || copyingImage) return;
-    setCopyingImage(true); setNotice("");
+  function downloadEmail() {
+    if (!readyPostcard) return;
     try {
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": readyPostcard.file })]);
-      setNotice("Postcard image copied. Open the email draft, then paste the picture into it with ⌘V on Mac or Ctrl+V on Windows. The card link is already included.");
+      savePostcardFile(readyPostcard.email);
+      setNotice("Your email file is ready to save, with the postcard attached and card link included. Open it in your desktop mail app, then address and send it.");
     } catch {
-      setNotice("This browser couldn’t copy the image. Download the PNG below, then attach it to the email draft. The draft already includes your card link.");
-    } finally { setCopyingImage(false); }
+      setNotice("The email file couldn’t download. Please try again.");
+    }
   }
 
   async function download() {
@@ -181,12 +181,12 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
             {growthError && <div className="thanks-growth-error" role="status"><p>{growthError}</p><button onClick={() => void connectCard(prepared)} disabled={preparing}>{preparing ? "Connecting…" : "Retry tree connection"}</button></div>}
             <div className="thanks-email-option">
               {readyPostcard && <img className="thanks-attachment-preview" src={readyPostcard.preview} alt={`Postcard image for ${prepared.recipient}`} width={1600} height={1000} />}
-              {readyPostcard?.copyable && <button className="thanks-email-button" onClick={copyPostcardImage} disabled={copyingImage}><Copy size={15} />{copyingImage ? "Copying postcard…" : "Copy postcard image"}</button>}
-              <a className="primary" href={gratitudeCardEmail(prepared).href} aria-describedby="thanks-email-help"><Mail size={16} /> Open email draft <ArrowRight size={15} /></a>
-              <p id="thanks-email-help">Your message and card link are included. Add their email address in your email app.</p>
-              <p>{readyPostcard?.copyable ? "For the picture: copy it above, then paste into your email with ⌘V on Mac or Ctrl+V on Windows." : "For the picture: download the PNG below, then attach it to your email."}</p>
-              <p className="thanks-email-fallback">Using webmail? Copy the card link below and paste it into your message with the picture.</p>
-              {postcardError && <div className="thanks-growth-error" role="alert"><p>{postcardError}</p><button onClick={() => setPostcardAttempt(value => value + 1)}>Retry postcard image</button></div>}
+              {readyPostcard && <p className="thanks-attachment-ready"><Check size={13} /> Postcard attached · card link included</p>}
+              <button className="primary" onClick={downloadEmail} disabled={!readyPostcard} aria-describedby="thanks-email-help"><Mail size={16} />{readyPostcard ? "Download email with attachment" : postcardError ? "Email attachment unavailable" : "Preparing email attachment…"}</button>
+              <p id="thanks-email-help">One email file (.eml), with your postcard PNG already attached and the full card link inside.</p>
+              <p>Open the downloaded file in your desktop mail app, add their email address, and send.</p>
+              <details className="thanks-email-instructions"><summary>Opening it in Apple Mail or another app</summary><p>If it opens as a message instead of a draft, use Send Again or Forward to address it with its attachment. In Apple Mail, look under the Message menu.</p><p>Email files need a compatible desktop mail app. Webmail and mobile apps may not open them as drafts.</p></details>
+              {postcardError && <div className="thanks-growth-error" role="alert"><p>{postcardError}</p><button onClick={() => setPostcardAttempt(value => value + 1)}>Retry email attachment</button></div>}
             </div>
             {readyPostcard?.shareable && <button className="thanks-email-button" onClick={sharePostcard} disabled={emailSharing}><Share2 size={16} />{emailSharing ? "Opening sharing…" : "Share image & link"}</button>}
             <div className="thanks-small-actions"><button onClick={copyLink}><Copy size={14} /> Copy link</button><button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button></div>

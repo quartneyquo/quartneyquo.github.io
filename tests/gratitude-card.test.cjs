@@ -23,7 +23,9 @@ function loadSource(filename) {
 
 const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardEmail, gratitudeCardImageShare, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
 const { canSharePostcard } = loadSource(path.join(sourceRoot, 'lib/gratitudePostcard.ts'));
+const { createGratitudeEmailFile } = loadSource(path.join(sourceRoot, 'lib/gratitudeEmailFile.ts'));
 const { File } = require('node:buffer');
+const { spawnSync } = require('node:child_process');
 const card = { recipient: 'Morgan', author: 'Avery', message: 'Thank you for being here.', color: 'maple' };
 const rawHash = value => '#card=' + Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -121,4 +123,62 @@ test('attachment support is checked separately from link sharing and safely fall
     assert.deepEqual(data.files, [file]);
     return true;
   } }), true);
+});
+
+// Parse with Python's independent MIME implementation, not the email builder.
+function parseEmail(raw) {
+  const result = spawnSync('python3', ['-c', `
+import sys, json, base64
+from email.parser import BytesParser
+from email import policy
+message = BytesParser(policy=policy.default).parsebytes(sys.stdin.buffer.read())
+print(json.dumps({
+  'subject': str(message['Subject']), 'to': str(message['To']),
+  'from': message['From'], 'bcc': message['Bcc'], 'unsent': message['X-Unsent'],
+  'body': message.get_body(preferencelist=('plain',)).get_content(),
+  'attachments': [{'name': p.get_filename(), 'type': p.get_content_type(),
+    'bytes': base64.b64encode(p.get_payload(decode=True)).decode()} for p in message.iter_attachments()],
+  'defects': [str(d) for p in message.walk() for d in p.defects]
+}))
+`], { input: raw, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  return JSON.parse(result.stdout);
+}
+const postcardPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lFEAAAAASUVORK5CYII=', 'base64');
+
+test('downloaded email contains the exact PNG attachment, message and full growth link', async () => {
+  const connected = { ...card, recipient: '지우 & Morgan 🍂', message: '고마워요!\nThanks for being here. 🦙', growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' };
+  const file = await createGratitudeEmailFile(connected, new File([postcardPng], 'postcard.png', { type: 'image/png' }));
+  assert.equal(file.type, 'message/rfc822');
+  assert.equal(file.name, 'paca-gratitude-email.eml');
+  const email = parseEmail(await file.text());
+  assert.equal(email.subject, gratitudeCardEmail(connected).subject);
+  assert.equal(email.body, gratitudeCardEmail(connected).body);
+  assert.ok(email.body.includes(gratitudeCardUrl(connected)));
+  assert.equal(email.to, '');
+  assert.equal(email.from, null, 'the sender account is chosen in the mail app');
+  assert.equal(email.unsent, '1');
+  assert.deepEqual(email.attachments, [{ name: 'paca-gratitude-postcard.png', type: 'image/png', bytes: postcardPng.toString('base64') }]);
+  assert.deepEqual(email.defects, []);
+});
+
+test('email files fold long Unicode subjects and keep user text out of address headers', async () => {
+  const long = { ...card, recipient: '葉'.repeat(40), author: 'Avery\nBcc: nobody@example.com' };
+  const image = new File([postcardPng], 'bad.png\r\nBcc: nobody@example.com', { type: 'image/png' });
+  const file = await createGratitudeEmailFile(long, image);
+  const raw = await file.text();
+  assert.ok(raw.split('\r\n').every(line => line.length <= 78));
+  assert.ok(!/[\r\n]/.test(raw.replaceAll('\r\n', '')));
+  const parsed = parseEmail(raw);
+  assert.equal(parsed.subject, gratitudeCardEmail(long).subject);
+  assert.equal(parsed.bcc, null);
+  assert.equal(parsed.to, '');
+  assert.equal(parsed.attachments.length, 1);
+  assert.deepEqual(parsed.defects, []);
+});
+
+test('email attachment export rejects missing or mislabeled image bytes', async () => {
+  await assert.rejects(createGratitudeEmailFile(card, new File([], 'empty.png', { type: 'image/png' })));
+  await assert.rejects(createGratitudeEmailFile(card, new File(['not a PNG'], 'fake.png', { type: 'image/png' })));
+  await assert.rejects(createGratitudeEmailFile(card, new File([postcardPng], 'wrong.txt', { type: 'text/plain' })));
 });
