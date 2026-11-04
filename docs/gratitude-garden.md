@@ -22,6 +22,14 @@ The counter explicitly labels approved community leaves, including zero, and exp
 
 Milestone buttons provide a clearly labeled visual preview without changing the real count or writing any records. “Back to our garden” returns to the live count. `node --test tests/garden-growth.test.cjs` checks growth boundaries, invalid/loading counts, stable positions, and large-community limits.
 
+## Personal thank-you cards
+
+“Send someone a little thanks” opens `/paca-village/holiday/gratitude-garden/thanks/`. Visitors choose a leaf, enter a recipient and message, optionally sign their name, and preview a watercolor card. They can use their device's share sheet, copy its link into a text or DM, or download a personalized PNG. Recipients can save their keepsake or create a thank-you of their own. The site does not send messages or claim delivery.
+
+The versioned, validated card payload lives in the link's URL fragment. It is not encrypted: anyone with the complete link can read it. It is not stored in the notes service, displayed in the public garden, or added to the approved community count. Shared links use the production domain; the preview link stays on the current host for local testing. Analytics scripts are excluded from the composer and recipient page, which also use `noindex`, `no-referrer`, and generic link-preview metadata without the personal message. Invalid or incomplete links show a recovery message.
+
+`node --test tests/gratitude-card.test.cjs tests/garden-growth.test.cjs` covers Unicode round trips, input limits, malformed links, allowed leaf colors, production URLs, and growth behavior. Browser checks cover composing, copying a link, opening the recipient view, downloading its PNG, mobile recipient width, and the absence of analytics scripts on card pages. The production export includes the new static route.
+
 ## Seasonal media
 
 Generated with the GMI Cloud Tools plugin after approval of the $0.87 quote: two PixVerse v6 8-second 720p clips ($0.36 each), and one MiniMax Music 3.0 track ($0.15). Exact prompts, settings, request IDs and source URLs are in `docs/garden-media-provenance.json`.

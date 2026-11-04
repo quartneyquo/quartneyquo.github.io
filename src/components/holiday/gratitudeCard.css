@@ -1,0 +1,60 @@
+.personal-gratitude-page main { max-width:1080px; }
+.garden-app .thanks-intro { text-align:center; padding:32px 0 35px; }
+.garden-app .thanks-intro>a { display:inline-block; margin-bottom:18px; }
+.garden-app .thanks-intro img { display:block; width:48px; height:60px; object-fit:contain; }
+.garden-app .thanks-intro h1 { font-size:clamp(34px,4.6vw,53px); letter-spacing:-1.8px; margin:13px 0; }
+.garden-app .thanks-intro>p:last-child { color:var(--muted); font-size:13px; line-height:1.8; }
+.garden-app .thanks-layout { display:grid; grid-template-columns:minmax(280px,360px) minmax(0,1fr); gap:40px; align-items:start; padding:10px 0 45px; }
+.garden-app .thanks-compose-panel { background:#fffdf7; border:1px solid #e7dfd1; border-radius:18px; padding:27px; box-shadow:0 8px 35px #58472e05; }
+.garden-app .thanks-form>label,.garden-app .thanks-leaf-picker legend { display:block; font-size:12px; color:#625746; font-weight:500; margin-bottom:8px; }
+.garden-app .thanks-form>label>span { color:var(--muted); font-size:10px; font-weight:400; margin-left:6px; }
+.garden-app .thanks-form>input,.garden-app .thanks-form>textarea,.garden-app .thanks-link-input { width:100%; border:1px solid #ded8cb; background:#fffcf7; border-radius:8px; padding:12px; color:var(--ink); font-size:13px; line-height:1.7; }
+.garden-app .thanks-form>textarea { resize:vertical; min-height:120px; }
+.garden-app .thanks-form>input { margin-bottom:22px; }
+.garden-app .thanks-form input::placeholder,.garden-app .thanks-form textarea::placeholder { color:#a49887; }
+.garden-app .thanks-leaf-picker { border:0; padding:0; margin:0 0 24px; min-width:0; }
+.garden-app .thanks-leaf-picker>div { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; }
+.garden-app .thanks-leaf-picker label { position:relative; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; border:1px solid #e8dfd3; border-radius:9px; padding:10px 2px; font-size:9px; color:var(--muted); }
+.garden-app .thanks-leaf-picker label.is-selected { border-color:var(--leaf-color); background:var(--leaf-pale); box-shadow:0 0 0 1px var(--leaf-color); }
+.garden-app .thanks-leaf-picker label:focus-within { outline:2px solid var(--sage); outline-offset:3px; }
+.garden-app .thanks-leaf-picker input { position:absolute; opacity:0; inset:0; width:100%; height:100%; cursor:pointer; }
+.garden-app .thanks-leaf-picker svg { width:31px; height:37px; }
+.garden-app .thanks-character-count { text-align:right; font-size:10px; color:var(--muted); margin:3px 0 20px; }
+.garden-app .thanks-share-detail { color:var(--muted); font-size:11px; line-height:1.7; margin-top:12px; text-align:center; }
+.garden-app .thanks-preview>.eyebrow { text-align:center; margin:0 0 15px; }
+.garden-app .personal-thanks-card { overflow:hidden; border:1px solid #e4d7c2; border-radius:19px; background:#fffaf2; box-shadow:0 12px 40px #5842270b; }
+.garden-app .thanks-card-garden { display:block; width:100%; height:205px; object-fit:cover; object-position:center 66%; mask-image:linear-gradient(#000 75%,transparent); }
+.garden-app .thanks-card-message { padding:0 35px 26px; margin-top:-12px; position:relative; text-align:center; background:radial-gradient(ellipse at 50% 30%,var(--card-tint),transparent 75%); }
+.garden-app .thanks-card-leaf { width:38px; height:44px; margin:0 auto 14px; transform:rotate(-12deg); }
+.garden-app .thanks-card-message .eyebrow { font-size:8px; color:var(--card-color); letter-spacing:1.6px; }
+.garden-app .thanks-card-message h2 { font:400 34px/1.3 var(--serif); margin:8px 0 20px; overflow-wrap:anywhere; }
+.garden-app .thanks-card-message blockquote { font:400 23px/1.55 var(--serif); white-space:pre-wrap; overflow-wrap:anywhere; }
+.garden-app .thanks-card-author { font-size:11px; line-height:1.9; color:var(--muted); margin:24px 0 20px; overflow-wrap:anywhere; }
+.garden-app .thanks-card-author strong { font-weight:500; color:var(--ink); }
+.garden-app .thanks-card-signature { display:flex; align-items:center; justify-content:center; gap:13px; border-top:1px solid #e4d9c7; padding-top:17px; }
+.garden-app .thanks-card-signature img { width:48px; height:60px; object-fit:contain; }
+.garden-app .thanks-card-signature span { text-align:left; font:italic 13px/1.65 var(--serif); color:#948067; }
+.garden-app .thanks-ready { text-align:center; }
+.garden-app .thanks-ready-icon { display:grid; place-items:center; width:53px; height:53px; border-radius:50%; color:#78845d; background:#eef1e4; margin:0 auto 19px; }
+.garden-app .thanks-ready h2 { font:400 29px/1.3 var(--serif); margin:10px 0 14px; overflow-wrap:anywhere; }
+.garden-app .thanks-ready>p:not(.eyebrow):not(.thanks-notice) { font-size:12px; line-height:1.8; color:var(--muted); }
+.garden-app .thanks-ready>.primary { margin-top:23px; }
+.garden-app .thanks-small-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px 20px; margin-top:12px; }
+.garden-app .thanks-small-actions button,.garden-app .thanks-small-actions a { display:inline-flex; align-items:center; justify-content:center; gap:6px; font-size:11px; color:#87715b; min-height:40px; }
+.garden-app .thanks-small-actions button:hover,.garden-app .thanks-small-actions a:hover { color:var(--rust); }
+.garden-app .thanks-link-label { display:block; text-align:left; font-size:10px; color:var(--muted); margin:24px 0 7px; }
+.garden-app .thanks-link-input { font-size:11px; padding:10px; }
+.garden-app .thanks-notice { font-size:12px; color:#68794e; line-height:1.7; margin:16px 0 0; min-height:20px; text-align:center; }
+.garden-app .thanks-received { max-width:520px; margin:0 auto 45px; }
+.garden-app .thanks-recipient-actions { margin-top:25px; display:flex; flex-direction:column; align-items:center; gap:15px; }
+.garden-app .thanks-recipient-actions>.primary { width:100%; max-width:290px; }
+.garden-app .thanks-recipient-actions>a { display:flex; align-items:center; gap:8px; color:#8c7459; font-size:12px; padding:8px; }
+.garden-app .thanks-empty { max-width:480px; margin:10px auto 70px; text-align:center; border:1px solid #e7dfd1; border-radius:16px; padding:35px; }
+.garden-app .thanks-empty>svg { margin:0 auto 16px; color:var(--sage); }
+.garden-app .thanks-empty h2 { font:400 28px/1.4 var(--serif); }
+.garden-app .thanks-empty p { color:var(--muted); font-size:13px; line-height:1.8; margin:15px 0 25px; }
+.garden-app .thanks-loading { text-align:center; color:var(--muted); padding:50px 0 100px; }
+.garden-app .thanks-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; padding:25px 0 35px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; }
+.garden-app .thanks-footer>a { display:inline-flex; gap:5px; align-items:center; margin-left:15px; min-height:35px; }
+@media(max-width:800px) { .garden-app .thanks-layout { grid-template-columns:1fr; max-width:520px; margin:auto; gap:30px; } .garden-app .thanks-compose-panel { padding:25px; } .garden-app .thanks-intro { padding:25px 0; } }
+@media(max-width:540px) { .garden-app .thanks-intro h1 { font-size:35px; max-width:none; } .garden-app .thanks-intro>p:last-child { font-size:12px; } .garden-app .thanks-card-garden { height:165px; } .garden-app .thanks-card-message { padding:0 24px 24px; } .garden-app .thanks-card-message h2 { font-size:29px; } .garden-app .thanks-card-message blockquote { font-size:21px; } .garden-app .thanks-compose-panel { padding:23px 20px; } .garden-app .thanks-footer>a { width:100%; margin:0; justify-content:center; } }

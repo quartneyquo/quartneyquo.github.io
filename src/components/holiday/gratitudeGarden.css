@@ -97,6 +97,8 @@
 .garden-app .garden-count-note { margin:8px 0 0; text-align:center; font-size:11px; line-height:1.6; color:var(--muted); }
 .garden-app .planted-state .pending-note { font-size:11px; }
 .garden-app .planted-state .success-detail { font-size:12px; line-height:1.7; }
+.garden-app .send-thanks-link { display:flex; align-items:center; justify-content:center; gap:7px; margin-top:18px; padding:16px 0 2px; border-top:1px solid var(--line); font-size:11px; color:var(--rust); min-height:44px; }
+.garden-app .send-thanks-link:hover { text-decoration:underline; text-underline-offset:4px; }
 
 /* A blustery autumn day, from the village header down to the last thank-you. */
 .garden-app .garden-wind { position:fixed; inset:0; height:100dvh; overflow:hidden; z-index:9; pointer-events:none; contain:layout paint; }

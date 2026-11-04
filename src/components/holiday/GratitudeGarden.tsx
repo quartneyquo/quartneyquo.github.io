@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback, type CSSProperties, type FormEvent } from "react";
-import { ArrowRight, ArrowLeft, Heart, Sprout, Download, X, Check, Pause, Play, Sparkles, ChevronRight, Copy, Lock, RefreshCw } from "lucide-react";
+import { ArrowRight, ArrowLeft, Heart, Sprout, Download, X, Check, Pause, Play, Sparkles, ChevronRight, Copy, Lock, RefreshCw, Mail } from "lucide-react";
 import { leafStyles, welcomeNotes, milestones, type LeafColor, type GardenNote } from "@/data/gratitudeGarden";
 import { downloadPostcard } from "@/lib/gratitudePostcard";
 import Leaf from "./Leaf";
@@ -9,6 +9,7 @@ import { GardenMusic, LeafAnimation } from "./GardenAtmosphere";
 import WindblownLeaves from "./WindblownLeaves";
 import { gardenGrowth, GARDEN_MATURITY_COUNT } from "@/lib/gardenGrowth";
 import { gardenRequest, gardenServiceUrl } from "@/lib/gratitudeApi";
+import { GRATITUDE_CARD_PATH } from "@/lib/gratitudeCard";
 import "./gratitudeGarden.css";
 
 const positions = [[30,24,-25],[49,16,15],[69,25,22],[20,40,-20],[43,35,16],[61,41,-10],[80,42,25],[36,51,-20],[58,24,10],[72,52,25],[52,49,-15],[25,53,18]];
@@ -182,6 +183,7 @@ export default function GratitudeGarden() {
             <div className="success-actions"><button onClick={copy}><Copy size={13} /> Copy gratitude</button><button onClick={() => { setPlanted(null); setMessage(""); setError(""); setNotice(""); started.current = Date.now(); requestAnimationFrame(() => textarea.current?.focus()); }}>Plant another <ArrowRight size={13} /></button></div>
             <p className="download-notice" role="status">{notice}</p>
           </div>}
+          <a className="send-thanks-link" href={GRATITUDE_CARD_PATH}><Mail size={14} /> Send someone a little thanks <ArrowRight size={13} /></a>
         </aside>
       </section>
       {loadError && <div className="load-error" role="status">{loadError}<button onClick={refresh}><RefreshCw size={13} /> Try again</button></div>}
