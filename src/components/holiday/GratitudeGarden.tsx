@@ -7,7 +7,7 @@ import Leaf from "./Leaf";
 import GardenGrowth from "./GardenGrowth";
 import { GardenMusic, LeafAnimation } from "./GardenAtmosphere";
 import WindblownLeaves from "./WindblownLeaves";
-import { gardenGrowth } from "@/lib/gardenGrowth";
+import { gardenGrowth, GARDEN_MATURITY_COUNT } from "@/lib/gardenGrowth";
 import { gardenRequest, gardenServiceUrl } from "@/lib/gratitudeApi";
 import "./gratitudeGarden.css";
 
@@ -113,6 +113,7 @@ export default function GratitudeGarden() {
   const liveGrowth = gardenGrowth(total);
   const displayedGrowth = gardenGrowth(previewTotal ?? total);
   const nextMilestone = liveGrowth.next;
+  const progressTarget = nextMilestone?.count ?? Math.max(total ?? 0, GARDEN_MATURITY_COUNT);
   function previewMilestone(count: number) {
     setPreviewTotal(count);
     scene.current?.scrollIntoView({ behavior: paused ? "instant" : "smooth", block: "center" });
@@ -149,7 +150,7 @@ export default function GratitudeGarden() {
           <p className="garden-count-note" role="status">{planted?.pending ? "Your leaf is saved for review. It joins this count once approved." : "New leaves join the count after review and approval."}</p>
           <p className="tree-hint"><Sparkles size={14} /> Tap a fluttering leaf. There’s a little kindness inside.</p>
           <div className="tree-growth-caption">
-            {previewTotal !== null ? <><span><Sparkles size={13} /> A peek ahead · {previewTotal.toLocaleString()} leaves</span><button onClick={() => setPreviewTotal(null)}><X size={12} /> Back to our garden</button></> : <><span><Sprout size={13} /> {liveGrowth.stage}</span><span>{total === null ? "Gathering our little thank-yous…" : nextMilestone ? `${liveGrowth.remaining} more to our ${nextMilestone.title.toLowerCase()}` : "A thousand little thanks. A golden kind of magic."}</span></>}
+            {previewTotal !== null ? <><span><Sparkles size={13} /> A peek ahead · {previewTotal.toLocaleString()} leaves</span><button onClick={() => setPreviewTotal(null)}><X size={12} /> Back to our garden</button></> : <><span><Sprout size={13} /> {liveGrowth.stage}</span><span>{total === null ? "Gathering our little thank-yous…" : nextMilestone ? `${liveGrowth.remaining} more to our ${nextMilestone.title.toLowerCase()}` : "A garden full of thanks. A golden kind of magic."}</span></>}
           </div>
           <p className="garden-growth-announcement" role="status" aria-live="polite">{growthAnnouncement}</p>
         </div>
@@ -192,7 +193,7 @@ export default function GratitudeGarden() {
         <div className="growing-heading"><span className="sprout-circle"><Sprout size={26} strokeWidth={1.3} /></span><div><p className="eyebrow">A LITTLE MORE MAGIC, TOGETHER</p><h2 id="growing-title">Every thank-you helps us grow.</h2><p>Every approved note grows our tree a little fuller. Tap a milestone for a peek at what’s coming.</p></div></div>
         <div className="milestone-track">{milestones.map(m => <button type="button" key={m.count} className={`milestone ${(total ?? 0) >= m.count ? "unlocked" : ""} ${previewTotal === m.count ? "previewing" : ""}`} onClick={() => previewMilestone(m.count)} aria-pressed={previewTotal === m.count} aria-label={`Preview ${m.title.toLowerCase()} at ${m.count.toLocaleString()} gratitude leaves`}><span className="milestone-art" aria-hidden="true">{m.icon}</span><strong>{m.title}</strong><span>{m.count.toLocaleString()} leaves {(total ?? 0) >= m.count && <Check size={12} />}</span></button>)}</div>
         <div className="progress-caption"><span>{total === null ? "Loading approved leaves…" : `${total.toLocaleString()} approved community ${total === 1 ? "leaf" : "leaves"}`}</span><span>{nextMilestone ? `${nextMilestone.count - (total ?? 0)} more to our ${nextMilestone.title.toLowerCase()}` : "A whole garden full of gratitude. Thank you!"}<Sparkles size={12} /></span></div>
-        <div className="progress-track" role="progressbar" aria-label="Progress toward the next garden milestone" aria-valuenow={total ?? 0} aria-valuemin={0} aria-valuemax={nextMilestone?.count ?? Math.max(total ?? 0, 1000)}><span style={{ width: `${Math.min(100, ((total ?? 0) / (nextMilestone?.count ?? 1000)) * 100)}%` }} /></div>
+        <div className="progress-track" role="progressbar" aria-label="Progress toward the next garden milestone" aria-valuenow={total ?? 0} aria-valuemin={0} aria-valuemax={progressTarget}><span style={{ width: `${Math.min(100, ((total ?? 0) / progressTarget) * 100)}%` }} /></div>
         <p className="milestone-footnote">Only approved community notes grow the tree. Milestone previews are a little peek ahead; they don’t change our leaf count.</p>
       </section>
       <section className="season-footer"><span aria-hidden="true">❄</span><p>A little autumn gratitude. A little winter wishing.<br /><strong>The magic continues next season.</strong></p><span className="coming-next">CHRISTMAS WISHING TREE <span>Coming this winter <ChevronRight size={12} /></span></span></section>

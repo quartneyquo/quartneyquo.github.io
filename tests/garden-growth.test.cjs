@@ -20,19 +20,23 @@ test('loading, zero and invalid counts never unlock community rewards', () => {
     assert.equal(growth.extraLeaves, 0);
     assert.equal(growth.canopyScale, 1);
     assert.deepEqual(growth.unlocked, []);
-    assert.equal(growth.remaining, 10);
+    assert.equal(growth.remaining, 3);
+    assert.equal(growth.stage, 'Little beginnings');
   }
 });
 
 test('each milestone unlocks at its exact approved count and advances the goal', () => {
-  const thresholds = [10, 50, 100, 250, 500, 1000];
+  const thresholds = [3, 10, 25, 50, 100, 250];
+  const stages = ['Taking root', 'Growing together', 'Glowing with gratitude', 'A garden of friends', 'Full of wonder', 'A golden garden'];
   thresholds.forEach((count, i) => {
     const before = gardenGrowth(count - 1);
     assert.equal(before.unlocked.length, i);
     assert.equal(before.remaining, 1);
     assert.equal(before.next.count, count);
+    assert.equal(before.stage, stages[i - 1] ?? 'Little beginnings');
     const reached = gardenGrowth(count);
     assert.equal(reached.unlocked.length, i + 1);
+    assert.equal(reached.stage, stages[i]);
     assert.equal(reached.next?.count, thresholds[i + 1]);
     assert.equal(reached.remaining, i < 5 ? thresholds[i + 1] - count : 0);
   });
@@ -40,7 +44,7 @@ test('each milestone unlocks at its exact approved count and advances the goal',
 
 test('growth is gradual and bounded without capping the actual community count', () => {
   let previous = gardenGrowth(0);
-  for (let count = 1; count <= 1000; count++) {
+  for (let count = 1; count <= 250; count++) {
     const current = gardenGrowth(count);
     assert.ok(current.canopyScale > previous.canopyScale);
     assert.ok(current.extraLeaves >= previous.extraLeaves);
@@ -48,6 +52,7 @@ test('growth is gradual and bounded without capping the actual community count',
     previous = current;
   }
   const huge = gardenGrowth(1000000);
+  assert.equal(previous.fullness, 1);
   assert.equal(huge.total, 1000000);
   assert.equal(huge.canopyScale, previous.canopyScale);
   assert.equal(huge.extraLeaves, previous.extraLeaves);

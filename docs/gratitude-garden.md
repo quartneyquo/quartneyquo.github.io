@@ -12,9 +12,9 @@ The TypeScript include paths now target `src/` so the portfolio no longer attemp
 
 ## Community growth
 
-The original painting stays unchanged. A soft masked copy of its tree gently enlarges from the roots as the approved community count rises, while additional autumn leaves fill the canopy. The tree reaches its visual size limit at 1,000 notes; the actual community counter continues growing. Decorative leaf elements are capped at 72 to keep the scene light on mobile.
+The original painting stays unchanged. A soft masked copy of its tree gently enlarges from the roots as the approved community count rises, while additional autumn leaves fill the canopy. The tree reaches its visual size limit at 250 notes; the actual community counter continues growing. Decorative leaf elements are capped at 72 to keep the scene light on mobile.
 
-Milestones add pumpkins at 10, a bench at 50, fairy lights at 100, small alpaca friends at 250, a fountain at 500, and a golden glow at 1,000. All counts come from the public API's approved total; welcome and pending notes do not count. The visible page checks for updates every 30 seconds and on returning to the tab. Paused and reduced-motion modes show the same growth without animations.
+Milestones add pumpkins at 3, a bench at 10, fairy lights at 25, small alpaca friends at 50, a fountain at 100, and a golden glow at 250. These smaller goals let a new community unlock decorations sooner. Stage labels, previews, progress and the tree’s growth curve share these thresholds. All counts come from the public API's approved total; welcome and pending notes do not count. The visible page checks for updates every 30 seconds and on returning to the tab. Paused and reduced-motion modes show the same growth without animations.
 
 The counter explicitly labels approved community leaves, including zero, and explains when new submissions join it. The form states this before submission; the saved confirmation says “awaiting review,” explains that approval adds one to the counter, and reassures visitors not to resubmit. Owners review notes at the notes service’s `/keeper` page. This feedback change does not change moderation or public counting rules.
 
