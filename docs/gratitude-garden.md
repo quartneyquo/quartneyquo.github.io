@@ -12,9 +12,11 @@ The TypeScript include paths now target `src/` so the portfolio no longer attemp
 
 ## Community growth
 
-The original painting stays unchanged. A soft masked copy of its tree gently enlarges from the roots as the approved community count rises, while additional autumn leaves fill the canopy. The tree reaches its visual size limit at 250 notes; the actual community counter continues growing. Decorative leaf elements are capped at 72 to keep the scene light on mobile.
+The garden now begins with mostly bare branches and fills with layered watercolor foliage as the approved community count rises. Two matching full-scene paintings blend progressively from `gratitude-garden-beginning.png` to `gratitude-garden-flourishing.png`; the canopy reaches full density at 250 notes while the real counter continues growing. The original `gratitude-garden.png` is preserved for the village invitation and postcards. The old enlarged duplicate tree and flat decorative leaf overlay have been replaced with the painted foliage.
 
 Milestones add pumpkins at 3, a bench at 10, fairy lights at 25, small alpaca friends at 50, a fountain at 100, and a golden glow at 250. These smaller goals let a new community unlock decorations sooner. Stage labels, previews, progress and the tree’s growth curve share these thresholds. All counts come from the public API's approved total; welcome and pending notes do not count. The visible page checks for updates every 30 seconds and on returning to the tab. Paused and reduced-motion modes show the same growth without animations.
+
+At 50 notes, three distinct transparent watercolor alpacas join the two original painted alpacas. Their sprite sheet, `alpaca-friends-watercolor.png`, replaces the two small outlined SVG animals. All three new PNGs were made with the built-in image_gen tool; exact prompts and saved source paths are recorded in `docs/garden-watercolor-refresh.json`. Their transparent alpha is retained, and the original garden illustration and Panchita logo are unchanged.
 
 The counter explicitly labels approved community leaves, including zero, and explains when new submissions join it. The form states this before submission; the saved confirmation says “awaiting review,” explains that approval adds one to the counter, and reassures visitors not to resubmit. Owners review notes at the notes service’s `/keeper` page. This feedback change does not change moderation or public counting rules.
 

@@ -17,7 +17,6 @@ test('loading, zero and invalid counts never unlock community rewards', () => {
   for (const value of [null, 0, -10, NaN, Infinity, -Infinity]) {
     const growth = gardenGrowth(value);
     assert.equal(growth.total, 0);
-    assert.equal(growth.extraLeaves, 0);
     assert.equal(growth.canopyScale, 1);
     assert.deepEqual(growth.unlocked, []);
     assert.equal(growth.remaining, 3);
@@ -46,17 +45,25 @@ test('growth is gradual and bounded without capping the actual community count',
   let previous = gardenGrowth(0);
   for (let count = 1; count <= 250; count++) {
     const current = gardenGrowth(count);
+    assert.ok(current.fullness > previous.fullness);
+    assert.ok(current.fullness <= 1);
     assert.ok(current.canopyScale > previous.canopyScale);
-    assert.ok(current.extraLeaves >= previous.extraLeaves);
-    assert.ok(current.extraLeaves <= 72);
     previous = current;
   }
   const huge = gardenGrowth(1000000);
   assert.equal(previous.fullness, 1);
   assert.equal(huge.total, 1000000);
   assert.equal(huge.canopyScale, previous.canopyScale);
-  assert.equal(huge.extraLeaves, previous.extraLeaves);
   assert.equal(huge.remaining, 0);
+});
+
+test('the beginning remains sparse and the final milestone fills the canopy', () => {
+  assert.equal(gardenGrowth(0).fullness, 0);
+  assert.ok(gardenGrowth(1).fullness < 0.05);
+  assert.ok(gardenGrowth(10).fullness < 0.2);
+  assert.ok(gardenGrowth(100).fullness > 0.5);
+  assert.equal(gardenGrowth(250).fullness, 1);
+  assert.equal(gardenGrowth(1000).fullness, 1);
 });
 
 test('decorative leaves stay in the canopy and keep their positions as it grows', () => {

@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-04",
+  "provider": "Built-in image_gen",
+  "mode": "image edits using the original garden as the visual reference",
+  "reference": "public/holiday/gratitude-garden.png",
+  "originalPreserved": true,
+  "assets": [
+    {
+      "file": "public/holiday/gratitude-garden-beginning.png",
+      "source": "/Users/courtneyko/.codex/generated_images/01a1a472-900e-7723-9ccf-e7e1c2b33973/exec-1f54d385-d5fb-4d92-a194-6cbf158e2fb0.png",
+      "prompt": "Use case: precise-object-edit.\nAsset type: the empty beginning state of an interactive watercolor gratitude garden, same landscape 1536x1024 composition as the reference.\nEdit the reference garden illustration. Make ONLY its central autumn tree canopy dramatically sparser: about 85 percent fewer leaves, delicate mostly bare warm-brown branches, just a few small soft peach and honey leaf clusters at outer branch tips. This must feel like a gentle promising beginning, not a dead or wintry tree. Remove the string fairy lights from the branches. Keep the trunk and branch geometry, their positions, original two adorable alpacas (including the cream alpaca's rust scarf), distant hills, ground, gate, path, pumpkins, flowers, paper texture, soft warm ivory background and feathered edges as precisely unchanged as possible. Preserve the exact composition and scale, no crop, no camera change. The exposed canopy should be warm empty ivory sky matching the background, not gray. Match the original delicate storybook watercolor rendering. No text, logo, new objects, extra animals, UI or watermark."
+    },
+    {
+      "file": "public/holiday/gratitude-garden-flourishing.png",
+      "source": "/Users/courtneyko/.codex/generated_images/01a1a472-900e-7723-9ccf-e7e1c2b33973/exec-c7c8cd4e-71f5-4a54-aa32-db2dfca74d9c.png",
+      "prompt": "Use case: precise-object-edit.\nAsset type: fully grown 250-leaf state of the same interactive watercolor garden.\nEdit the reference illustration, keeping its exact 1536x1024 composition, trunk and branch placement, two original alpacas, rust scarf, ground, hills, path, fence and pumpkins. Make the central tree dramatically fuller and abundant: a dense, rounded, lush canopy of many layered hand-painted autumn leaves, soft peach, apricot, honey gold, dusty coral and warm amber, closing the large empty holes between branches. Give it a subtle warm golden late-afternoon glow. The canopy should feel rich and gently overflowing, still entirely inside the frame with the same soft ivory feathered edges. Keep the delicate fine watercolor texture and natural leaf detail; no plastic shine or flat vector shapes. Add a few more small warm cream daisies in the existing flower beds so it feels cared for, not cluttered. Preserve all original animals exactly. Do not add any new animals, bench, fountain or decorations: these will be separate layers. No text, no UI, no logos, no watermark."
+    },
+    {
+      "file": "public/holiday/alpaca-friends-watercolor.png",
+      "source": "/Users/courtneyko/.codex/generated_images/01a1a472-900e-7723-9ccf-e7e1c2b33973/exec-ca65a767-8392-4361-bc67-4dd09bbdc029.png",
+      "prompt": "Use case: illustration-story.\nAsset type: transparent PNG character sprite sheet for Paca's Gratitude Garden.\nUse the reference garden only to match its two sweet hand-painted alpacas, warm ivory wool, soft blush cheeks, delicate pencil edges and gentle watercolor texture. Create THREE DISTINCT adorable small alpaca friends, full body, separated into THREE equal-width vertical columns in one 1536x1024 horizontal sprite sheet. Each animal centered in its own column, all hooves/bottoms on a shared baseline at 90 percent image height, all with clear space around them and no overlap across columns. Left: fluffy cream standing alpaca with a dusty sage scarf, looking gently right. Middle: small honey-caramel alpaca sitting with legs tucked in, rounded soft wool, tiny closed smiling eyes, muted rose scarf. Right: fluffy cream alpaca standing in a three-quarter view facing slightly left, apricot scarf, small friendly smile. Real alpaca anatomy with short rounded muzzle and soft pointed ears; cute storybook proportions, soft round curls, natural gentle black-dot eyes. Match the painted animals in the garden, NOT a vector icon, not geometric shapes, not an emoji, not a toy, not glossy 3D. Entirely transparent background with genuine alpha. No grass, landscape, cast shadow, panels, borders, labels, letters, text or watermark. Keep each animal distinct, charming and legible at small size.",
+      "cleanupPrompt": "Use case: background-extraction.\nEdit this exact sprite sheet. Keep all three alpacas, faces, scarves, wool, proportions, colors, pixel positions and separate column layout unchanged. Remove ALL the tan/brown haze, halos, glow and ground shading around and between the animals. Make every pixel outside the physical wool, ears, scarves and hooves fully transparent. The only soft translucent edge should be the narrow antialiased watercolor outline directly against the animals. No background color, no white border, no cast shadow, no checkerboard painted into the image. A clean transparent PNG cutout sheet, same 1536x1024 dimensions.",
+      "transparentBackground": true
+    }
+  ]
+}

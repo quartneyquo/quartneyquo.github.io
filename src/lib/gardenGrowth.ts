@@ -11,15 +11,14 @@ export const GARDEN_MATURITY_COUNT = GARDEN_MILESTONES[GARDEN_MILESTONES.length 
 
 export function gardenGrowth(approvedTotal: number | null) {
   const total = Number.isFinite(approvedTotal) ? Math.max(0, Math.floor(approvedTotal as number)) : 0;
-  // Early contributions are visible; large communities stay inside the scene.
-  const fullness = Math.log1p(Math.min(total, GARDEN_MATURITY_COUNT)) / Math.log1p(GARDEN_MATURITY_COUNT);
+  // Leave room for the garden to fill in, with a genuinely sparse beginning.
+  const fullness = Math.pow(Math.min(total, GARDEN_MATURITY_COUNT) / GARDEN_MATURITY_COUNT, 0.65);
   const unlocked = GARDEN_MILESTONES.filter(m => total >= m.count);
   const next = GARDEN_MILESTONES.find(m => total < m.count);
   return {
     total,
     fullness,
     canopyScale: 1 + fullness * 0.075,
-    extraLeaves: Math.min(total, 72),
     unlocked,
     next,
     remaining: next ? next.count - total : 0,
