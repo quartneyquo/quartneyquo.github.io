@@ -64,3 +64,22 @@ export function gratitudeCardUrl(card: GratitudeCard) {
   // The fragment stays out of HTTP requests; it is readable by anyone with the link.
   return `${PUBLIC_ORIGIN}${GRATITUDE_CARD_PATH}#card=${encodeGratitudeCard(card)}`;
 }
+
+export function gratitudeCardEmail(card: GratitudeCard, address: string) {
+  const to = address.trim();
+  if (to.length > 254 || !/^[^\s@<>,;:&?#%]+@[a-z\d](?:[a-z\d-]*[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]*[a-z\d])?)+$/i.test(to)) {
+    throw new Error("Enter one email address, like friend@example.com.");
+  }
+  const validated = validateGratitudeCard(card);
+  const subject = `A little thanks for ${validated.recipient.replace(/[\r\n]+/g, " ")} 🍂`;
+  const body = [
+    `Hi ${validated.recipient},`, "",
+    "I made you a little gratitude card:", "",
+    `“${validated.message}”`, "",
+    "Open your card:", gratitudeCardUrl(validated), "",
+    "With gratitude,", validated.author, "",
+    "Paca’s Gratitude Garden · Little thanks make a big garden.",
+  ].join("\n").replace(/\r\n|\r|\n/g, "\r\n");
+  // The address stays in the email draft, never in the shared card or garden API.
+  return { to, subject, body, href: `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+}

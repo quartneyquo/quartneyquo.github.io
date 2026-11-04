@@ -21,7 +21,7 @@ function loadSource(filename) {
   return compiled.exports;
 }
 
-const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
+const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardEmail, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
 const card = { recipient: 'Morgan', author: 'Avery', message: 'Thank you for being here.', color: 'maple' };
 const rawHash = value => '#card=' + Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -74,4 +74,27 @@ test('only a stable digest is needed to register a card; retries do not change i
   assert.match(digest, /^[a-f0-9]{64}$/);
   assert.equal(await gratitudeCardFingerprint({ ...card, growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' }), digest);
   assert.notEqual(await gratitudeCardFingerprint({ ...card, recipient: 'Sam' }), digest);
+});
+
+test('email drafts preserve Unicode, the message, and the tree contribution link', () => {
+  const connected = { ...card, recipient: '지우 & Morgan', message: 'Thanks for tea & good company! 🍂\nYou make my day.', growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' };
+  const draft = gratitudeCardEmail(connected, ' morgan+thanks@example.com ');
+  const mailto = new URL(draft.href);
+  assert.equal(mailto.protocol, 'mailto:');
+  assert.equal(decodeURIComponent(mailto.pathname), 'morgan+thanks@example.com');
+  assert.equal(mailto.searchParams.get('subject'), draft.subject);
+  assert.equal(mailto.searchParams.get('body'), draft.body);
+  assert.ok(draft.body.includes(connected.message.replace(/\n/g, '\r\n')));
+  assert.ok(draft.body.includes(gratitudeCardUrl(connected)));
+  assert.ok(!gratitudeCardUrl(connected).includes(draft.to));
+});
+
+test('email drafts reject extra recipients and header injection', () => {
+  for (const address of ['', 'not-an-email', 'a@example.com,b@example.com', 'a@example.com; b@example.com', 'a@example.com\r\nBcc: b@example.com', 'a@example.com?bcc=b@example.com']) {
+    assert.throws(() => gratitudeCardEmail(card, address), /one email address/);
+  }
+  const draft = gratitudeCardEmail({ ...card, recipient: 'Morgan\nBcc: nobody' }, 'morgan@example.com');
+  assert.ok(!/[\r\n]/.test(draft.subject));
+  const parameters = new URL(draft.href).searchParams;
+  assert.deepEqual([...parameters.keys()], ['subject', 'body']);
 });
