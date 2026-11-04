@@ -16,6 +16,8 @@ The original painting stays unchanged. A soft masked copy of its tree gently enl
 
 Milestones add pumpkins at 10, a bench at 50, fairy lights at 100, small alpaca friends at 250, a fountain at 500, and a golden glow at 1,000. All counts come from the public API's approved total; welcome and pending notes do not count. The visible page checks for updates every 30 seconds and on returning to the tab. Paused and reduced-motion modes show the same growth without animations.
 
+The counter explicitly labels approved community leaves, including zero, and explains when new submissions join it. The form states this before submission; the saved confirmation says “awaiting review,” explains that approval adds one to the counter, and reassures visitors not to resubmit. Owners review notes at the notes service’s `/keeper` page. This feedback change does not change moderation or public counting rules.
+
 Milestone buttons provide a clearly labeled visual preview without changing the real count or writing any records. “Back to our garden” returns to the live count. `node --test tests/garden-growth.test.cjs` checks growth boundaries, invalid/loading counts, stable positions, and large-community limits.
 
 ## Seasonal media

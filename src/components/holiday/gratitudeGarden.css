@@ -91,6 +91,9 @@
 .garden-app.motion-paused .leaf-media-overlay { transition:none; }
 @media(prefers-reduced-motion:reduce) { .garden-app .leaf-media-overlay { transition:none; } }
 @media(max-width:540px) { .garden-app .garden-below { row-gap:8px; } .garden-app .garden-sound-controls { gap:4px 10px; } }
+.garden-app .garden-count-note { margin:8px 0 0; text-align:center; font-size:11px; line-height:1.6; color:var(--muted); }
+.garden-app .planted-state .pending-note { font-size:11px; }
+.garden-app .planted-state .success-detail { font-size:12px; line-height:1.7; }
 
 /* A blustery autumn day, from the village header down to the last thank-you. */
 .garden-app .garden-wind { position:fixed; inset:0; height:100dvh; overflow:hidden; z-index:9; pointer-events:none; contain:layout paint; }

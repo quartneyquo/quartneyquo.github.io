@@ -145,7 +145,8 @@ export default function GratitudeGarden() {
             {planted && <span className="paca-cheer" key={`cheer-${planted.id}`} aria-hidden="true">♡<br /><span>you made my day!</span></span>}
             <div className="gate-sign">Little thanks make a big garden.</div>
           </div>
-          <div className="garden-below"><span><span className="live-dot" /> {total === null ? "The garden is waking up…" : total === 0 ? "Our first season. Your kindness starts it." : <><strong>{total.toLocaleString()}</strong> community {total === 1 ? "leaf" : "leaves"} and counting</>}</span><div className="garden-sound-controls"><button onClick={() => setPaused(!paused)} aria-label={paused ? "Play autumn animations" : "Pause autumn animations"}>{paused ? <Play size={13} /> : <Pause size={13} />}{paused ? "Play" : "Pause"} leaves</button><GardenMusic /></div></div>
+          <div className="garden-below"><span><span className="live-dot" /> {total === null ? "The garden is waking up…" : <><strong>{total.toLocaleString()}</strong> approved community {total === 1 ? "leaf" : "leaves"}</>}</span><div className="garden-sound-controls"><button onClick={() => setPaused(!paused)} aria-label={paused ? "Play autumn animations" : "Pause autumn animations"}>{paused ? <Play size={13} /> : <Pause size={13} />}{paused ? "Play" : "Pause"} leaves</button><GardenMusic /></div></div>
+          <p className="garden-count-note" role="status">{planted?.pending ? "Your leaf is saved for review. It joins this count once approved." : "New leaves join the count after review and approval."}</p>
           <p className="tree-hint"><Sparkles size={14} /> Tap a fluttering leaf. There’s a little kindness inside.</p>
           <div className="tree-growth-caption">
             {previewTotal !== null ? <><span><Sparkles size={13} /> A peek ahead · {previewTotal.toLocaleString()} leaves</span><button onClick={() => setPreviewTotal(null)}><X size={12} /> Back to our garden</button></> : <><span><Sprout size={13} /> {liveGrowth.stage}</span><span>{total === null ? "Gathering our little thank-yous…" : nextMilestone ? `${liveGrowth.remaining} more to our ${nextMilestone.title.toLowerCase()}` : "A thousand little thanks. A golden kind of magic."}</span></>}
@@ -167,15 +168,15 @@ export default function GratitudeGarden() {
               <div className="honey" aria-hidden="true"><label>Leave this blank<input name="website" ref={trap} tabIndex={-1} autoComplete="off" /></label></div>
               {error && <p className="form-error" role="alert">{error}</p>}
               <button className="primary plant-button" type="submit" disabled={busy}><Leaf color={color} />{busy ? "Finding your leaf a home…" : "Plant my gratitude"}<ArrowRight size={16} /></button>
-              <p className="moderation-note"><Heart size={12} /> Every note is gently reviewed before it’s shared.</p>
+              <p className="moderation-note"><Heart size={12} /> Your leaf joins the garden and counter after approval.</p>
             </form>
           </> : <div className="planted-state">
             <div className="success-leaf" style={{ background: palette.pale }}><Leaf color={planted.color} /><span><Check size={13} /></span></div>
             <p className="eyebrow">ONE LITTLE LEAF. SO MUCH LOVE.</p>
-            <h2 id="plant-title" ref={success} tabIndex={-1}>Your gratitude<br />has blossomed!</h2>
+            <h2 id="plant-title" ref={success} tabIndex={-1}>Your gratitude<br />{planted.pending ? "is safely saved!" : "has blossomed!"}</h2>
             <div className="personal-note"><blockquote>“{planted.message}”</blockquote><p>— {planted.author}</p></div>
-            <p className="pending-note"><Check size={13} /> {planted.pending ? "Safely planted, waiting for a little care." : "Your leaf is growing with the garden!"}</p>
-            <p className="success-detail">{planted.pending ? "Your leaf is visible to you. After Paca reviews it, it will help our shared tree grow." : "Paca approved your gratitude. It now helps our shared tree grow a little fuller."}</p>
+            <p className="pending-note"><Check size={13} /> {planted.pending ? "Saved · awaiting review" : "Approved · added to the community count"}</p>
+            <p className="success-detail">{planted.pending ? "Once reviewed and approved, your leaf will add 1 to the community counter and help the tree grow. No need to submit it again." : "Paca approved your gratitude. It now helps our shared tree grow a little fuller."}</p>
             <button className="primary" onClick={download} disabled={postcardBusy}><Download size={16} />{postcardBusy ? "Making your keepsake…" : "Take home my postcard"}</button>
             <div className="success-actions"><button onClick={copy}><Copy size={13} /> Copy gratitude</button><button onClick={() => { setPlanted(null); setMessage(""); setError(""); setNotice(""); started.current = Date.now(); requestAnimationFrame(() => textarea.current?.focus()); }}>Plant another <ArrowRight size={13} /></button></div>
             <p className="download-notice" role="status">{notice}</p>
@@ -190,7 +191,7 @@ export default function GratitudeGarden() {
       <section className="growing-section" id="growing" aria-labelledby="growing-title">
         <div className="growing-heading"><span className="sprout-circle"><Sprout size={26} strokeWidth={1.3} /></span><div><p className="eyebrow">A LITTLE MORE MAGIC, TOGETHER</p><h2 id="growing-title">Every thank-you helps us grow.</h2><p>Every approved note grows our tree a little fuller. Tap a milestone for a peek at what’s coming.</p></div></div>
         <div className="milestone-track">{milestones.map(m => <button type="button" key={m.count} className={`milestone ${(total ?? 0) >= m.count ? "unlocked" : ""} ${previewTotal === m.count ? "previewing" : ""}`} onClick={() => previewMilestone(m.count)} aria-pressed={previewTotal === m.count} aria-label={`Preview ${m.title.toLowerCase()} at ${m.count.toLocaleString()} gratitude leaves`}><span className="milestone-art" aria-hidden="true">{m.icon}</span><strong>{m.title}</strong><span>{m.count.toLocaleString()} leaves {(total ?? 0) >= m.count && <Check size={12} />}</span></button>)}</div>
-        <div className="progress-caption"><span>{total ?? 0} community leaves planted</span><span>{nextMilestone ? `${nextMilestone.count - (total ?? 0)} more to our ${nextMilestone.title.toLowerCase()}` : "A whole garden full of gratitude. Thank you!"}<Sparkles size={12} /></span></div>
+        <div className="progress-caption"><span>{total === null ? "Loading approved leaves…" : `${total.toLocaleString()} approved community ${total === 1 ? "leaf" : "leaves"}`}</span><span>{nextMilestone ? `${nextMilestone.count - (total ?? 0)} more to our ${nextMilestone.title.toLowerCase()}` : "A whole garden full of gratitude. Thank you!"}<Sparkles size={12} /></span></div>
         <div className="progress-track" role="progressbar" aria-label="Progress toward the next garden milestone" aria-valuenow={total ?? 0} aria-valuemin={0} aria-valuemax={nextMilestone?.count ?? Math.max(total ?? 0, 1000)}><span style={{ width: `${Math.min(100, ((total ?? 0) / (nextMilestone?.count ?? 1000)) * 100)}%` }} /></div>
         <p className="milestone-footnote">Only approved community notes grow the tree. Milestone previews are a little peek ahead; they don’t change our leaf count.</p>
       </section>
