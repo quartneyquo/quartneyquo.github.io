@@ -21,7 +21,9 @@ function loadSource(filename) {
   return compiled.exports;
 }
 
-const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardEmail, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
+const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardEmail, gratitudeCardImageShare, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
+const { canSharePostcard } = loadSource(path.join(sourceRoot, 'lib/gratitudePostcard.ts'));
+const { File } = require('node:buffer');
 const card = { recipient: 'Morgan', author: 'Avery', message: 'Thank you for being here.', color: 'maple' };
 const rawHash = value => '#card=' + Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -78,23 +80,45 @@ test('only a stable digest is needed to register a card; retries do not change i
 
 test('email drafts preserve Unicode, the message, and the tree contribution link', () => {
   const connected = { ...card, recipient: '지우 & Morgan', message: 'Thanks for tea & good company! 🍂\nYou make my day.', growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' };
-  const draft = gratitudeCardEmail(connected, ' morgan+thanks@example.com ');
+  const draft = gratitudeCardEmail(connected);
   const mailto = new URL(draft.href);
   assert.equal(mailto.protocol, 'mailto:');
-  assert.equal(decodeURIComponent(mailto.pathname), 'morgan+thanks@example.com');
+  assert.equal(mailto.pathname, '', 'the recipient is chosen in the email app');
   assert.equal(mailto.searchParams.get('subject'), draft.subject);
   assert.equal(mailto.searchParams.get('body'), draft.body);
   assert.ok(draft.body.includes(connected.message.replace(/\n/g, '\r\n')));
   assert.ok(draft.body.includes(gratitudeCardUrl(connected)));
-  assert.ok(!gratitudeCardUrl(connected).includes(draft.to));
 });
 
-test('email drafts reject extra recipients and header injection', () => {
-  for (const address of ['', 'not-an-email', 'a@example.com,b@example.com', 'a@example.com; b@example.com', 'a@example.com\r\nBcc: b@example.com', 'a@example.com?bcc=b@example.com']) {
-    assert.throws(() => gratitudeCardEmail(card, address), /one email address/);
-  }
-  const draft = gratitudeCardEmail({ ...card, recipient: 'Morgan\nBcc: nobody' }, 'morgan@example.com');
+test('email draft subject cannot inject headers or recipients', () => {
+  const draft = gratitudeCardEmail({ ...card, recipient: 'Morgan\nBcc: nobody' });
   assert.ok(!/[\r\n]/.test(draft.subject));
   const parameters = new URL(draft.href).searchParams;
   assert.deepEqual([...parameters.keys()], ['subject', 'body']);
+});
+
+test('image sharing passes a PNG attachment and the complete growth link to the email app', () => {
+  const connected = { ...card, growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' };
+  const file = new File([new Uint8Array([137, 80, 78, 71])], 'postcard.png', { type: 'image/png' });
+  const shared = gratitudeCardImageShare(connected, file);
+  assert.deepEqual(shared.files, [file]);
+  assert.equal(shared.files[0].type, 'image/png');
+  assert.equal(shared.title, gratitudeCardEmail(connected).subject);
+  assert.ok(shared.text.includes(gratitudeCardUrl(connected)));
+  assert.ok(shared.text.includes(card.message));
+  assert.throws(() => gratitudeCardImageShare(card, new File([], 'empty.png', { type: 'image/png' })));
+  assert.throws(() => gratitudeCardImageShare(card, new File(['text'], 'link.txt', { type: 'text/plain' })));
+});
+
+test('attachment support is checked separately from link sharing and safely falls back', () => {
+  const file = new File(['image'], 'postcard.png', { type: 'image/png' });
+  assert.equal(canSharePostcard(file, {}), false);
+  assert.equal(canSharePostcard(file, { share() {} }), false);
+  assert.equal(canSharePostcard(file, { share() {}, canShare: () => false }), false);
+  assert.equal(canSharePostcard(file, { share() {}, canShare: () => { throw new Error('blocked'); } }), false);
+  assert.equal(canSharePostcard(file, { share() {}, canShare(data) {
+    assert.deepEqual(Object.keys(data), ['files']);
+    assert.deepEqual(data.files, [file]);
+    return true;
+  } }), true);
 });

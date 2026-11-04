@@ -65,11 +65,7 @@ export function gratitudeCardUrl(card: GratitudeCard) {
   return `${PUBLIC_ORIGIN}${GRATITUDE_CARD_PATH}#card=${encodeGratitudeCard(card)}`;
 }
 
-export function gratitudeCardEmail(card: GratitudeCard, address: string) {
-  const to = address.trim();
-  if (to.length > 254 || !/^[^\s@<>,;:&?#%]+@[a-z\d](?:[a-z\d-]*[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]*[a-z\d])?)+$/i.test(to)) {
-    throw new Error("Enter one email address, like friend@example.com.");
-  }
+export function gratitudeCardEmail(card: GratitudeCard) {
   const validated = validateGratitudeCard(card);
   const subject = `A little thanks for ${validated.recipient.replace(/[\r\n]+/g, " ")} 🍂`;
   const body = [
@@ -80,6 +76,12 @@ export function gratitudeCardEmail(card: GratitudeCard, address: string) {
     "With gratitude,", validated.author, "",
     "Paca’s Gratitude Garden · Little thanks make a big garden.",
   ].join("\n").replace(/\r\n|\r|\n/g, "\r\n");
-  // The address stays in the email draft, never in the shared card or garden API.
-  return { to, subject, body, href: `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+  // Recipients are entered in the email app. mailto cannot attach an image.
+  return { subject, body, href: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+}
+
+export function gratitudeCardImageShare(card: GratitudeCard, image: File): ShareData {
+  if (image.type !== "image/png" || !image.size) throw new Error("Please prepare your postcard image first.");
+  const draft = gratitudeCardEmail(card);
+  return { files: [image], title: draft.subject, text: draft.body };
 }

@@ -1,6 +1,6 @@
 import type { GardenNote } from "@/data/gratitudeGarden";
 import { leafStyles } from "@/data/gratitudeGarden";
-export async function downloadPostcard(note: Pick<GardenNote, "message" | "author" | "color">, recipient?: string) {
+export async function createPostcardFile(note: Pick<GardenNote, "message" | "author" | "color">, recipient?: string) {
   const image = new Image(); image.src = recipient ? "/holiday/gratitude-garden-flourishing.png" : "/holiday/gratitude-garden.png";
   await image.decode();
   const canvas = document.createElement("canvas"); canvas.width = 1600; canvas.height = 1000;
@@ -41,7 +41,21 @@ export async function downloadPostcard(note: Pick<GardenNote, "message" | "autho
   ctx.fillText(`— ${note.author}`, 1190, Math.min(810, start + lines.length * lineHeight + 38), 590);
   ctx.font = "italic 25px Georgia"; ctx.fillText(recipient ? "With love, from Paca’s Gratitude Garden." : "Little thanks make a big garden.", 1190, 890, 590);
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("Could not create postcard")), "image/png"));
-  const url = URL.createObjectURL(blob); const link = document.createElement("a");
-  link.href = url; link.download = recipient ? "a-little-paca-thank-you.png" : "my-paca-gratitude-postcard.png"; document.body.appendChild(link); link.click(); link.remove();
+  return new File([blob], recipient ? "a-little-paca-thank-you.png" : "my-paca-gratitude-postcard.png", { type: "image/png" });
+}
+
+export function savePostcardFile(file: File) {
+  const url = URL.createObjectURL(file); const link = document.createElement("a");
+  link.href = url; link.download = file.name; document.body.appendChild(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+export async function downloadPostcard(note: Pick<GardenNote, "message" | "author" | "color">, recipient?: string) {
+  savePostcardFile(await createPostcardFile(note, recipient));
+}
+
+export function canSharePostcard(file: File, browser: Partial<Pick<Navigator, "share" | "canShare">>) {
+  if (typeof browser.share !== "function" || typeof browser.canShare !== "function") return false;
+  try { return browser.canShare({ files: [file] }); }
+  catch { return false; }
 }

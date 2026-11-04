@@ -11,13 +11,13 @@
 .garden-app .thanks-form>input,.garden-app .thanks-form>textarea,.garden-app .thanks-link-input { width:100%; border:1px solid #ded8cb; background:#fffcf7; border-radius:8px; padding:12px; color:var(--ink); font-size:13px; line-height:1.7; }
 .garden-app .thanks-form>textarea { resize:vertical; min-height:120px; }
 .garden-app .thanks-form>input { margin-bottom:22px; }
-.garden-app .thanks-email-hint { text-align:left; font-size:10px; line-height:1.6; color:var(--muted); margin:-15px 0 22px; }
-.garden-app .thanks-email-form { margin-top:23px; padding:18px 0 0; border-top:1px solid var(--line); text-align:left; }
-.garden-app .thanks-email-form>label { display:block; font-size:11px; color:#625746; margin-bottom:7px; }
-.garden-app .thanks-email-form>input { width:100%; border:1px solid #ded8cb; background:#fffcf7; border-radius:8px; padding:11px; color:var(--ink); font-size:13px; line-height:1.7; }
+.garden-app .thanks-email-option { margin-top:23px; padding:18px 0; border-top:1px solid var(--line); }
+.garden-app .thanks-attachment-preview { display:block; width:100%; height:auto; border:1px solid #e4d7c2; border-radius:9px; margin-bottom:16px; }
+.garden-app .thanks-email-option>.primary { width:100%; }
+.garden-app .thanks-email-option>p { font-size:11px; line-height:1.7; color:var(--muted); margin-top:10px; }
+.garden-app .thanks-email-draft { display:inline-flex; align-items:center; gap:6px; font-size:11px; min-height:40px; color:#68794e; text-decoration:underline; text-underline-offset:3px; }
 .garden-app .thanks-email-button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:43px; margin-top:10px; border:1px solid #899574; border-radius:7px; background:#f1f4e8; color:#5f6c4c; font-size:12px; }
 .garden-app .thanks-email-button:hover { background:#e7edd9; }
-.garden-app .thanks-email-form>p:not(.form-error) { font-size:10px; line-height:1.7; color:var(--muted); margin-top:9px; text-align:center; }
 .garden-app .thanks-form input::placeholder,.garden-app .thanks-form textarea::placeholder { color:#a49887; }
 .garden-app .thanks-leaf-picker { border:0; padding:0; margin:0 0 24px; min-width:0; }
 .garden-app .thanks-leaf-picker>div { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; }
