@@ -1,4 +1,4 @@
-/** Growth comes from the server's approved notes plus uniquely opened personal cards. */
+/** Growth comes from the server's public notes plus uniquely opened personal cards. */
 export const GARDEN_MILESTONES = [
   { count: 3, title: "Pumpkin patch", icon: "🎃", key: "pumpkins", stage: "Taking root" },
   { count: 10, title: "Cozy bench", icon: "🪑", key: "bench", stage: "Growing together" },

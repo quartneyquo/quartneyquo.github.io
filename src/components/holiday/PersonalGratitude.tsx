@@ -31,7 +31,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   const [invalidLink, setInvalidLink] = useState(false);
   const [prepared, setPrepared] = useState<GratitudeCard | null>(null);
   const [recipient, setRecipient] = useState("");
-  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; preview: string; shareable: boolean } | null>(null);
+  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; preview: string; shareable: boolean; copyable: boolean } | null>(null);
   const [postcardError, setPostcardError] = useState("");
   const [postcardAttempt, setPostcardAttempt] = useState(0);
   const [emailSharing, setEmailSharing] = useState(false);
@@ -40,8 +40,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   const [color, setColor] = useState<LeafColor>("maple");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [canShare, setCanShare] = useState(false);
-  const [sharing, setSharing] = useState(false);
+  const [copyingImage, setCopyingImage] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [preparing, setPreparing] = useState(false);
   const [growthError, setGrowthError] = useState("");
@@ -60,7 +59,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
       }
       setReady(true);
     };
-    readLink(); started.current = Date.now(); setCanShare(typeof navigator.share === "function");
+    readLink(); started.current = Date.now();
     window.addEventListener("hashchange", readLink);
     return () => window.removeEventListener("hashchange", readLink);
   }, [embedded]);
@@ -76,7 +75,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
     void createPostcardFile(prepared, prepared.recipient).then(file => {
       if (!active) return;
       preview = URL.createObjectURL(file);
-      setPostcard({ card: prepared, file, preview, shareable: canSharePostcard(file, navigator) });
+      setPostcard({ card: prepared, file, preview, shareable: canSharePostcard(file, navigator), copyable: typeof ClipboardItem !== "undefined" && typeof navigator.clipboard?.write === "function" });
     }).catch(() => {
       if (active) setPostcardError("The postcard image couldn’t be prepared. Please try again.");
     });
@@ -130,8 +129,8 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
     catch { setNotice("Select and copy the card link below, then paste it into your message."); }
   }
 
-  async function emailPostcard() {
-    if (!prepared || !readyPostcard || emailSharing || sharing) return;
+  async function sharePostcard() {
+    if (!prepared || !readyPostcard || emailSharing) return;
     setNotice("");
     if (!readyPostcard.shareable) {
       savePostcardFile(readyPostcard.file);
@@ -148,15 +147,15 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
     } finally { setEmailSharing(false); }
   }
 
-  async function share() {
-    if (!card || sharing || emailSharing) return;
-    if (!canShare) { await copyLink(); return; }
-    setSharing(true); setNotice("");
-    try { await navigator.share({ title: `A little thanks for ${card.recipient}`, text: "I made you a little gratitude card. 🍂", url }); }
-    catch (e) {
-      if (e instanceof Error && e.name === "AbortError") setNotice("Your card is ready whenever you are.");
-      else setNotice("Sharing couldn’t open. You can copy the link below instead.");
-    } finally { setSharing(false); }
+  async function copyPostcardImage() {
+    if (!readyPostcard || copyingImage) return;
+    setCopyingImage(true); setNotice("");
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": readyPostcard.file })]);
+      setNotice("Postcard image copied. Open the email draft, then paste the picture into it with ⌘V on Mac or Ctrl+V on Windows. The card link is already included.");
+    } catch {
+      setNotice("This browser couldn’t copy the image. Download the PNG below, then attach it to the email draft. The draft already includes your card link.");
+    } finally { setCopyingImage(false); }
   }
 
   async function download() {
@@ -182,13 +181,15 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
             {growthError && <div className="thanks-growth-error" role="status"><p>{growthError}</p><button onClick={() => void connectCard(prepared)} disabled={preparing}>{preparing ? "Connecting…" : "Retry tree connection"}</button></div>}
             <div className="thanks-email-option">
               {readyPostcard && <img className="thanks-attachment-preview" src={readyPostcard.preview} alt={`Postcard image for ${prepared.recipient}`} width={1600} height={1000} />}
-              <button className="primary" onClick={emailPostcard} disabled={!readyPostcard || emailSharing || sharing} aria-describedby="thanks-email-help">{readyPostcard && !readyPostcard.shareable ? <Download size={16} /> : <Mail size={16} />}{emailSharing ? "Opening sharing…" : postcardError ? "Postcard image unavailable" : !readyPostcard ? "Preparing postcard image…" : readyPostcard.shareable ? "Email postcard image" : "Download postcard for email"}</button>
-              <p id="thanks-email-help">{readyPostcard ? readyPostcard.shareable ? "Choose your email app from the share menu. The postcard image goes with it; add their email address there." : "This browser can’t attach images automatically. Download the postcard, then attach it in your email app." : postcardError ? "You can still share your card link below." : "Making your little thank-you into an image."}</p>
-              {readyPostcard && !readyPostcard.shareable && <a className="thanks-email-draft" href={gratitudeCardEmail(prepared).href}>Open email draft <ArrowRight size={13} /></a>}
+              {readyPostcard?.copyable && <button className="thanks-email-button" onClick={copyPostcardImage} disabled={copyingImage}><Copy size={15} />{copyingImage ? "Copying postcard…" : "Copy postcard image"}</button>}
+              <a className="primary" href={gratitudeCardEmail(prepared).href} aria-describedby="thanks-email-help"><Mail size={16} /> Open email draft <ArrowRight size={15} /></a>
+              <p id="thanks-email-help">Your message and card link are included. Add their email address in your email app.</p>
+              <p>{readyPostcard?.copyable ? "For the picture: copy it above, then paste into your email with ⌘V on Mac or Ctrl+V on Windows." : "For the picture: download the PNG below, then attach it to your email."}</p>
+              <p className="thanks-email-fallback">Using webmail? Copy the card link below and paste it into your message with the picture.</p>
               {postcardError && <div className="thanks-growth-error" role="alert"><p>{postcardError}</p><button onClick={() => setPostcardAttempt(value => value + 1)}>Retry postcard image</button></div>}
             </div>
-            <button className="thanks-email-button" onClick={share} disabled={sharing || emailSharing}>{canShare ? <Share2 size={16} /> : <Copy size={16} />}{sharing ? "Opening sharing…" : canShare ? "Share card link" : "Copy card link"}</button>
-            <div className="thanks-small-actions">{canShare && <button onClick={copyLink}><Copy size={14} /> Copy link</button>}<button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button></div>
+            {readyPostcard?.shareable && <button className="thanks-email-button" onClick={sharePostcard} disabled={emailSharing}><Share2 size={16} />{emailSharing ? "Opening sharing…" : "Share image & link"}</button>}
+            <div className="thanks-small-actions"><button onClick={copyLink}><Copy size={14} /> Copy link</button><button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button></div>
             <label className="thanks-link-label" htmlFor="card-link">Your card link</label>
             <input id="card-link" className="thanks-link-input" value={url} readOnly onFocus={event => event.currentTarget.select()} />
             <p className="thanks-share-detail">Anyone with this link can open your card.</p>

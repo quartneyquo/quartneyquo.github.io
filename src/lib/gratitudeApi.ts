@@ -1,4 +1,4 @@
-/** The portfolio is statically exported. Shared notes live in a separate moderated service. */
+/** The portfolio is statically exported. Shared notes live in a separate shared notes service. */
 export const gardenServiceUrl = process.env.NEXT_PUBLIC_PACA_GARDEN_API_URL || 'https://paca-holiday-village.courtneythko.chatgpt.site';
 let sessionVisitor = '';
 function visitorId() {

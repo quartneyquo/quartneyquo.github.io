@@ -24,7 +24,7 @@ test('loading, zero and invalid counts never unlock community rewards', () => {
   }
 });
 
-test('each milestone unlocks at its exact approved count and advances the goal', () => {
+test('each milestone unlocks at its exact public count and advances the goal', () => {
   const thresholds = [3, 10, 25, 50, 100, 250];
   const stages = ['Taking root', 'Growing together', 'Glowing with gratitude', 'A garden of friends', 'Full of wonder', 'A golden garden'];
   thresholds.forEach((count, i) => {
