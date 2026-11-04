@@ -1,4 +1,4 @@
-/** Growth is derived only from the server's approved community total. */
+/** Growth comes from the server's approved notes plus uniquely opened personal cards. */
 export const GARDEN_MILESTONES = [
   { count: 3, title: "Pumpkin patch", icon: "🎃", key: "pumpkins", stage: "Taking root" },
   { count: 10, title: "Cozy bench", icon: "🪑", key: "bench", stage: "Growing together" },
@@ -9,8 +9,8 @@ export const GARDEN_MILESTONES = [
 ] as const;
 export const GARDEN_MATURITY_COUNT = GARDEN_MILESTONES[GARDEN_MILESTONES.length - 1].count;
 
-export function gardenGrowth(approvedTotal: number | null) {
-  const total = Number.isFinite(approvedTotal) ? Math.max(0, Math.floor(approvedTotal as number)) : 0;
+export function gardenGrowth(contributionTotal: number | null) {
+  const total = Number.isFinite(contributionTotal) ? Math.max(0, Math.floor(contributionTotal as number)) : 0;
   // Leave room for the garden to fill in, with a genuinely sparse beginning.
   const fullness = Math.pow(Math.min(total, GARDEN_MATURITY_COUNT) / GARDEN_MATURITY_COUNT, 0.65);
   const unlocked = GARDEN_MILESTONES.filter(m => total >= m.count);

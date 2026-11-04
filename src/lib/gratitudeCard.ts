@@ -9,6 +9,7 @@ export type GratitudeCard = {
   message: string;
   author: string;
   color: LeafColor;
+  growthId?: string;
 };
 
 export function validateGratitudeCard(value: unknown): GratitudeCard {
@@ -26,7 +27,15 @@ export function validateGratitudeCard(value: unknown): GratitudeCard {
   const message = read("message", 2, 240, "your message");
   const author = read("author", 0, 40, "your name") || "A grateful little paca";
   if (!leafStyles.some(leaf => leaf.id === input.color)) throw new Error("Choose a leaf for your card.");
-  return { recipient, message, author, color: input.color as LeafColor };
+  if (input.growthId !== undefined && (typeof input.growthId !== "string" || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(input.growthId))) throw new Error("Please check your card link.");
+  return { recipient, message, author, color: input.color as LeafColor, ...(input.growthId ? { growthId: input.growthId as string } : {}) };
+}
+
+export async function gratitudeCardFingerprint(card: GratitudeCard) {
+  // Only a digest goes to the garden service, never the names or message.
+  const { recipient, message, author, color } = validateGratitudeCard(card);
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(encodeGratitudeCard({ recipient, message, author, color })));
+  return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export function encodeGratitudeCard(value: GratitudeCard) {

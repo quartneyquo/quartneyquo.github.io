@@ -21,7 +21,7 @@ function loadSource(filename) {
   return compiled.exports;
 }
 
-const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
+const { validateGratitudeCard, encodeGratitudeCard, decodeGratitudeCard, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH } = loadSource(path.join(sourceRoot, 'lib/gratitudeCard.ts'));
 const card = { recipient: 'Morgan', author: 'Avery', message: 'Thank you for being here.', color: 'maple' };
 const rawHash = value => '#card=' + Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -60,4 +60,18 @@ test('enforces limits on every decoded field, not just form inputs', () => {
 test('keeps user text as data and discards extra payload properties', () => {
   const text = { ...card, message: '<img src=x onerror=alert(1)> Thanks & love!' };
   assert.deepEqual(decodeGratitudeCard(rawHash({ v: 1, ...text, href: 'javascript:alert(1)', pending: false })), text);
+});
+
+test('growth receipts survive links while legacy cards still open', () => {
+  const connected = { ...card, growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' };
+  assert.deepEqual(decodeGratitudeCard(`#card=${encodeGratitudeCard(connected)}`), connected);
+  assert.deepEqual(decodeGratitudeCard(`#card=${encodeGratitudeCard(card)}`), card);
+  assert.throws(() => validateGratitudeCard({ ...card, growthId: 'invalid' }));
+});
+
+test('only a stable digest is needed to register a card; retries do not change it', async () => {
+  const digest = await gratitudeCardFingerprint(card);
+  assert.match(digest, /^[a-f0-9]{64}$/);
+  assert.equal(await gratitudeCardFingerprint({ ...card, growthId: 'fdaafc83-476a-44df-88a7-cb3ff402e40a' }), digest);
+  assert.notEqual(await gratitudeCardFingerprint({ ...card, recipient: 'Sam' }), digest);
 });

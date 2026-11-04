@@ -56,5 +56,17 @@
 .garden-app .thanks-loading { text-align:center; color:var(--muted); padding:50px 0 100px; }
 .garden-app .thanks-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; padding:25px 0 35px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; }
 .garden-app .thanks-footer>a { display:inline-flex; gap:5px; align-items:center; margin-left:15px; min-height:35px; }
+.garden-app .thanks-growth-promise { display:flex; align-items:flex-start; gap:8px; color:#68794e; font-size:11px; line-height:1.7; margin-top:17px; text-align:left; }
+.garden-app .thanks-growth-promise>svg { flex-shrink:0; margin-top:2px; }
+.garden-app .thanks-growth-note { margin-top:20px; border:1px solid #dae1cd; border-radius:13px; padding:18px 22px; background:#f3f5e9; color:#68794e; text-align:center; font-size:12px; line-height:1.8; }
+.garden-app .thanks-growth-note>svg { margin:0 auto 8px; }
+.garden-app .thanks-growth-note a,.garden-app .thanks-growth-note button,.garden-app .thanks-growth-error button { display:inline-flex; align-items:center; gap:6px; min-height:40px; text-decoration:underline; text-underline-offset:4px; }
+.garden-app .thanks-growth-error { font-size:12px; line-height:1.7; color:#986343; padding-top:15px; }
+.garden-app .embedded-thanks .thanks-layout { display:block; padding:0; }
+.garden-app .embedded-thanks .thanks-compose-panel { border:0; padding:0; background:transparent; box-shadow:none; border-radius:0; }
+.garden-app .embedded-thanks .thanks-preview { display:none; }
+.garden-app .embedded-thanks .thanks-form>label,.garden-app .embedded-thanks .thanks-leaf-picker legend { text-align:left; }
+.garden-app .embedded-thanks .thanks-leaf-picker svg { width:26px; height:32px; }
+.garden-app .embedded-thanks .thanks-ready h2 { font-size:26px; }
 @media(max-width:800px) { .garden-app .thanks-layout { grid-template-columns:1fr; max-width:520px; margin:auto; gap:30px; } .garden-app .thanks-compose-panel { padding:25px; } .garden-app .thanks-intro { padding:25px 0; } }
 @media(max-width:540px) { .garden-app .thanks-intro h1 { font-size:35px; max-width:none; } .garden-app .thanks-intro>p:last-child { font-size:12px; } .garden-app .thanks-card-garden { height:165px; } .garden-app .thanks-card-message { padding:0 24px 24px; } .garden-app .thanks-card-message h2 { font-size:29px; } .garden-app .thanks-card-message blockquote { font-size:21px; } .garden-app .thanks-compose-panel { padding:23px 20px; } .garden-app .thanks-footer>a { width:100%; margin:0; justify-content:center; } }

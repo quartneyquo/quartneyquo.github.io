@@ -97,8 +97,11 @@
 .garden-app .garden-count-note { margin:8px 0 0; text-align:center; font-size:11px; line-height:1.6; color:var(--muted); }
 .garden-app .planted-state .pending-note { font-size:11px; }
 .garden-app .planted-state .success-detail { font-size:12px; line-height:1.7; }
-.garden-app .send-thanks-link { display:flex; align-items:center; justify-content:center; gap:7px; margin-top:18px; padding:16px 0 2px; border-top:1px solid var(--line); font-size:11px; color:var(--rust); min-height:44px; }
-.garden-app .send-thanks-link:hover { text-decoration:underline; text-underline-offset:4px; }
+.garden-app .gratitude-tabs { display:flex; padding:4px; gap:3px; background:#f0eadf; border-radius:10px; margin:-5px -9px 24px; }
+.garden-app .gratitude-tabs button { flex:1; display:flex; align-items:center; justify-content:center; gap:5px; min-height:42px; padding:7px 3px; font-size:11px; color:#8a7c69; border-radius:7px; white-space:nowrap; }
+.garden-app .gratitude-tabs button[aria-selected="true"] { background:#fffdf7; color:#665d42; box-shadow:0 2px 6px #58472e0b; }
+.garden-app .gratitude-tabs button:focus-visible { outline:2px solid var(--sage); outline-offset:2px; }
+.garden-app .plant-card [role="tabpanel"]>.eyebrow,.garden-app .embedded-thanks>.eyebrow { text-align:center; }
 
 /* A blustery autumn day, from the village header down to the last thank-you. */
 .garden-app .garden-wind { position:fixed; inset:0; height:100dvh; overflow:hidden; z-index:9; pointer-events:none; contain:layout paint; }

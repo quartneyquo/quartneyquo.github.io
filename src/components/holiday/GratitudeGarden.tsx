@@ -7,9 +7,9 @@ import Leaf from "./Leaf";
 import GardenGrowth from "./GardenGrowth";
 import { GardenMusic, LeafAnimation } from "./GardenAtmosphere";
 import WindblownLeaves from "./WindblownLeaves";
+import PersonalGratitude from "./PersonalGratitude";
 import { gardenGrowth, GARDEN_MATURITY_COUNT } from "@/lib/gardenGrowth";
 import { gardenRequest, gardenServiceUrl } from "@/lib/gratitudeApi";
-import { GRATITUDE_CARD_PATH } from "@/lib/gratitudeCard";
 import "./gratitudeGarden.css";
 
 const positions = [[30,24,-25],[49,16,15],[69,25,22],[20,40,-20],[43,35,16],[61,41,-10],[80,42,25],[36,51,-20],[58,24,10],[72,52,25],[52,49,-15],[25,53,18]];
@@ -18,6 +18,10 @@ const prompts = ["A person who made your day a little brighter…", "A small thi
 export default function GratitudeGarden() {
   const [notes, setNotes] = useState<GardenNote[]>(welcomeNotes);
   const [total, setTotal] = useState<number | null>(null);
+  const [contributions, setContributions] = useState({ approved: 0, cards: 0 });
+  const [gratitudeTab, setGratitudeTab] = useState<"plant" | "send">("plant");
+  const plantTab = useRef<HTMLButtonElement>(null);
+  const sendTab = useRef<HTMLButtonElement>(null);
   const [loadError, setLoadError] = useState("");
   const [color, setColor] = useState<LeafColor>("maple");
   const [message, setMessage] = useState(""); const [author, setAuthor] = useState("");
@@ -43,15 +47,16 @@ export default function GratitudeGarden() {
     activeRequest.current = controller;
     try {
       const response = await gardenRequest("/api/garden", { cache: "no-store", signal: controller.signal });
-      const data = await response.json() as { error?: string; notes: GardenNote[]; total: number };
+      const data = await response.json() as { error?: string; notes: GardenNote[]; total: number; sharedCards?: number; growthTotal?: number };
       if (!response.ok) throw new Error(data.error);
       if (controller.signal.aborted) return;
-      if (previousTotal.current !== null && data.total > previousTotal.current) {
-        const added = data.total - previousTotal.current;
+      const growthTotal = data.growthTotal ?? data.total;
+      if (previousTotal.current !== null && growthTotal > previousTotal.current) {
+        const added = growthTotal - previousTotal.current;
         setGrowthAnnouncement(`${added} new ${added === 1 ? "leaf has" : "leaves have"} joined the garden. Our tree is growing!`);
       }
-      previousTotal.current = data.total;
-      setNotes(data.notes); setTotal(data.total); setLoadError("");
+      previousTotal.current = growthTotal;
+      setNotes(data.notes); setTotal(growthTotal); setContributions({ approved: data.total, cards: data.sharedCards ?? 0 }); setLoadError("");
       setPage(current => Math.min(current, Math.max(0, Math.ceil(data.notes.length / 3) - 1)));
       setPlanted(current => current ? data.notes.find(n => n.id === current.id) ?? current : null);
     } catch {
@@ -78,7 +83,7 @@ export default function GratitudeGarden() {
   const plantedId = planted?.id;
   useEffect(() => { if (plantedId) success.current?.focus(); }, [plantedId]);
 
-  function focusForm() { form.current?.scrollIntoView({ behavior: paused ? "instant" : "smooth", block: "center" }); textarea.current?.focus({ preventScroll: true }); }
+  function focusForm() { setGratitudeTab("plant"); requestAnimationFrame(() => { form.current?.scrollIntoView({ behavior: paused ? "instant" : "smooth", block: "center" }); textarea.current?.focus({ preventScroll: true }); }); }
   function openNote(note: GardenNote) { setHeartError(""); setSelected(note); }
   async function plant(event: FormEvent) {
     event.preventDefault(); if (busy) return;
@@ -125,7 +130,7 @@ export default function GratitudeGarden() {
 
   return <div className={`garden-app ${paused ? "motion-paused" : ""}`}>
     <WindblownLeaves />
-    <a className="skip-link" href="#plant">Skip to planting a leaf</a>
+    <a className="skip-link" href="#plant" onClick={() => setGratitudeTab("plant")}>Skip to planting a leaf</a>
     <main>
       <nav className="garden-return" aria-label="Return to the portfolio"><a href="/paca-village/"><ArrowLeft size={13} aria-hidden="true" /> Paca Village</a><span aria-hidden="true">·</span><a href="/">Home</a></nav>
       <section className="garden-intro" aria-labelledby="garden-title">
@@ -147,15 +152,25 @@ export default function GratitudeGarden() {
             {planted && <span className="paca-cheer" key={`cheer-${planted.id}`} aria-hidden="true">♡<br /><span>you made my day!</span></span>}
             <div className="gate-sign">Little thanks make a big garden.</div>
           </div>
-          <div className="garden-below"><span><span className="live-dot" /> {total === null ? "The garden is waking up…" : <><strong>{total.toLocaleString()}</strong> approved community {total === 1 ? "leaf" : "leaves"}</>}</span><div className="garden-sound-controls"><button onClick={() => setPaused(!paused)} aria-label={paused ? "Play autumn animations" : "Pause autumn animations"}>{paused ? <Play size={13} /> : <Pause size={13} />}{paused ? "Play" : "Pause"} leaves</button><GardenMusic /></div></div>
-          <p className="garden-count-note" role="status">{planted?.pending ? "Your leaf is saved for review. It joins this count once approved." : "New leaves join the count after review and approval."}</p>
+          <div className="garden-below"><span><span className="live-dot" /> {total === null ? "The garden is waking up…" : <><strong>{total.toLocaleString()}</strong> gratitude {total === 1 ? "leaf" : "leaves"}</>}</span><div className="garden-sound-controls"><button onClick={() => setPaused(!paused)} aria-label={paused ? "Play autumn animations" : "Pause autumn animations"}>{paused ? <Play size={13} /> : <Pause size={13} />}{paused ? "Play" : "Pause"} leaves</button><GardenMusic /></div></div>
+          <p className="garden-count-note" role="status">{total !== null && <>{contributions.approved.toLocaleString()} approved {contributions.approved === 1 ? "note" : "notes"} · {contributions.cards.toLocaleString()} opened thank-you {contributions.cards === 1 ? "card" : "cards"}<br /></>}{planted?.pending ? "Your public leaf is saved for review. It joins this count once approved." : "Approved notes and opened personal cards help our tree grow."}</p>
           <p className="tree-hint"><Sparkles size={14} /> Tap a fluttering leaf. There’s a little kindness inside.</p>
           <div className="tree-growth-caption">
             {previewTotal !== null ? <><span><Sparkles size={13} /> A peek ahead · {previewTotal.toLocaleString()} leaves</span><button onClick={() => setPreviewTotal(null)}><X size={12} /> Back to our garden</button></> : <><span><Sprout size={13} /> {liveGrowth.stage}</span><span>{total === null ? "Gathering our little thank-yous…" : nextMilestone ? `${liveGrowth.remaining} more to our ${nextMilestone.title.toLowerCase()}` : "A garden full of thanks. A golden kind of magic."}</span></>}
           </div>
           <p className="garden-growth-announcement" role="status" aria-live="polite">{growthAnnouncement}</p>
         </div>
-        <aside className="plant-card" id="plant" ref={form} aria-labelledby="plant-title">
+        <aside className="plant-card" id="plant" ref={form} aria-label="Share your gratitude">
+          <div className="gratitude-tabs" role="tablist" aria-label="Ways to give thanks" onKeyDown={event => {
+            if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            const next = event.key === "Home" ? "plant" : event.key === "End" ? "send" : gratitudeTab === "plant" ? "send" : "plant";
+            setGratitudeTab(next); (next === "plant" ? plantTab : sendTab).current?.focus();
+          }}>
+            <button ref={plantTab} id="plant-gratitude-tab" role="tab" aria-selected={gratitudeTab === "plant"} aria-controls="plant-gratitude-panel" tabIndex={gratitudeTab === "plant" ? 0 : -1} onClick={() => setGratitudeTab("plant")}><Sprout size={14} /> Plant gratitude</button>
+            <button ref={sendTab} id="send-gratitude-tab" role="tab" aria-selected={gratitudeTab === "send"} aria-controls="send-gratitude-panel" tabIndex={gratitudeTab === "send" ? 0 : -1} onClick={() => setGratitudeTab("send")}><Mail size={14} /> Send to someone</button>
+          </div>
+          <div id="plant-gratitude-panel" role="tabpanel" aria-labelledby="plant-gratitude-tab" hidden={gratitudeTab !== "plant"}>
           {!planted ? <>
             <div className="card-sprout"><Sprout size={25} strokeWidth={1.4} /></div>
             <p className="eyebrow">SOMETHING GOOD STARTS HERE</p>
@@ -183,7 +198,8 @@ export default function GratitudeGarden() {
             <div className="success-actions"><button onClick={copy}><Copy size={13} /> Copy gratitude</button><button onClick={() => { setPlanted(null); setMessage(""); setError(""); setNotice(""); started.current = Date.now(); requestAnimationFrame(() => textarea.current?.focus()); }}>Plant another <ArrowRight size={13} /></button></div>
             <p className="download-notice" role="status">{notice}</p>
           </div>}
-          <a className="send-thanks-link" href={GRATITUDE_CARD_PATH}><Mail size={14} /> Send someone a little thanks <ArrowRight size={13} /></a>
+          </div>
+          <div id="send-gratitude-panel" role="tabpanel" aria-labelledby="send-gratitude-tab" hidden={gratitudeTab !== "send"}><PersonalGratitude embedded /></div>
         </aside>
       </section>
       {loadError && <div className="load-error" role="status">{loadError}<button onClick={refresh}><RefreshCw size={13} /> Try again</button></div>}
@@ -192,11 +208,11 @@ export default function GratitudeGarden() {
         <div className="note-grid">{shownNotes.map(note => <button className="note-card" key={note.id} onClick={() => openNote(note)} style={{ "--note-bg": leafStyles.find(s => s.id === note.color)?.pale } as CSSProperties}><Leaf color={note.color} /><blockquote>“{note.message}”</blockquote><div><span>— {note.author}{note.welcome && <small>A welcome note</small>}</span><span className="note-heart"><Heart size={14} fill={note.liked ? "currentColor" : "none"} />{note.hearts}</span></div></button>)}</div>
       </section>
       <section className="growing-section" id="growing" aria-labelledby="growing-title">
-        <div className="growing-heading"><span className="sprout-circle"><Sprout size={26} strokeWidth={1.3} /></span><div><p className="eyebrow">A LITTLE MORE MAGIC, TOGETHER</p><h2 id="growing-title">Every thank-you helps us grow.</h2><p>Every approved note grows our tree a little fuller. Tap a milestone for a peek at what’s coming.</p></div></div>
+        <div className="growing-heading"><span className="sprout-circle"><Sprout size={26} strokeWidth={1.3} /></span><div><p className="eyebrow">A LITTLE MORE MAGIC, TOGETHER</p><h2 id="growing-title">Every thank-you helps us grow.</h2><p>Plant an approved note or send a card someone opens. Each adds one leaf. Tap a milestone for a peek at what’s coming.</p></div></div>
         <div className="milestone-track">{milestones.map(m => <button type="button" key={m.count} className={`milestone ${(total ?? 0) >= m.count ? "unlocked" : ""} ${previewTotal === m.count ? "previewing" : ""}`} onClick={() => previewMilestone(m.count)} aria-pressed={previewTotal === m.count} aria-label={`Preview ${m.title.toLowerCase()} at ${m.count.toLocaleString()} gratitude leaves`}><span className="milestone-art" aria-hidden="true">{m.icon}</span><strong>{m.title}</strong><span>{m.count.toLocaleString()} leaves {(total ?? 0) >= m.count && <Check size={12} />}</span></button>)}</div>
-        <div className="progress-caption"><span>{total === null ? "Loading approved leaves…" : `${total.toLocaleString()} approved community ${total === 1 ? "leaf" : "leaves"}`}</span><span>{nextMilestone ? `${nextMilestone.count - (total ?? 0)} more to our ${nextMilestone.title.toLowerCase()}` : "A whole garden full of gratitude. Thank you!"}<Sparkles size={12} /></span></div>
+        <div className="progress-caption"><span>{total === null ? "Gathering gratitude leaves…" : `${total.toLocaleString()} gratitude ${total === 1 ? "leaf" : "leaves"}`}</span><span>{nextMilestone ? `${nextMilestone.count - (total ?? 0)} more to our ${nextMilestone.title.toLowerCase()}` : "A whole garden full of gratitude. Thank you!"}<Sparkles size={12} /></span></div>
         <div className="progress-track" role="progressbar" aria-label="Progress toward the next garden milestone" aria-valuenow={total ?? 0} aria-valuemin={0} aria-valuemax={progressTarget}><span style={{ width: `${Math.min(100, ((total ?? 0) / progressTarget) * 100)}%` }} /></div>
-        <p className="milestone-footnote">Only approved community notes grow the tree. Milestone previews are a little peek ahead; they don’t change our leaf count.</p>
+        <p className="milestone-footnote">Personal cards count once when someone opens them; their messages stay on the cards. Public notes still need approval. Previews and repeat opens don’t add leaves.</p>
       </section>
       <section className="season-footer"><span aria-hidden="true">❄</span><p>A little autumn gratitude. A little winter wishing.<br /><strong>The magic continues next season.</strong></p><span className="coming-next">CHRISTMAS WISHING TREE <span>Coming this winter <ChevronRight size={12} /></span></span></section>
       <div className="final-invitation"><p>There’s always room for one more little thank-you.</p><button onClick={focusForm}>Leave a little kindness <ArrowRight size={15} /></button></div>
