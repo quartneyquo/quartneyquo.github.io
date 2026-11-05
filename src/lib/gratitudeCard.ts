@@ -59,10 +59,13 @@ export function decodeGratitudeCard(hash: string): GratitudeCard {
   }
 }
 
-export function gratitudeCardUrl(card: GratitudeCard) {
+export function gratitudeCardUrl(card: GratitudeCard, view: "card" | "image" = "card") {
   // A production origin makes links created in the local preview usable by recipients.
   // The fragment stays out of HTTP requests; it is readable by anyone with the link.
-  return `${PUBLIC_ORIGIN}${GRATITUDE_CARD_PATH}#card=${encodeGratitudeCard(card)}`;
+  const url = new URL(GRATITUDE_CARD_PATH, PUBLIC_ORIGIN);
+  if (view === "image") url.searchParams.set("view", "image");
+  url.hash = `card=${encodeGratitudeCard(card)}`;
+  return url.href;
 }
 
 export function gratitudeCardEmail(card: GratitudeCard) {
@@ -72,7 +75,8 @@ export function gratitudeCardEmail(card: GratitudeCard) {
     `Hi ${validated.recipient},`, "",
     "I made you a little gratitude card:", "",
     `“${validated.message}”`, "",
-    "Open your card:", gratitudeCardUrl(validated), "",
+    "View or save your postcard image:", gratitudeCardUrl(validated, "image"), "",
+    "Open your garden card:", gratitudeCardUrl(validated), "",
     "With gratitude,", validated.author, "",
     "Paca’s Gratitude Garden · Little thanks make a big garden.",
   ].join("\n").replace(/\r\n|\r|\n/g, "\r\n");

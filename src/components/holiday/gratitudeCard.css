@@ -18,9 +18,7 @@
 .garden-app .thanks-email-instructions { margin-top:14px; color:var(--muted); font-size:12px; line-height:1.65; text-align:left; }
 .garden-app .thanks-email-instructions>summary { cursor:pointer; color:#586847; padding:8px 0; }
 .garden-app .thanks-email-instructions p { margin-top:9px; }
-.garden-app .thanks-draft-apps { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-.garden-app .thanks-draft-apps>a { flex:1 1 110px; display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; padding:7px 9px; border-radius:7px; background:#5f694f; color:#fffdf6; font-size:13px; }
-.garden-app .thanks-draft-apps>a:hover { background:#505a41; }
+.garden-app .thanks-gmail { width:100%; margin-top:16px; }
 .garden-app .thanks-email-button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:43px; margin-top:10px; border:1px solid #899574; border-radius:7px; background:#f1f4e8; color:#5f6c4c; font-size:12px; }
 .garden-app .thanks-email-button:hover { background:#e7edd9; }
 .garden-app .thanks-form input::placeholder,.garden-app .thanks-form textarea::placeholder { color:#a49887; }
@@ -59,6 +57,9 @@
 .garden-app .thanks-notice { font-size:12px; color:#68794e; line-height:1.7; margin:16px 0 0; min-height:20px; text-align:center; }
 .garden-app .thanks-notice:empty { margin:0; min-height:0; }
 .garden-app .thanks-received { max-width:520px; margin:0 auto 45px; }
+.garden-app .thanks-image-title { margin:22px auto; text-align:center; overflow-wrap:anywhere; }
+.garden-app .thanks-image-title h1 { font:400 clamp(24px,4vw,36px)/1.25 var(--serif); }
+.garden-app .thanks-image-view { max-width:900px; text-align:center; }
 .garden-app .thanks-recipient-actions { margin-top:25px; display:flex; flex-direction:column; align-items:center; gap:15px; }
 .garden-app .thanks-recipient-actions>.primary { width:100%; max-width:290px; }
 .garden-app .thanks-recipient-actions>a { display:flex; align-items:center; gap:8px; color:#8c7459; font-size:12px; padding:8px; }

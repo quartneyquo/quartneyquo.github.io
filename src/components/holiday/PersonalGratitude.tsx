@@ -29,10 +29,11 @@ function CardArtwork({ card, preview = false }: { card: GratitudeCard; preview?:
 export default function PersonalGratitude({ embedded = false }: { embedded?: boolean }) {
   const [ready, setReady] = useState(false);
   const [received, setReceived] = useState<GratitudeCard | null>(null);
+  const [imageView, setImageView] = useState(false);
   const [invalidLink, setInvalidLink] = useState(false);
   const [prepared, setPrepared] = useState<GratitudeCard | null>(null);
   const [recipient, setRecipient] = useState("");
-  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; preview: string; shareable: boolean } | null>(null);
+  const [postcard, setPostcard] = useState<{ card: GratitudeCard; file: File; preview: string; shareable: boolean; emailUrl: string } | null>(null);
   const [postcardError, setPostcardError] = useState("");
   const [postcardAttempt, setPostcardAttempt] = useState(0);
   const [emailSharing, setEmailSharing] = useState(false);
@@ -53,7 +54,9 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   useEffect(() => {
     const readLink = () => {
       setInvalidLink(false); setReceived(null);
-      if (!embedded && window.location.hash) {
+      const showImage = !embedded && new URLSearchParams(window.location.search).get("view") === "image";
+      setImageView(showImage);
+      if (!embedded && (window.location.hash || showImage)) {
         try { setReceived(decodeGratitudeCard(window.location.hash)); }
         catch { setInvalidLink(true); }
       }
@@ -66,21 +69,33 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
 
   useEffect(() => { if (prepared) successTitle.current?.focus(); }, [prepared]);
 
+  const imageCard = prepared ?? (imageView ? received : null);
   useEffect(() => {
     setPostcard(null); setPostcardError("");
-    if (!prepared) return;
+    if (!imageCard) return;
     let active = true;
     let preview = "";
-    // Render before the click so sharing keeps the browser's user activation.
-    void createPostcardFile(prepared, prepared.recipient).then(file => {
+    let emailUrl = "";
+    // Render the same image for the sender and for recipients following the image link.
+    void createPostcardFile(imageCard, imageCard.recipient).then(async file => {
       if (!active) return;
       preview = URL.createObjectURL(file);
-      setPostcard({ card: prepared, file, preview, shareable: canSharePostcard(file, navigator) });
+      const result = { card: imageCard, file, preview, shareable: canSharePostcard(file, navigator), emailUrl: "" };
+      setPostcard(result);
+      if (!prepared) return;
+      const email = await createGratitudeEmailFile(prepared, file);
+      if (!active) return;
+      emailUrl = URL.createObjectURL(email);
+      setPostcard({ ...result, emailUrl });
     }).catch(() => {
-      if (active) setPostcardError("The email attachment couldn’t be prepared. Please try again.");
+      if (active) setPostcardError(prepared ? "The email attachment couldn’t be prepared." : "The postcard image couldn’t be loaded.");
     });
-    return () => { active = false; if (preview) URL.revokeObjectURL(preview); };
-  }, [prepared, postcardAttempt]);
+    return () => {
+      active = false;
+      if (preview) URL.revokeObjectURL(preview);
+      if (emailUrl) URL.revokeObjectURL(emailUrl);
+    };
+  }, [imageCard, prepared, postcardAttempt]);
 
   useEffect(() => {
     if (!received?.growthId) { setGrowthStatus(""); return; }
@@ -99,9 +114,8 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
 
   const card = received ?? prepared;
   const url = card ? gratitudeCardUrl(card) : "";
-  const readyPostcard = postcard?.card === prepared ? postcard : null;
+  const readyPostcard = postcard?.card === card ? postcard : null;
   const emailDraft = prepared && gratitudeCardEmail(prepared);
-  const canCopyImage = !!readyPostcard && typeof ClipboardItem !== "undefined" && typeof navigator.clipboard?.write === "function";
 
   async function connectCard(draft: GratitudeCard) {
     setPreparing(true); setGrowthError("");
@@ -140,36 +154,15 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
       setNotice("Add the recipient and send in the app you chose.");
     } catch (e) {
       if (e instanceof Error && e.name === "AbortError") setNotice("Sharing closed. Your postcard is ready whenever you are.");
-      else setNotice("Sharing couldn’t open. Use Open mail app or Open Gmail for an email draft.");
+      else setNotice("Sharing couldn’t open. Use Gmail or download the attached email above.");
     } finally { setEmailSharing(false); }
-  }
-
-  async function copyPostcardImage() {
-    if (!readyPostcard) return;
-    try {
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": readyPostcard.file })]);
-      setNotice("Postcard copied. Open your draft and paste the image into the message.");
-    } catch {
-      setNotice("The image couldn’t be copied. Use Download PNG, then attach it to your draft.");
-    }
-  }
-
-  async function saveAttachedDraft() {
-    if (!readyPostcard) return;
-    try {
-      const email = await createGratitudeEmailFile(readyPostcard.card, readyPostcard.file);
-      savePostcardFile(email);
-      setNotice("Open the saved email in your desktop mail app. It contains the postcard attachment and link.");
-    } catch {
-      setNotice("The email file couldn’t be saved. Please try again.");
-    }
   }
 
   async function download() {
     if (!card || downloading) return;
     setDownloading(true); setNotice("");
     try {
-      if (readyPostcard && card === prepared) savePostcardFile(readyPostcard.file);
+      if (readyPostcard) savePostcardFile(readyPostcard.file);
       else await downloadPostcard(card, card.recipient);
       setNotice("Your keepsake is ready to save.");
     }
@@ -189,15 +182,12 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
               {!readyPostcard && !postcardError && <p role="status">Preparing your postcard…</p>}
               {emailDraft && <>
                 <h3>Email your postcard</h3>
-                {readyPostcard && <p>{canCopyImage ? "Copy the image, open your draft, and paste it into the message." : "Download the image, then attach it in your mail app."} The card link is included.</p>}
-                {readyPostcard && <button className="thanks-email-button" onClick={canCopyImage ? copyPostcardImage : download}>
-                  {canCopyImage ? <Copy size={15} /> : <Download size={15} />}
-                  {canCopyImage ? "Copy postcard image" : "Download postcard image"}
-                </button>}
-                <div className="thanks-draft-apps" role="group" aria-label="Open an email draft">
-                  <a href={emailDraft.href} title="Open your default email app, such as Apple Mail"><Mail size={15} /> Open mail app</a>
-                  <a href={emailDraft.gmailHref} target="_blank" rel="noopener noreferrer">Open Gmail <ArrowRight size={14} /></a>
-                </div>
+                <a className="primary thanks-gmail" href={emailDraft.gmailHref} target="_blank" rel="noopener noreferrer"><Mail size={15} /> Open Gmail <ArrowRight size={14} /></a>
+                <p>Your draft includes links to the postcard image and the garden card.</p>
+                {readyPostcard?.emailUrl && <>
+                  <a className="thanks-email-button" href={readyPostcard.emailUrl} download="paca-gratitude-email.eml"><Download size={15} /> Download for Apple Mail</a>
+                  <p>Open the .eml file in Mail. The postcard PNG is attached.</p>
+                </>}
               </>}
               {postcardError && <div className="thanks-growth-error" role="alert"><p>{postcardError}</p><button onClick={() => setPostcardAttempt(value => value + 1)}>Retry email attachment</button></div>}
             </div>
@@ -208,7 +198,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
                 {readyPostcard?.shareable && <button onClick={sharePostcard} disabled={emailSharing}><Share2 size={14} />{emailSharing ? "Choosing an app…" : "Share image & link"}</button>}
                 <button onClick={copyLink}><Copy size={14} /> Copy link</button>
                 <button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button>
-                {readyPostcard && <button onClick={saveAttachedDraft}><Mail size={14} /> Save email with PNG attached (.eml)</button>}
+                {emailDraft && <a href={emailDraft.href}><Mail size={14} /> Open default mail app with links</a>}
               </div>
               <label className="thanks-link-label" htmlFor="card-link">Your card link</label>
               <input id="card-link" className="thanks-link-input" value={url} readOnly onFocus={event => event.currentTarget.select()} />
@@ -239,17 +229,22 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   return <div className="garden-app personal-gratitude-page">
     <main>
       <nav className="garden-return" aria-label="Return to the village"><a href="/paca-village/holiday/gratitude-garden/"><ArrowLeft size={13} /> Gratitude Garden</a><span aria-hidden="true">·</span><a href="/paca-village/">Paca Village</a></nav>
-      <header className="thanks-intro">
+      {imageView && received ? <header className="thanks-image-title"><h1>Your postcard, {received.recipient}</h1></header> : <header className="thanks-intro">
         <a href="/paca-village/holiday/" aria-label="Paca’s Holiday Village"><img src="/holiday/panchita-scarf.png" alt="Panchita" width="48" height="60" /></a>
         <p className="eyebrow">FROM ONE GRATEFUL HEART TO ANOTHER</p>
         <h1>{received ? <>A little thanks, <em>just for you.</em></> : <>Send someone <em>a little thanks.</em></>}</h1>
         <p>{received ? "Someone’s world is a little brighter with you in it." : "For the person who made your day, or makes every day a little better."}</p>
-      </header>
+      </header>}
 
-      {!ready ? <p className="thanks-loading" role="status">Opening a little kindness…</p> : invalidLink ? <section className="thanks-empty" aria-labelledby="card-error-title"><Mail size={30} /><h2 id="card-error-title">This little note couldn’t be opened.</h2><p>The link may be incomplete. Ask the sender to copy and share the whole card link again.</p><a className="primary" href={GRATITUDE_CARD_PATH}>Make a new card <ArrowRight size={15} /></a></section> : received ? <section className="thanks-received" aria-label="A personal gratitude card">
-        <CardArtwork card={received} />
+      {!ready ? <p className="thanks-loading" role="status">Opening a little kindness…</p> : invalidLink ? <section className="thanks-empty" aria-labelledby="card-error-title"><Mail size={30} /><h2 id="card-error-title">This little note couldn’t be opened.</h2><p>The link may be incomplete. Ask the sender to copy and share the whole card link again.</p><a className="primary" href={GRATITUDE_CARD_PATH}>Make a new card <ArrowRight size={15} /></a></section> : received ? <section className={imageView ? "thanks-received thanks-image-view" : "thanks-received"} aria-label="A personal gratitude card">
+        {imageView ? <>
+          {readyPostcard && <img className="thanks-attachment-preview" src={readyPostcard.preview} alt={`Postcard for ${received.recipient}: ${received.message} — ${received.author}`} width={1600} height={1000} />}
+          {postcardError && <div className="thanks-growth-error" role="alert">{postcardError} <button onClick={() => setPostcardAttempt(value => value + 1)}>Retry image</button></div>}
+          {!readyPostcard && !postcardError && <p className="thanks-loading" role="status">Opening your postcard image…</p>}
+          {readyPostcard && <a className="primary" href={readyPostcard.preview} download={readyPostcard.file.name}><Download size={16} /> Save postcard PNG</a>}
+        </> : <CardArtwork card={received} />}
         {growthStatus && <div className="thanks-growth-note" role="status"><Sprout size={18} /><p>{growthStatus === "connecting" ? "Finding this kindness a place in the garden…" : growthStatus === "preview" ? "This is your preview. Your card adds one leaf when someone else opens the link." : growthStatus === "error" ? "Your card is here. The tree couldn’t update just yet." : "This little thank-you has added one leaf to our shared tree. The message stays on this card."}</p>{growthStatus === "error" ? <button onClick={() => setGrowthAttempt(value => value + 1)}>Try again</button> : growthStatus !== "connecting" && <a href="/paca-village/holiday/gratitude-garden/">See the growing garden <ArrowRight size={13} /></a>}</div>}
-        <div className="thanks-recipient-actions"><button className="primary" onClick={download} disabled={downloading}><Download size={16} />{downloading ? "Making your keepsake…" : "Save this keepsake"}</button><a href={GRATITUDE_CARD_PATH}>Send a little thanks back <ArrowRight size={15} /></a></div>
+        <div className="thanks-recipient-actions">{!imageView && <button className="primary" onClick={download} disabled={downloading}><Download size={16} />{downloading ? "Making your keepsake…" : "Save this keepsake"}</button>}<a href={GRATITUDE_CARD_PATH}>Send a little thanks back <ArrowRight size={15} /></a></div>
         <p className="thanks-notice" role="status">{notice}</p>
       </section> : composer}
       <footer className="thanks-footer"><Heart size={13} /><span>Little thanks make a big garden.</span><a href="/paca-village/holiday/gratitude-garden/">Visit the garden <ArrowRight size={13} /></a></footer>

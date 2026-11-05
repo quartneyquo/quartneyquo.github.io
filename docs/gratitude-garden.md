@@ -24,9 +24,9 @@ Milestone buttons provide a clearly labeled visual preview without changing the 
 
 ## Personal thank-you cards
 
-The prepared card shows “Open mail app” and “Open Gmail” directly under the postcard on both the garden tab and the standalone page. Each opens a draft containing the message and full card link. Visitors can copy the rendered PNG and paste it into the draft, or download and attach it when image copying is unavailable. They enter the recipient address in their email app.
+“Open Gmail” fills the draft with two recipient links. The image link uses `?view=image` on the existing recipient page and renders the personalized 1600 × 1000 PNG with a save button. The second link opens the interactive garden card. Both carry the same validated card fragment and optional growth receipt, so opening both contributes at most one leaf. The image renders in the recipient’s browser. The notes service stores neither the image nor the message.
 
-“More ways to share” contains the native app picker on browsers that support file sharing. It passes the PNG and card link to the selected app. macOS controls which apps appear for those items. This disclosure also contains the PNG download, card link, and optional desktop email file with the image already attached. See the [Web Share specification](https://www.w3.org/TR/web-share/) and [Apple’s guide to sharing extensions](https://support.apple.com/en-ca/guide/mac-help/mh40614/mac).
+“Download for Apple Mail” saves an email file containing the actual PNG attachment and the card link. Open the file in a compatible desktop mail app to address it. “More ways to share” also offers the native app picker where available, the default mail composer with links, a separate PNG download, and the card link.
 
 The garden's gratitude panel has “Plant gratitude” and “Send to someone” tabs. Each draft survives switching tabs, with arrow keys and Home/End supported. The sending tab embeds the same composer available at `/paca-village/holiday/gratitude-garden/thanks/`. Visitors choose a leaf, enter a recipient and message, optionally sign their name, and preview a watercolor card. They can use their device's share sheet, copy its link into a text or DM, or download a personalized PNG. Recipients can save their keepsake or create a thank-you of their own. The site does not send messages or claim delivery.
 

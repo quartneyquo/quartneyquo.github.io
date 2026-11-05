@@ -96,6 +96,13 @@ test('email drafts preserve Unicode, the message, and the tree contribution link
   assert.equal(gmail.searchParams.get('su'), draft.subject);
   assert.equal(gmail.searchParams.get('body'), draft.body);
   assert.equal(gmail.searchParams.has('to'), false);
+  const links = gmail.searchParams.get('body').split('\r\n').filter(line => line.startsWith('https://')).map(value => new URL(value));
+  assert.equal(links.length, 2);
+  assert.equal(links[0].origin, 'https://courtneyko.com');
+  assert.equal(links[0].pathname, GRATITUDE_CARD_PATH);
+  assert.equal(links[0].search, '?view=image');
+  assert.deepEqual(decodeGratitudeCard(links[0].hash), connected);
+  assert.equal(links[1].href, gratitudeCardUrl(connected));
 });
 
 test('email draft subject cannot inject headers or recipients', () => {
