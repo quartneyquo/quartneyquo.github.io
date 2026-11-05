@@ -90,6 +90,12 @@ test('email drafts preserve Unicode, the message, and the tree contribution link
   assert.equal(mailto.searchParams.get('body'), draft.body);
   assert.ok(draft.body.includes(connected.message.replace(/\n/g, '\r\n')));
   assert.ok(draft.body.includes(gratitudeCardUrl(connected)));
+  const gmail = new URL(draft.gmailHref);
+  assert.equal(gmail.origin, 'https://mail.google.com');
+  assert.equal(gmail.searchParams.get('view'), 'cm');
+  assert.equal(gmail.searchParams.get('su'), draft.subject);
+  assert.equal(gmail.searchParams.get('body'), draft.body);
+  assert.equal(gmail.searchParams.has('to'), false);
 });
 
 test('email draft subject cannot inject headers or recipients', () => {

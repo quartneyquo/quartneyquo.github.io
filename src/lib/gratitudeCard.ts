@@ -77,7 +77,14 @@ export function gratitudeCardEmail(card: GratitudeCard) {
     "Paca’s Gratitude Garden · Little thanks make a big garden.",
   ].join("\n").replace(/\r\n|\r|\n/g, "\r\n");
   // Recipients are entered in the email app. mailto cannot attach an image.
-  return { subject, body, href: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+  const gmail = new URL("https://mail.google.com/mail/");
+  gmail.search = new URLSearchParams({ view: "cm", fs: "1", su: subject, body }).toString();
+  return {
+    subject,
+    body,
+    href: `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+    gmailHref: gmail.href,
+  };
 }
 
 export function gratitudeCardImageShare(card: GratitudeCard, image: File): ShareData {
