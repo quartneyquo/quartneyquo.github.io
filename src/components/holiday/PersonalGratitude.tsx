@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, Check, Copy, Download, Heart, Mail, Pencil, Sprout } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Download, Heart, Mail, Pencil, Share2, Sprout } from "lucide-react";
 import { leafStyles, type LeafColor } from "@/data/gratitudeGarden";
 import { decodeGratitudeCard, encodeGratitudeCard, gratitudeCardEmail, gratitudeCardImageShare, gratitudeCardFingerprint, gratitudeCardUrl, GRATITUDE_CARD_PATH, validateGratitudeCard, type GratitudeCard } from "@/lib/gratitudeCard";
 import { createGratitudeEmailFile } from "@/lib/gratitudeEmailFile";
@@ -49,7 +49,6 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
   const started = useRef(0);
   const trap = useRef<HTMLInputElement>(null);
   const successTitle = useRef<HTMLHeadingElement>(null);
-  const emailOptions = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     const readLink = () => {
@@ -141,10 +140,7 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
       setNotice("Add the recipient and send in the app you chose.");
     } catch (e) {
       if (e instanceof Error && e.name === "AbortError") setNotice("Sharing closed. Your postcard is ready whenever you are.");
-      else {
-        if (emailOptions.current) emailOptions.current.open = true;
-        setNotice("The app picker couldn’t open. Choose a draft option below.");
-      }
+      else setNotice("Sharing couldn’t open. Use Open mail app or Open Gmail for an email draft.");
     } finally { setEmailSharing(false); }
   }
 
@@ -191,27 +187,33 @@ export default function PersonalGratitude({ embedded = false }: { embedded?: boo
             <div className="thanks-email-option">
               {readyPostcard && <img className="thanks-attachment-preview" src={readyPostcard.preview} alt={`Postcard image for ${prepared.recipient}`} width={1600} height={1000} />}
               {!readyPostcard && !postcardError && <p role="status">Preparing your postcard…</p>}
-              {readyPostcard?.shareable && <>
-                <button className="primary" onClick={sharePostcard} disabled={emailSharing} aria-describedby="thanks-email-help"><Mail size={16} />{emailSharing ? "Choosing an app…" : "Email postcard"}</button>
-                <p id="thanks-email-help">Choose your mail app to share the image and card link. Add their address there.</p>
-              </>}
-              {readyPostcard && emailDraft && <details className="thanks-email-instructions" ref={emailOptions} open={!readyPostcard.shareable}>
-                <summary>{readyPostcard.shareable ? "My mail app isn’t listed" : "Open an email draft"}</summary>
-                <p>{canCopyImage ? "Copy the postcard, then paste it into the draft you open below." : "Download the PNG, then attach it to the draft you open below."} The card link is already in the message.</p>
-                <button className="thanks-email-button" onClick={canCopyImage ? copyPostcardImage : download}>{canCopyImage ? <Copy size={14} /> : <Download size={14} />}{canCopyImage ? "Copy postcard image" : "Download postcard image"}</button>
-                <div className="thanks-draft-apps">
-                  <a href={emailDraft.href}>Open mail app <ArrowRight size={13} /></a>
-                  <a href={emailDraft.gmailHref} target="_blank" rel="noopener noreferrer">Open Gmail <ArrowRight size={13} /></a>
+              {emailDraft && <>
+                <h3>Email your postcard</h3>
+                {readyPostcard && <p>{canCopyImage ? "Copy the image, open your draft, and paste it into the message." : "Download the image, then attach it in your mail app."} The card link is included.</p>}
+                {readyPostcard && <button className="thanks-email-button" onClick={canCopyImage ? copyPostcardImage : download}>
+                  {canCopyImage ? <Copy size={15} /> : <Download size={15} />}
+                  {canCopyImage ? "Copy postcard image" : "Download postcard image"}
+                </button>}
+                <div className="thanks-draft-apps" role="group" aria-label="Open an email draft">
+                  <a href={emailDraft.href} title="Open your default email app, such as Apple Mail"><Mail size={15} /> Open mail app</a>
+                  <a href={emailDraft.gmailHref} target="_blank" rel="noopener noreferrer">Open Gmail <ArrowRight size={14} /></a>
                 </div>
-                <button className="thanks-save-draft" onClick={saveAttachedDraft}>Save an email with the image attached (.eml)</button>
-              </details>}
+              </>}
               {postcardError && <div className="thanks-growth-error" role="alert"><p>{postcardError}</p><button onClick={() => setPostcardAttempt(value => value + 1)}>Retry email attachment</button></div>}
             </div>
-            <div className="thanks-small-actions"><button onClick={copyLink}><Copy size={14} /> Copy link</button><button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button></div>
-            <label className="thanks-link-label" htmlFor="card-link">Your card link</label>
-            <input id="card-link" className="thanks-link-input" value={url} readOnly onFocus={event => event.currentTarget.select()} />
-            <p className="thanks-share-detail">Anyone with this link can open your card.</p>
             <p className="thanks-notice" role="status">{notice}</p>
+            <details className="thanks-email-instructions">
+              <summary>More ways to share</summary>
+              <div className="thanks-small-actions">
+                {readyPostcard?.shareable && <button onClick={sharePostcard} disabled={emailSharing}><Share2 size={14} />{emailSharing ? "Choosing an app…" : "Share image & link"}</button>}
+                <button onClick={copyLink}><Copy size={14} /> Copy link</button>
+                <button onClick={download} disabled={downloading}><Download size={14} />{downloading ? "Making keepsake…" : "Download PNG"}</button>
+                {readyPostcard && <button onClick={saveAttachedDraft}><Mail size={14} /> Save email with PNG attached (.eml)</button>}
+              </div>
+              <label className="thanks-link-label" htmlFor="card-link">Your card link</label>
+              <input id="card-link" className="thanks-link-input" value={url} readOnly onFocus={event => event.currentTarget.select()} />
+              <p className="thanks-share-detail">Anyone with this link can open your card.</p>
+            </details>
             <div className="thanks-small-actions"><button onClick={() => { setPrepared(null); setNotice(""); }}><Pencil size={14} /> Edit card</button><a href={`${GRATITUDE_CARD_PATH}#card=${encodeGratitudeCard(prepared)}`} target="_blank" rel="noopener noreferrer">Preview their card <ArrowRight size={14} /></a></div>
           </div> : <form className="thanks-form" onSubmit={prepare}>
             <label htmlFor="thanks-to">Who’s this for?</label>

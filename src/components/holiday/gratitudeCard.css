@@ -13,14 +13,14 @@
 .garden-app .thanks-form>input { margin-bottom:22px; }
 .garden-app .thanks-email-option { margin-top:23px; padding:18px 0; border-top:1px solid var(--line); }
 .garden-app .thanks-attachment-preview { display:block; width:100%; height:auto; border:1px solid #e4d7c2; border-radius:9px; margin-bottom:16px; }
-.garden-app .thanks-email-option>.primary { width:100%; margin-top:12px; }
-.garden-app .thanks-email-option>p { font-size:11px; line-height:1.7; color:var(--muted); margin-top:10px; }
+.garden-app .thanks-email-option h3 { font:400 23px/1.35 var(--serif); }
+.garden-app .thanks-email-option>p { font-size:12px; line-height:1.65; color:var(--muted); margin-top:8px; }
 .garden-app .thanks-email-instructions { margin-top:14px; color:var(--muted); font-size:12px; line-height:1.65; text-align:left; }
 .garden-app .thanks-email-instructions>summary { cursor:pointer; color:#586847; padding:8px 0; }
 .garden-app .thanks-email-instructions p { margin-top:9px; }
-.garden-app .thanks-draft-apps { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
-.garden-app .thanks-draft-apps>a { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:42px; padding:4px 8px; border:1px solid var(--line); border-radius:7px; color:var(--ink); }
-.garden-app .thanks-save-draft { padding:9px 0; text-decoration:underline; text-underline-offset:3px; }
+.garden-app .thanks-draft-apps { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.garden-app .thanks-draft-apps>a { flex:1 1 110px; display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; padding:7px 9px; border-radius:7px; background:#5f694f; color:#fffdf6; font-size:13px; }
+.garden-app .thanks-draft-apps>a:hover { background:#505a41; }
 .garden-app .thanks-email-button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:43px; margin-top:10px; border:1px solid #899574; border-radius:7px; background:#f1f4e8; color:#5f6c4c; font-size:12px; }
 .garden-app .thanks-email-button:hover { background:#e7edd9; }
 .garden-app .thanks-form input::placeholder,.garden-app .thanks-form textarea::placeholder { color:#a49887; }
@@ -57,6 +57,7 @@
 .garden-app .thanks-link-label { display:block; text-align:left; font-size:10px; color:var(--muted); margin:24px 0 7px; }
 .garden-app .thanks-link-input { font-size:11px; padding:10px; }
 .garden-app .thanks-notice { font-size:12px; color:#68794e; line-height:1.7; margin:16px 0 0; min-height:20px; text-align:center; }
+.garden-app .thanks-notice:empty { margin:0; min-height:0; }
 .garden-app .thanks-received { max-width:520px; margin:0 auto 45px; }
 .garden-app .thanks-recipient-actions { margin-top:25px; display:flex; flex-direction:column; align-items:center; gap:15px; }
 .garden-app .thanks-recipient-actions>.primary { width:100%; max-width:290px; }
