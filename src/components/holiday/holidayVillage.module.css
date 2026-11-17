@@ -75,3 +75,5 @@
   .gardenArt > img, .enter { transition: none; }
   .gardenLink:hover .gardenArt > img, .gardenLink:focus-visible .gardenArt > img { transform: none; }
 }
+
+.potluckArt > img { display: block; max-width: 256px; margin-inline: auto; }

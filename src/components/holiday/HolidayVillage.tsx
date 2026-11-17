@@ -16,7 +16,7 @@ export default function HolidayVillage() {
           <p className={styles.eyebrow}><Sparkles size={15} aria-hidden="true" /> COME IN, IT’S COZY HERE</p>
           <h1 id="holiday-title">Paca’s <em>Holiday Village</em></h1>
           <p className={styles.tagline}>A little magic for every season.</p>
-          <p className={styles.description}>A place for small joys, warm wishes, and the lovely things we grow together. Wander over to the garden and stay awhile.</p>
+          <p className={styles.description}>A place for small joys, warm wishes, and the lovely things we grow together. Plant a leaf in the gratitude garden or gather your friends for a holiday potluck.</p>
           <a className={styles.explore} href="#holiday-garden">Explore the garden <ArrowDown size={15} aria-hidden="true" /></a>
         </div>
         <img className={styles.house} src="/holiday/gingerbread-house.png" alt="A little gingerbread cottage with snowy icing, a sage-green door, and glowing windows" width="1254" height="1254" fetchPriority="high" />
@@ -36,6 +36,18 @@ export default function HolidayVillage() {
             <span className={styles.enter}>Enter the garden <ArrowRight size={16} aria-hidden="true" /></span>
           </div>
         </Link>
+      </section>
+      <section id="paca-potluck" className={styles.garden} aria-labelledby="potluck-title">
+        <a className={styles.gardenLink} href="https://paca-potluck.vercel.app/" aria-labelledby="potluck-title" aria-describedby="potluck-description">
+          <div className={`${styles.gardenArt} ${styles.potluckArt}`}>
+            <img src="/holiday/paca-potluck.webp" alt="An alpaca holding a holiday pie" width="256" height="234" loading="lazy" />
+          </div>
+          <div className={styles.gardenCopy}>
+            <h2 id="potluck-title">Paca Potluck</h2>
+            <p id="potluck-description">Host a potluck or import one from Luma. Everyone picks an alpaca and adds their dish to the shared menu.</p>
+            <span className={styles.enter}>Open Paca Potluck <ArrowRight size={16} aria-hidden="true" /></span>
+          </div>
+        </a>
       </section>
     </main>
 
