@@ -38,7 +38,7 @@ export default function HolidayVillage() {
         </Link>
       </section>
       <section id="paca-potluck" className={styles.garden} aria-labelledby="potluck-title">
-        <a className={styles.gardenLink} href="https://paca-potluck.vercel.app/" aria-labelledby="potluck-title" aria-describedby="potluck-description">
+        <a className={styles.gardenLink} href="https://potluck.courtneyko.com/" aria-labelledby="potluck-title" aria-describedby="potluck-description">
           <div className={`${styles.gardenArt} ${styles.potluckArt}`}>
             <img src="/holiday/paca-potluck.webp" alt="An alpaca holding a holiday pie" width="256" height="234" loading="lazy" />
           </div>
